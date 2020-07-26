@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30225.117
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlameSystems", "FlameSystems\FlameSystems.csproj", "{89FE3C50-BCA7-4029-85FC-5A3C75A8A91C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlameBase", "FlameBase\FlameBase.csproj", "{89E09B04-9F5F-403A-8701-5DB74A23C6F9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{89FE3C50-BCA7-4029-85FC-5A3C75A8A91C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89FE3C50-BCA7-4029-85FC-5A3C75A8A91C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89FE3C50-BCA7-4029-85FC-5A3C75A8A91C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89FE3C50-BCA7-4029-85FC-5A3C75A8A91C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89E09B04-9F5F-403A-8701-5DB74A23C6F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89E09B04-9F5F-403A-8701-5DB74A23C6F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89E09B04-9F5F-403A-8701-5DB74A23C6F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89E09B04-9F5F-403A-8701-5DB74A23C6F9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BB243B36-4DC1-44A0-89C6-BF39BADEF188}
+	EndGlobalSection
+EndGlobal
