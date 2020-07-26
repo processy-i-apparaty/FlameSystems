@@ -1,0 +1,325 @@
+﻿<UserControl x:Class="FlameSystems.Views.CreateFlameView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:viewModels="clr-namespace:FlameSystems.ViewModels"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:views="clr-namespace:FlameSystems.Controls.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <viewModels:CreateFlameViewModel/>
+    </UserControl.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="60" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="230" />
+        </Grid.ColumnDefinitions>
+
+        <!-- upper panel -->
+        <Border
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            BorderBrush="{StaticResource BrushBorder}">
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <Border BorderThickness="0 0 0 0"
+                        BorderBrush="{StaticResource BrushBorder}">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="new"
+                                Margin="2 0 0 0"
+                                Style="{StaticResource StyleButtonFlatUi}"
+                                IsEnabled="{Binding IsEnabledNew}"
+                                Command="{Binding MultiCommand}"
+                                CommandParameter="new" />
+                        <Button Content="load"
+                                Style="{StaticResource StyleButtonFlatUi}"
+                                IsEnabled="{Binding IsEnabledLoad}"
+                                Command="{Binding MultiCommand}"
+                                CommandParameter="load" />
+                        <Button Content="save"
+                                Margin="0 0 2 0"
+                                Style="{StaticResource StyleButtonFlatUi}"
+                                IsEnabled="{Binding IsEnabledSave}"
+                                Command="{Binding MultiCommand}"
+                                CommandParameter="save" />
+                    </StackPanel>
+                </Border>
+                <Border BorderThickness="0 0 0 0"
+                        BorderBrush="{StaticResource BrushBorder}">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="start render"
+                                Margin="2 0 0 0"
+                                Style="{StaticResource StyleButtonFlatUi}"
+                                IsEnabled="{Binding IsEnabledStartRender}"
+                                Command="{Binding MultiCommand}"
+                                CommandParameter="startRender" />
+                        <Button Content="stop render"
+                                Style="{StaticResource StyleButtonFlatUi}"
+                                IsEnabled="{Binding IsEnabledStopRender}"
+                                Command="{Binding MultiCommand}"
+                                CommandParameter="stopRender" />
+                        <Button Content="continue render"
+                                Margin="0 0 2 0"
+                                Style="{StaticResource StyleButtonFlatUi}"
+                                IsEnabled="{Binding IsEnabledContinueRender}"
+                                Command="{Binding MultiCommand}"
+                                CommandParameter="continueRender" />
+                    </StackPanel>
+                </Border>
+                <Border BorderThickness="0 0 0 0"
+                        BorderBrush="{StaticResource BrushBorder}">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="load render"
+                                Margin="2 0 0 0"
+                                Style="{StaticResource StyleButtonFlatUi}"
+                                IsEnabled="{Binding IsEnabledLoadRender}"
+                                Command="{Binding MultiCommand}"
+                                CommandParameter="loadRender" />
+
+                        <Button Content="save render"
+                                Margin=" 0 0 2 0 "
+                                Style="{StaticResource StyleButtonFlatUi}"
+                                IsEnabled="{Binding IsEnabledSaveRender}"
+                                Command="{Binding MultiCommand}"
+                                CommandParameter="saveRender" />
+                    </StackPanel>
+                </Border>
+
+                <Border BorderThickness="0 0 0 0"
+                        BorderBrush="{StaticResource BrushBorder}">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="render settings"
+                                Margin="2 0"
+                                Style="{StaticResource StyleButtonFlatUi}"
+                                IsEnabled="{Binding IsEnabledRenderSettings}"
+                                Command="{Binding MultiCommand}"
+                                CommandParameter="renderSettings" />
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </Border>
+
+        <!-- view panel -->
+        <Border
+            BorderThickness="0 1 0 1"
+            BorderBrush="{StaticResource BrushBorder}"
+            Grid.Row="1"
+            Grid.Column="0">
+            <!-- sd -->
+            <StackPanel
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                Orientation="Horizontal"
+                Margin="0 0 0 5">
+                <StackPanel
+                    Orientation="Vertical"
+                    Margin="3">
+                    <TextBlock
+                        Text="shift x"
+                        Style="{StaticResource FontBrassMono}"
+                        Foreground="{StaticResource BrushBorder}"
+                        Margin="3"
+                        HorizontalAlignment="Center" />
+                    <views:NumericUpDown
+                        Width="70"
+                        ChangeNormal="0.01"
+                        ChangeSmall="0.001"
+                        ChangeLarge="0.1"
+                        DecimalPlaces="3"
+                        Value="{Binding ShiftX}" />
+                </StackPanel>
+                <StackPanel
+                    Orientation="Vertical"
+                    Margin="3">
+                    <TextBlock
+                        Text="shift y"
+                        Style="{StaticResource FontBrassMono}"
+                        Foreground="{StaticResource BrushBorder}"
+                        Margin="3"
+                        HorizontalAlignment="Center" />
+                    <views:NumericUpDown
+                        Width="70"
+                        ChangeNormal="0.01"
+                        ChangeSmall="0.001"
+                        ChangeLarge="0.1"
+                        DecimalPlaces="3"
+                        Value="{Binding ShiftY}" />
+                </StackPanel>
+
+                <StackPanel
+                    Orientation="Vertical"
+                    Margin="3">
+                    <TextBlock
+                        Text="zoom"
+                        Style="{StaticResource FontBrassMono}"
+                        Foreground="{StaticResource BrushBorder}"
+                        Margin="3"
+                        HorizontalAlignment="Center" />
+                    <views:NumericUpDown
+                        Width="65"
+                        ChangeNormal="0.01"
+                        ChangeSmall="0.001"
+                        ChangeLarge="0.1"
+                        DecimalPlaces="3"
+                        Value="{Binding Zoom}" />
+                </StackPanel>
+                <StackPanel
+                    Orientation="Vertical"
+                    Margin="3">
+                    <TextBlock
+                        Text="rotate"
+                        Style="{StaticResource FontBrassMono}"
+                        Foreground="{StaticResource BrushBorder}"
+                        Margin="3"
+                        HorizontalAlignment="Center" />
+                    <views:NumericUpDown
+                        Width="70"
+                        ChangeNormal="1"
+                        DecimalPlaces="3"
+                        Value="{Binding Rotation}"/>
+                </StackPanel>
+
+                <StackPanel
+                    Orientation="Vertical"
+                    Margin="3">
+                    <TextBlock
+                        Text="symmetry"
+                        Style="{StaticResource FontBrassMono}"
+                        Foreground="{StaticResource BrushBorder}"
+                        Margin="3"
+                        HorizontalAlignment="Center" />
+                    <views:NumericUpDown
+                        Width="40"
+                        ChangeNormal="1"
+                        DecimalPlaces="0"
+                        Value="{Binding Symmetry}" />
+                </StackPanel>
+
+                <StackPanel
+                    Orientation="Vertical"
+                    Margin="3">
+                    <TextBlock
+                        Text="width"
+                        Style="{StaticResource FontBrassMono}"
+                        Foreground="{StaticResource BrushBorder}"
+                        Margin="3"
+                        HorizontalAlignment="Center" />
+                    <views:NumericUpDown
+                        Width="60"
+                        ChangeNormal="1"
+                        DecimalPlaces="0"
+                        Minimum="16"
+                        Maximum="15000"
+                        Value="{Binding ImageWidth}" />
+                </StackPanel>
+
+                <StackPanel
+                    Orientation="Vertical"
+                    Margin="3">
+                    <TextBlock
+                        Text="height"
+                        Style="{StaticResource FontBrassMono}"
+                        Foreground="{StaticResource BrushBorder}"
+                        Margin="3"
+                        HorizontalAlignment="Center" />
+                    <views:NumericUpDown
+                        Width="60"
+                        ChangeNormal="1"
+                        Minimum="16"
+                        Maximum="15000"
+                        DecimalPlaces="0"
+                        Value="{Binding ImageHeight}" />
+                </StackPanel>
+
+            </StackPanel>
+        </Border>
+
+        <!-- add button -->
+        <Border
+            Grid.Row="1"
+            Grid.Column="1"
+            BorderThickness="0 1 0 1"
+            BorderBrush="{StaticResource BrushBorder}">
+            <StackPanel Orientation="Vertical" VerticalAlignment="Stretch">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <RadioButton Name="RadioColor"
+                        GroupName="GColor" Content="Color" Foreground="{StaticResource BrushForeground}" VerticalAlignment="Center" Margin="2"
+                        IsChecked="{Binding RadioColor}"
+                        FontFamily="{StaticResource FamilyBrassMono}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Checked">
+                                <i:InvokeCommandAction Command="{Binding CommandColorRadioChecked}"
+                                                       CommandParameter="{Binding ElementName=RadioColor}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </RadioButton>
+                    <RadioButton x:Name="RadioGradient"
+                                 IsChecked="{Binding RadioGradient}"
+                                 FontFamily="{StaticResource FamilyBrassMono}"
+                        GroupName="GColor" Content="Gradient" Foreground="{StaticResource BrushForeground}" VerticalAlignment="Center" Margin="2">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Checked">
+                                <i:InvokeCommandAction Command="{Binding CommandColorRadioChecked}"
+                                                       CommandParameter="{Binding ElementName=RadioGradient}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+
+                    </RadioButton>
+                    <Button
+                        Command="{Binding CommandEditGradient}"
+                        IsEnabled="{Binding IsEnabledGradientMode}"
+                        Content="Edit Gradient" Style="{StaticResource StyleButtonFlatUi}" Margin="2"/>
+                </StackPanel>
+                <Button
+                    Height="33"
+                    Width="213"
+                    HorizontalAlignment="Right"
+                    Style="{StaticResource StyleButtonFlatUi}"
+                    Content="add transform"
+                    IsEnabled="{Binding IsEnabledAddTransform}" 
+                    Command="{Binding MultiCommand}"
+                    CommandParameter="addTransform"/>
+            </StackPanel>
+        </Border>
+
+        <!-- transformations panel -->
+        <Border
+            Grid.Row="2"
+            Grid.Column="1"
+            BorderThickness="0 0 0 0"
+            BorderBrush="{StaticResource BrushBorder}">
+            <ScrollViewer
+                VerticalScrollBarVisibility="Visible"
+                HorizontalScrollBarVisibility="Disabled"
+                Style="{StaticResource LeftScrollViewer}">
+                <StackPanel Orientation="Vertical">
+                    <ItemsControl ItemsSource="{Binding Transforms}" />
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <!-- image panel -->
+        <Border
+            Grid.Row="2"
+            Grid.Column="0">
+            <Image Source="{Binding ImageSource}" />
+        </Border>
+
+        <!-- <ContentControl -->
+        <!--     Content="{Binding TopContent}" -->
+        <!--     Grid.Row="0" -->
+        <!--     Grid.Column="0" -->
+        <!--     Grid.RowSpan="3" -->
+        <!--     Grid.ColumnSpan="2" /> -->
+
+    </Grid>
+</UserControl>
