@@ -51,7 +51,7 @@ namespace FlameBase.Models
             var minDelta = double.MaxValue;
             for (var angle = 0.0; angle <= Math.PI * 2.0; angle += tolerance)
             {
-                var values = SolveValues(angle);
+                var values = SolveValues(angle, this);
                 if (!CheckValues(values)) continue;
                 var coefficients = CountCoefficients(values);
                 var delta = CountDelta(values, coefficients);
@@ -97,7 +97,7 @@ namespace FlameBase.Models
             var shearY = n1 / n2;
             FixNaN(ref shearY);
 
-            return new[] { t.E, t.F, scaleX, scaleY, shearX, shearY, angle };
+            return new[] {t.E, t.F, scaleX, scaleY, shearX, shearY, angle};
         }
 
         private static void FixNaN(ref double value)

@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace FlameSystems.Controls.Views
 {
     /// <summary>
-    /// Interaction logic for SettingsView.xaml
+    /// Interaction logic for RenderSettingsView.xaml
     /// </summary>
-    public partial class SettingsView : UserControl
+    public partial class RenderSettingsView : UserControl
     {
-        public SettingsView()
+        public RenderSettingsView()
         {
             InitializeComponent();
         }

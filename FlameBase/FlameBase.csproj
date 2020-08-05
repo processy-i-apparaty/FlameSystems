@@ -52,6 +52,7 @@
     <Compile Include="Models\GiveIdModel.cs" />
     <Compile Include="Models\GradientModel.cs" />
     <Compile Include="Models\GradientPackModel.cs" />
+    <Compile Include="Models\RenderSettingsModel.cs" />
     <Compile Include="Models\TransformModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
