@@ -1,10 +1,12 @@
 ﻿namespace FlameBase.FlameMath
 {
-    public class Algebra
+    public static class Algebra
     {
-        public double Map(double value, double iStart, double iStop, double oStart, double oStop)
+        public static double Map(double value, double iStart, double iStop, double oStart, double oStop)
         {
             return oStart + (oStop - oStart) * ((value - iStart) / (iStop - iStart));
         }
+
+
     }
 }

@@ -255,6 +255,10 @@ namespace FlameSystems.Controls.Views
                 case Key.Enter:
                     SetValueFromInput();
                     break;
+                case Key.Tab:
+                    SetValueFromInput();
+                    break;
+
             }
         }
 
