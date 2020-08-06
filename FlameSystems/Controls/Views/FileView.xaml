@@ -3,12 +3,129 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:FlameSystems.Controls.Views"
              xmlns:viewModels="clr-namespace:FlameSystems.Controls.ViewModels"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.DataContext>
         <viewModels:FileViewModel />
     </UserControl.DataContext>
-    <Grid />
+    <Grid Background="{StaticResource BrushBlackTransparent}">
+        <Grid HorizontalAlignment="Center" MaxHeight="800">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="80" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="400" />
+                <ColumnDefinition Width="200" />
+            </Grid.ColumnDefinitions>
+
+            <ListView ItemsSource="{Binding ListItems}"
+                      SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                      SelectedIndex="{Binding SelectedIndex}"
+                      BorderThickness="0"
+                      Background="Transparent"
+                      SelectionMode="Single">
+
+                <ListView.Resources>
+                    <ControlTemplate x:Key="SelectedTemplate" TargetType="ListViewItem">
+                        <Border BorderThickness="0 1" BorderBrush="{StaticResource BrushBorder}"
+                                Background="Transparent" HorizontalAlignment="Stretch" Padding="2" Margin="2">
+                            <TextBlock Text="{Binding}" Margin="2" Style="{StaticResource FontBrassMono}"
+                                       HorizontalAlignment="Left"
+                                       FontSize="15" />
+                        </Border>
+                    </ControlTemplate>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListViewItem">
+                                    <Border BorderThickness="1" BorderBrush="Transparent" Background="Transparent"
+                                            HorizontalAlignment="Stretch" Padding="2" Margin="2">
+                                        <TextBlock Text="{Binding}" Margin="2"
+                                                   Style="{StaticResource FontBrassMono}"
+                                                   Foreground="{StaticResource BrushTextInactive}"
+                                                   HorizontalAlignment="Left"
+                                                   FontSize="14" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsSelected" Value="true" />
+                                    <Condition Property="Selector.IsSelectionActive" Value="true" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Template" Value="{StaticResource SelectedTemplate}" />
+                            </MultiTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListView.Resources>
+
+            </ListView>
+
+            <StackPanel
+                Grid.Row="1" Grid.Column="0"
+                Orientation="Vertical"
+                VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="filename"
+                               Style="{StaticResource FontBrassMono}"
+                               VerticalAlignment="Center"
+                               Margin="5 0 0 0" />
+                    <TextBox
+                        Margin="5"
+                        Background="Transparent"
+                        BorderBrush="{StaticResource BrushBorder}"
+                        BorderThickness="1"
+                        Foreground="{StaticResource BrushForeground}"
+                        Width="300"
+                        Text="{Binding FileName, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Button Style="{StaticResource StyleButtonFlatUi2}"
+                            Content="{Binding OkButtonText}"
+                            Width="50"
+                            Margin="5"
+                            Command="{Binding Command}"
+                            CommandParameter="{Binding OkButtonText}" />
+                    <Button Style="{StaticResource StyleButtonFlatUi2}"
+                            Content="cancel"
+                            Width="50"
+                            Margin="5"
+                            Command="{Binding Command}"
+                            CommandParameter="cancel" />
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical"
+                        Grid.Column="1" Grid.Row="0"
+                        Grid.RowSpan="2"
+                        VerticalAlignment="Center"
+                        Margin="5">
+
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Border Margin="5 5 5 0"
+                            BorderBrush="{StaticResource BrushBorder}"
+                            BorderThickness="{Binding PreviewBorder1}">
+                        <Image Source="{Binding FlamePreview}"
+                               MaxHeight="200"
+                               Margin="5 2" />
+                    </Border>
+                    <Border Margin="5 0 5 5"
+                            BorderBrush="{StaticResource BrushBorder}" BorderThickness="{Binding PreviewBorder2}">
+                        <StackPanel HorizontalAlignment="Center" Margin="5 2">
+                            <TextBlock Style="{StaticResource FontBrassMono}"
+                                       Text="{Binding FlameInfo}"
+                                       TextAlignment="Right" />
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
+
+
+            </StackPanel>
+        </Grid>
+    </Grid>
 </UserControl>

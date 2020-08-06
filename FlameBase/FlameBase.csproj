@@ -34,6 +34,9 @@
     <Reference Include="ColorMine, Version=1.1.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ColorMine.1.1.3.0\lib\ColorMine.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -47,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\ColorPickerMode.cs" />
+    <Compile Include="Enums\FileViewType.cs" />
     <Compile Include="FlameMath\Algebra.cs" />
     <Compile Include="FlameMath\Trigonometry.cs" />
     <Compile Include="Enums\FlameColorMode.cs" />
@@ -54,12 +58,20 @@
     <Compile Include="Models\ColorPickerColumnModel.cs" />
     <Compile Include="Models\ColorPickerCoordinatesModel.cs" />
     <Compile Include="Models\ColorPickerCubeModel.cs" />
+    <Compile Include="Models\FlameModel.cs" />
     <Compile Include="Models\GiveIdModel.cs" />
     <Compile Include="Enums\GradientMode.cs" />
     <Compile Include="Models\GradientModel.cs" />
     <Compile Include="Models\GradientPackModel.cs" />
+    <Compile Include="Models\JsonFlamesModel.cs" />
+    <Compile Include="Models\RenderActionsModel.cs" />
+    <Compile Include="Models\RenderPackModel.cs" />
     <Compile Include="Models\RenderSettingsModel.cs" />
     <Compile Include="Models\TransformModel.cs" />
+    <Compile Include="Models\VariationFactoryModel.cs" />
+    <Compile Include="Models\VariationHelperModel.cs" />
+    <Compile Include="Models\VariationModel.cs" />
+    <Compile Include="Models\ViewSettingsModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
