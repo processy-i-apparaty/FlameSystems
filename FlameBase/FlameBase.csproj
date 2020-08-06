@@ -46,9 +46,14 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\ColorPickerMode.cs" />
     <Compile Include="FlameMath\Algebra.cs" />
     <Compile Include="FlameMath\Trigonometry.cs" />
     <Compile Include="Enums\FlameColorMode.cs" />
+    <Compile Include="Models\ColorPickerColorsModel.cs" />
+    <Compile Include="Models\ColorPickerColumnModel.cs" />
+    <Compile Include="Models\ColorPickerCoordinatesModel.cs" />
+    <Compile Include="Models\ColorPickerCubeModel.cs" />
     <Compile Include="Models\GiveIdModel.cs" />
     <Compile Include="Enums\GradientMode.cs" />
     <Compile Include="Models\GradientModel.cs" />

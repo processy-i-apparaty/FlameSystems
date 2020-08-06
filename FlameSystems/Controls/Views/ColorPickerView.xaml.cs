@@ -1,28 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows.Media;
+using FlameSystems.Controls.ViewModels;
 
 namespace FlameSystems.Controls.Views
 {
     /// <summary>
-    /// Interaction logic for ColorPickerView.xaml
+    ///     Interaction logic for ColorPickerView.xaml
     /// </summary>
-    public partial class ColorPickerView : UserControl
+    public partial class ColorPickerView
     {
+        public ColorPickerView(Color color)
+        {
+            InitializeComponent();
+            DataContext = new ColorPickerViewModel(Colors.Gray);
+        }
+
         public ColorPickerView()
         {
             InitializeComponent();
+            DataContext = new ColorPickerViewModel(Colors.Gray);
         }
     }
 }
