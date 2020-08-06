@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using FlameBase.Enums;
 using FlameBase.Models;
 using FlameSystems.Infrastructure;
 using FlameSystems.Infrastructure.ActionFire;

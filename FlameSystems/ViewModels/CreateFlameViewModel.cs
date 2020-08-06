@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using FlameBase.Enums;
 using FlameBase.FlameMath;
 using FlameBase.Models;
 using FlameSystems.Controls.Views;

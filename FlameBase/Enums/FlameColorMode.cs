@@ -1,4 +1,4 @@
-﻿namespace FlameBase.Models
+﻿namespace FlameBase.Enums
 {
     public enum FlameColorMode
     {

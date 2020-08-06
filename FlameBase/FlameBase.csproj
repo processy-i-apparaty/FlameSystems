@@ -48,8 +48,9 @@
   <ItemGroup>
     <Compile Include="FlameMath\Algebra.cs" />
     <Compile Include="FlameMath\Trigonometry.cs" />
-    <Compile Include="Models\FlameColorMode.cs" />
+    <Compile Include="Enums\FlameColorMode.cs" />
     <Compile Include="Models\GiveIdModel.cs" />
+    <Compile Include="Enums\GradientMode.cs" />
     <Compile Include="Models\GradientModel.cs" />
     <Compile Include="Models\GradientPackModel.cs" />
     <Compile Include="Models\RenderSettingsModel.cs" />
@@ -59,5 +60,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
