@@ -57,6 +57,34 @@ namespace FlameSystems.Controls.ViewModels
             SetCoefficients();
         }
 
+        #region public
+
+        public VariationModel GetVariation
+        {
+            get
+            {
+                if (!VariationFactoryModel.StaticVariationFactory.TryGet(VariationSelected, out var variation))
+                    return null;
+
+                variation.P1 = Parameter1;
+                variation.P2 = Parameter2;
+                variation.P3 = Parameter3;
+                variation.P4 = Parameter4;
+                variation.W = Weight;
+                return variation;
+            }
+        }
+
+        public TransformModel GetTransform
+        {
+            get
+            {
+                SetCoefficients();
+                return _transformModel.Copy();
+            }
+        }
+
+
         public void Freeze(bool state)
         {
             _isFrozen = state;
@@ -68,6 +96,8 @@ namespace FlameSystems.Controls.ViewModels
             BindStorage.Set("IsVariationSelectEnabled", !state);
         }
 
+        #endregion
+        
         #region bindings
 
         public int Id { get; set; }

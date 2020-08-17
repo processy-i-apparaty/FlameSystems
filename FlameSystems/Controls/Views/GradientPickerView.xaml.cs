@@ -1,28 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using FlameBase.Models;
+using FlameSystems.Controls.ViewModels;
 
 namespace FlameSystems.Controls.Views
 {
     /// <summary>
-    /// Interaction logic for GradientPickerView.xaml
+    ///     Interaction logic for GradientPickerView.xaml
     /// </summary>
-    public partial class GradientPickerView : UserControl
+    public partial class GradientPickerView
     {
         public GradientPickerView()
         {
             InitializeComponent();
+            DataContext = new GradientPickerViewModel();
+        }
+
+        public GradientPickerView(GradientModel gradientModel, double position)
+        {
+            InitializeComponent();
+            DataContext = new GradientPickerViewModel(gradientModel, position);
+        }
+
+        public GradientPickerView(GradientModel gradientModel)
+        {
+            InitializeComponent();
+            DataContext = new GradientPickerViewModel(gradientModel);
         }
     }
 }
