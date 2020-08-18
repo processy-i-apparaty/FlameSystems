@@ -88,11 +88,9 @@ namespace FlameBase.RenderMachine
             switch (colorMode)
             {
                 case FlameColorMode.Color:
-                    // img = display.GetBitmapForRender(_transformationColors);
                     img = Display.GetBitmapForRender(_transformationColors);
                     break;
                 case FlameColorMode.Gradient:
-                    // img = display.GetBitmapForRender(_transformationGradientValues, _gradModel);
                     img = Display.GetBitmapForRender(_transformationGradientValues, _gradModel);
                     break;
                 default:
@@ -167,7 +165,7 @@ namespace FlameBase.RenderMachine
             if (@continue && HasRender)
                 display = Display;
             else
-                display = new LogDisplayModel((int) imageSize.Width, (int) imageSize.Height, colorCount);
+                display = new LogDisplayModel((int) imageSize.Width, (int) imageSize.Height, colorCount, renderPack.ViewSettings.BackColor);
 
             var translationMatrix = Matrix.FromViewSettings(renderPack.ViewSettings);
             var translationArray = translationMatrix.Array;
@@ -241,7 +239,8 @@ namespace FlameBase.RenderMachine
                 catch (OperationCanceledException)
                 {
                     EndRender(display, totalIterations, stopwatch.Elapsed, renderActionsPack,
-                        $"render interrupted (p) {renderId}", draftMode, renderId);
+                        $"render interrupted (OperationCanceledException) {renderId}", draftMode, renderId);
+                    return;
                 }
                 finally
                 {
@@ -255,7 +254,7 @@ namespace FlameBase.RenderMachine
                 if (!RenderValidity(renderId))
                 {
                     EndRender(display, totalIterations, stopwatch.Elapsed, renderActionsPack,
-                        $"render interrupted (v) {renderId}", draftMode, renderId);
+                        $"render interrupted (RenderValidity) {renderId}", draftMode, renderId);
                     return;
                 }
 
@@ -299,13 +298,12 @@ namespace FlameBase.RenderMachine
                             if (IsRendering)
                             {
                                 sw.Stop();
-                                // Debug.WriteLine(
-                                //     $"\t@ {typeof(RenderMachine).Name}.{MethodBase.GetCurrentMethod().Name} invoking draw action after {sw.Elapsed}");
                                 renderActionsPack.ActionDraw.Invoke(img);
+                                Debug.WriteLine("DrawIntermediate:  renderActionsPack.ActionDraw.Invoke(img);");
                             }
                             else
                             {
-                                Debug.WriteLine("[RenderTask] dii:\tisRendering is false. forgetting img...");
+                                Debug.WriteLine("DrawIntermediate: IsRendering false");
                             }
 
                             isDrawingIntermediate = false;
@@ -313,9 +311,10 @@ namespace FlameBase.RenderMachine
                     }
                     catch (OperationCanceledException)
                     {
-                        Debug.WriteLine($"### draw {renderId}");
+                        Debug.WriteLine($"render interrupted (DrawingIntermediate) #{renderId}");
                         EndRender(display, totalIterations, stopwatch.Elapsed, renderActionsPack,
-                            $"render interrupted (d) {renderId}", draftMode, renderId);
+                            $"render interrupted (DrawingIntermediate) {renderId}", draftMode, renderId);
+                        return;
                     }
                     finally
                     {
@@ -366,22 +365,18 @@ namespace FlameBase.RenderMachine
 
             #endregion
 
-            #region report
-
+            // #region report
             // var renderParameters =
             //     $"{{{imageSize.Width:0000}x{imageSize.Height:0000}}}, shift: {{{flameModel.ViewShiftX:0.0000}}}, {{{flameModel.ViewShiftY:0.0000}}}, zoom: {flameModel.ViewZoom:0.0000}";
             // var time = $"Time: {stopwatch.ElapsedMilliseconds * .001:0.000}sec";
             // var filename = $"{Path.GetFileNameWithoutExtension(_flameModelPath)}";
             // var now = DateTime.Now;
-
             // var _pngName =
             // $"{filename}-{now.DayOfYear}-{(int) now.TimeOfDay.TotalSeconds}-{(int) stopwatch.Elapsed.TotalSeconds}.png";
-
             // return gradientMode
             //     ? display.GetBitmapForRender(transformationGradientValues, gradModel)
             //     : display.GetBitmapForRender(flameModel.FunctionColors.ToArray());
-
-            #endregion
+            // #endregion
 
             #region draw final image
 
@@ -414,7 +409,7 @@ namespace FlameBase.RenderMachine
             RenderActionsModel renderActions,
             string message, bool draftMode, int renderId)
         {
-            Debug.WriteLine($"#######[EndRender] {renderId}");
+            Debug.WriteLine($"EndRender [{renderId}]");
             IsRendering = false;
             if (draftMode)
             {

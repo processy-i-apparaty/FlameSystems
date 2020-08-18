@@ -232,7 +232,7 @@ namespace FlameSystems.Controls.ViewModels
             const int width = 200;
             var aspect = 1.0 * model.ImageHeight / model.ImageWidth;
             var viewSettings = new ViewSettingsModel(width, (int) (aspect * width), model.ViewShiftX,
-                model.ViewShiftY, model.ViewZoom, model.Rotation, model.Symmetry);
+                model.ViewShiftY, model.ViewZoom, model.Rotation, model.Symmetry, model.BackColor);
             var variations = FlameHelperModel.GetVariationsFromFlameModel(model);
             var transformations = FlameHelperModel.GetTransformationsFromFlameModel(model);
             var renderSettings = new RenderSettingsModel(50, 10);

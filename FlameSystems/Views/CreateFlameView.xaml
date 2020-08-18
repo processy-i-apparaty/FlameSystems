@@ -240,6 +240,23 @@
                         Value="{Binding ImageHeight}" />
                 </StackPanel>
 
+                <StackPanel
+                    Orientation="Vertical"
+                    Margin="3">
+                    <TextBlock
+                        Text="back color"
+                        Style="{StaticResource FontBrassMono}"
+                        Foreground="{StaticResource BrushBorder}"
+                        Margin="3"
+                        HorizontalAlignment="Center" />
+                    <Button Height="20" Width="40"
+                            Style="{StaticResource StyleButtonFlatUi2}"
+                            Background="{Binding BackColor}"
+                            BorderBrush="{StaticResource BrushBorder}"
+                            Command="{Binding MultiCommand}"
+                            CommandParameter="back color"/>
+                </StackPanel>
+
             </StackPanel>
         </Border>
 

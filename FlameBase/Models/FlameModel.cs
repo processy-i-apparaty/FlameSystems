@@ -19,5 +19,6 @@ namespace FlameBase.Models
         public List<double> Weights { get; set; }
         public List<double> FunctionColorPositions { get; set; }
         public GradientPackModel GradientPack { get; set; }
+        public Color BackColor { get; set; } = Colors.Black;
     }
 }

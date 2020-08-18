@@ -1,4 +1,5 @@
-﻿using FlameBase.FlameMath;
+﻿using System.Windows.Media;
+using FlameBase.FlameMath;
 
 namespace FlameBase.Models
 {
@@ -17,7 +18,7 @@ namespace FlameBase.Models
 
         public ViewSettingsModel(int imageWidth, int imageHeight, double shiftX, double shiftY, double zoom,
             double rotation,
-            int symmetry)
+            int symmetry, Color backColor)
         {
             Rotation = rotation;
             ImageWidth = imageWidth;
@@ -28,7 +29,10 @@ namespace FlameBase.Models
             ShiftY = shiftY;
             Zoom = zoom;
             Symmetry = symmetry;
+            BackColor = backColor;
         }
+
+        public Color BackColor { get; set; }
 
         public double HalfWidth { get; private set; }
         public double HalfHeight { get; private set; }

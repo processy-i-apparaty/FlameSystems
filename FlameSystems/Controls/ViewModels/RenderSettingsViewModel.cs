@@ -54,7 +54,7 @@ namespace FlameSystems.Controls.ViewModels
             set => Set(value);
         }
 
-        [ValueBind(100, 50, 1000)]
+        [ValueBind(100, 50, 10000)]
         public int RenderPerIterations
         {
             get => Get();

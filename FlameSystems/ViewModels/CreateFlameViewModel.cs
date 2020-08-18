@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -39,7 +40,7 @@ namespace FlameSystems.ViewModels
 
 
         private RenderActionsModel _renderActionsPack;
-        private int _transformationId;
+        private int _transformId;
 
 
         public CreateFlameViewModel()
@@ -48,6 +49,7 @@ namespace FlameSystems.ViewModels
             InitActions();
             InitDirectories();
             InitStrings();
+            BackColor = Brushes.Black;
         }
 
         #region methods
@@ -158,7 +160,17 @@ namespace FlameSystems.ViewModels
                 case "addTransform":
                     AddTransform();
                     break;
+                case "back color":
+                    SelectBackColor();
+                    break;
             }
+        }
+
+        private void SelectBackColor()
+        {
+            _colorPikMode = "back color";
+            _colorPicker = new ColorPickerView(BackColor.Color);
+            TopContent = _colorPicker;
         }
 
         private void Save()
@@ -195,7 +207,7 @@ namespace FlameSystems.ViewModels
         private void RenderSettings()
         {
             var uRenderSettingsView = new RenderSettingsView();
-            var vm = (RenderSettingsViewModel)uRenderSettingsView.DataContext;
+            var vm = (RenderSettingsViewModel) uRenderSettingsView.DataContext;
             vm.Set(_renderSettings, ActionRenderSettingsCallback);
             TopContent = uRenderSettingsView;
         }
@@ -270,6 +282,13 @@ namespace FlameSystems.ViewModels
         #endregion
 
         #region bindings flame parameters
+
+        [ValueBind]
+        public SolidColorBrush BackColor
+        {
+            get => Get();
+            set => Set(value);
+        }
 
         [ValueBind(0.0, -10.0, 10.0)]
         public double ShiftX
@@ -410,15 +429,17 @@ namespace FlameSystems.ViewModels
         #endregion
 
         #region Actions
+
         private void ActionRenderSettingsCallback()
         {
             TopContent = null;
         }
+
         private void ActionTransformPickColor(TransformViewModel model)
         {
             _colorPikMode = "transform";
             _colorPicker = new ColorPickerView(model.ColorBrush.Color);
-            _transformationId = model.Id;
+            _transformId = model.Id;
             TopContent = _colorPicker;
         }
 
@@ -479,7 +500,8 @@ namespace FlameSystems.ViewModels
             out ViewSettingsModel viewSettings)
         {
             viewSettings =
-                new ViewSettingsModel(ImageWidth, ImageHeight, ShiftX, ShiftY, Zoom, RotationRadians, Symmetry);
+                new ViewSettingsModel(ImageWidth, ImageHeight, ShiftX, ShiftY, Zoom, RotationRadians, Symmetry,
+                    BackColor.Color);
 
 
             variations = new VariationModel[Transforms.Count];
@@ -569,7 +591,7 @@ namespace FlameSystems.ViewModels
 
         private void ActionTransformPickGradientColor(TransformViewModel model)
         {
-            _transformationId = model.Id;
+            _transformId = model.Id;
             _gradView = new GradientPickerView(_gradModel, model.ColorPosition);
             TopContent = _gradView;
         }
@@ -588,7 +610,7 @@ namespace FlameSystems.ViewModels
                     break;
                 case GradientMode.Select:
                     var t = (TransformViewModel) Transforms.FirstOrDefault(x =>
-                            ((TransformViewModel) x.DataContext).Id == _transformationId)
+                            ((TransformViewModel) x.DataContext).Id == _transformId)
                         ?.DataContext;
                     if (t != null) t.ColorPosition = dc.GetColorPosition();
                     break;
@@ -608,7 +630,7 @@ namespace FlameSystems.ViewModels
                 case "transform":
                     if (!result) return;
                     var t = (TransformViewModel) Transforms
-                        .FirstOrDefault(x => ((TransformViewModel) x.DataContext).Id == _transformationId)
+                        .FirstOrDefault(x => ((TransformViewModel) x.DataContext).Id == _transformId)
                         ?.DataContext;
                     if (t == null) return;
                     t.FColor = color;
@@ -617,8 +639,6 @@ namespace FlameSystems.ViewModels
                     if (result)
                     {
                         TopContent = _gradView;
-
-                        //TODO: set name for action
                         ActionFire.Invoke("GRADIENT_PICKER_VIEWMODEL-CALLBACK", color);
                     }
                     else
@@ -626,6 +646,10 @@ namespace FlameSystems.ViewModels
                         TopContent = _gradView;
                     }
 
+                    break;
+                case "back color":
+                    if (!result) return;
+                    BackColor = new SolidColorBrush(color);
                     break;
             }
         }
@@ -696,7 +720,12 @@ namespace FlameSystems.ViewModels
                     FreezeControls(false);
                     IsEnabledAddTransform = true;
                     if (RenderMachine.HasRender)
+                    {
+                        Debug.WriteLine($"Saving Rendered Image");
                         RenderMachine.SaveImage(Directories.Images, "img", _flameColorMode);
+                        Debug.WriteLine($"Saving Rendered Image end.");
+                    }
+
                     break;
             }
         }
