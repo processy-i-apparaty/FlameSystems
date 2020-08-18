@@ -31,13 +31,13 @@ namespace FlameSystems.Controls.ViewModels
 
         public TransformViewModel()
         {
+            _transformModel = new TransformModel();
+            _flameColorMode = FlameColorMode.Color;
+
             Command = new RelayCommand(CommandHandler);
             GradientModel = new GradientModel(Colors.Gray, Colors.Gray);
             ColorPosition = .5;
 
-
-            _transformModel = new TransformModel();
-            _flameColorMode = FlameColorMode.Color;
 
             FColor = Colors.Gray;
             Parameter1Visibility = Visibility.Collapsed;
@@ -45,14 +45,13 @@ namespace FlameSystems.Controls.ViewModels
             Parameter3Visibility = Visibility.Collapsed;
             Parameter4Visibility = Visibility.Collapsed;
 
-            //TODO: VariationFactoryModel
-            //Variations = VariationFactoryModel.StaticVariationFactory.VariationNames;
+            Variations = VariationFactoryModel.StaticVariationFactory.VariationNames;
             VariationSelected = "Linear";
 
-            BindStorage.SetActionFor(ActChanged, _propParameters);
-            BindStorage.SetActionFor(ActChanged, _propValues2);
-            BindStorage.SetActionFor(ActValuesChanged, _propValues);
-            BindStorage.SetActionFor(ActVariationChanged, _propVariation);
+            BindStorage.SetActionFor(ActionValueChanged, _propParameters);
+            BindStorage.SetActionFor(ActionValueChanged, _propValues2);
+            BindStorage.SetActionFor(ActionTransformValueChanged, _propValues);
+            BindStorage.SetActionFor(ActionVariationChanged, _propVariation);
 
             SetCoefficients();
         }
@@ -91,13 +90,11 @@ namespace FlameSystems.Controls.ViewModels
             BindStorage.FreezeFor(state, _propParameters);
             BindStorage.FreezeFor(state, _propValues);
             BindStorage.FreezeFor(state, _propValues2);
-
-            //TODO:  BindStorage.Set("IsVariationSelectEnabled", !state);
             BindStorage.Set("IsVariationSelectEnabled", !state);
         }
 
         #endregion
-        
+
         #region bindings
 
         public int Id { get; set; }
@@ -328,29 +325,28 @@ namespace FlameSystems.Controls.ViewModels
 
         #region actions
 
-        //TODO: set names for actions
-        private void ActValuesChanged(string name, object obj)
+        private void ActionTransformValueChanged(string name, object obj)
         {
             if (_isFrozen) return;
             SetCoefficients();
-            ActionFire.Invoke("UCreateCallRender", "draft");
+            ActionFire.Invoke("CREATE_FLAME_VIEWMODEL-CALL_RENDER", "draft");
         }
 
-        private void ActChanged(string name, object obj)
+        private void ActionValueChanged(string name, object obj)
         {
             if (_isFrozen) return;
-            ActionFire.Invoke("UCreateCallRender", "draft");
+            ActionFire.Invoke("CREATE_FLAME_VIEWMODEL-CALL_RENDER", "draft");
         }
 
-        private void ActVariationChanged(string name, object obj)
+        private void ActionVariationChanged(string name, object obj)
         {
             if (_isFrozen) return;
 
-            //TODO: VariationFactoryModel
-            // if (VariationFactoryModel.StaticVariationFactory.TryGetParameters(VariationSelected, out var parameterNames, out var parameters))
-            // ShowParameters(parameterNames, parameters);
+            if (VariationFactoryModel.StaticVariationFactory.TryGetParameters(VariationSelected, out var parameterNames,
+                out var parameters))
+                ShowParameters(parameterNames, parameters);
 
-            ActionFire.Invoke("UCreateCallRender", "draft");
+            ActionFire.Invoke("CREATE_FLAME_VIEWMODEL-CALL_RENDER", "draft");
         }
 
         #endregion
@@ -365,7 +361,7 @@ namespace FlameSystems.Controls.ViewModels
             {
                 case "remove":
                     if (_isFrozen) return;
-                    ActionFire.Invoke("UCreateRemoveTransformation", Id);
+                    ActionFire.Invoke("CREATE_FLAME_VIEWMODEL-TRANSFORM_REMOVE", Id);
                     break;
                 case "randomize":
                     Randomize();
@@ -380,6 +376,8 @@ namespace FlameSystems.Controls.ViewModels
 
         #region private
 
+
+
         private void SelectColor()
         {
             if (_isFrozen) return;
@@ -388,10 +386,10 @@ namespace FlameSystems.Controls.ViewModels
             {
                 //TODO: set names for actions
                 case FlameColorMode.Color:
-                    ActionFire.Invoke("UCreateSetTransformationColor", this);
+                    ActionFire.Invoke("CREATE_FLAME_VIEWMODEL-TRANSFORM_PICK_COLOR", this);
                     break;
                 case FlameColorMode.Gradient:
-                    ActionFire.Invoke("UCreateSetTransformationColorGradient", this);
+                    ActionFire.Invoke("CREATE_FLAME_VIEWMODEL-TRANSFORM_PICK_GRADIENT_COLOR", this);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -428,44 +426,43 @@ namespace FlameSystems.Controls.ViewModels
             BindStorage.RandomizeFor(props);
             BindStorage.TurnActionFor(true, props);
             SetCoefficients();
-            //TODO: set name for action
-            ActionFire.Invoke("UCreateCallRender", "draft");
+            ActionFire.Invoke("CREATE_FLAME_VIEWMODEL-CALL_RENDER", "draft");
         }
 
 
         public void SetVariation(int variationId, double[] parameters, double weight = 1.0)
         {
-            //TODO: VariationFactoryModel
-            // var props = _propParameters.Concat(_propVariation).ToArray();
-            //if (!VariationFactoryModel.StaticVariationFactory.TryGet(variationId, out var variation)) return;
-            // BindStorage.TurnActionFor(false, props);
-            // VariationSelected = variation.Name;
-            //VariationFactoryModel.StaticVariationFactory.TryGetParameters(VariationSelected, out var parameterNames, out var paramts);
-            //ShowParameters(parameterNames, paramts);
-            // Weight = weight;
-            // if (parameters != null)
-            //     for (var i = 0; i < variation.HasParameters; i++)
-            //         switch (i)
-            //         {
-            //             case 0:
-            //                 Parameter1 = parameters[0];
-            //                 break;
-            //             case 1:
-            //                 Parameter2 = parameters[1];
-            //                 break;
-            //
-            //             case 2:
-            //                 Parameter3 = parameters[2];
-            //                 break;
-            //
-            //             case 3:
-            //                 Parameter4 = parameters[3];
-            //                 break;
-            //         }
-            // BindStorage.TurnActionFor(true, props);
+            var props = _propParameters.Concat(_propVariation).ToArray();
+            if (!VariationFactoryModel.StaticVariationFactory.TryGet(variationId, out var variation)) return;
+            BindStorage.TurnActionFor(false, props);
+            VariationSelected = variation.Name;
+            VariationFactoryModel.StaticVariationFactory.TryGetParameters(VariationSelected, out var parameterNames,
+                out var paramts);
+            ShowParameters(parameterNames, paramts);
+            Weight = weight;
+            if (parameters != null)
+                for (var i = 0; i < variation.HasParameters; i++)
+                    switch (i)
+                    {
+                        case 0:
+                            Parameter1 = parameters[0];
+                            break;
+                        case 1:
+                            Parameter2 = parameters[1];
+                            break;
+
+                        case 2:
+                            Parameter3 = parameters[2];
+                            break;
+
+                        case 3:
+                            Parameter4 = parameters[3];
+                            break;
+                    }
+
+            BindStorage.TurnActionFor(true, props);
         }
-
-
+        
         private void SetCoefficients()
         {
             _transformModel.SetFromValues(new[] {ShiftX, ShiftY, ScaleX, ScaleY, ShearX, ShearY, Angle},
@@ -474,7 +471,9 @@ namespace FlameSystems.Controls.ViewModels
                 $"a {$"{_transformModel.A:0.00}",-5} b {$"{_transformModel.B:0.00}",-5} e {$"{_transformModel.E:0.00}",-5}\nc {$"{_transformModel.C:0.00}",-5} d {$"{_transformModel.D:0.00}",-5} f {$"{_transformModel.F:0.00}",-5}";
         }
 
-        private void ShowParametersOld(IReadOnlyList<string> parametersNames, IReadOnlyList<double> parameters)
+
+
+        private void ShowParameters(IReadOnlyList<string> parametersNames, IReadOnlyList<double> parameters)
         {
             switch (parametersNames.Count)
             {

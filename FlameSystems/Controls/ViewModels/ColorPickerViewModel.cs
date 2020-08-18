@@ -81,16 +81,15 @@ namespace FlameSystems.Controls.ViewModels
 
         private void CommandHandler(object obj)
         {
-            //TODO: set names for actions
             switch ((string) obj)
             {
                 case "ok":
                     _canvasColumn.Children.Remove(_columnArrows);
-                    ActionFire.Invoke("UCreateColorPickerCallback", true, ColorNew.Color);
+                    ActionFire.Invoke("CREATE_FLAME_VIEWMODEL-TRANSFORM_PICK_COLOR_CALLBACK", true, ColorNew.Color);
                     break;
                 case "cancel":
                     _canvasColumn.Children.Remove(_columnArrows);
-                    ActionFire.Invoke("UCreateColorPickerCallback", false, ColorNew.Color);
+                    ActionFire.Invoke("CREATE_FLAME_VIEWMODEL-TRANSFORM_PICK_COLOR_CALLBACK", false, ColorNew.Color);
                     break;
                 case "current":
                     ColorNew = new SolidColorBrush(ColorCurrent.Color);

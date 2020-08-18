@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 using FlameBase.Models;
+using FlameBase.RenderMachine.Models;
 using FlameSystems.Infrastructure;
 using FlameSystems.Infrastructure.ValueBind;
 

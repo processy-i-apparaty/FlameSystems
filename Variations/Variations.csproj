@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CA096052-3EC6-4026-92BE-A9BA6B882F22}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Variations</RootNamespace>
+    <AssemblyName>Variations</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Arch.cs" />
+    <Compile Include="Bent.cs" />
+    <Compile Include="Blade.cs" />
+    <Compile Include="Blob.cs" />
+    <Compile Include="Blur.cs" />
+    <Compile Include="Bubble.cs" />
+    <Compile Include="Cosine.cs" />
+    <Compile Include="Cross.cs" />
+    <Compile Include="Curl.cs" />
+    <Compile Include="Cylinder.cs" />
+    <Compile Include="Diamond.cs" />
+    <Compile Include="Disc.cs" />
+    <Compile Include="Ex.cs" />
+    <Compile Include="Exponential.cs" />
+    <Compile Include="EyeFish.cs" />
+    <Compile Include="Fan.cs" />
+    <Compile Include="Fan2.cs" />
+    <Compile Include="FishEye.cs" />
+    <Compile Include="Gaussian.cs" />
+    <Compile Include="Handkerchief.cs" />
+    <Compile Include="Heart.cs" />
+    <Compile Include="Horseshoe.cs" />
+    <Compile Include="Hyperbolic.cs" />
+    <Compile Include="Julia.cs" />
+    <Compile Include="JuliaN.cs" />
+    <Compile Include="JuliaScope.cs" />
+    <Compile Include="Linear.cs" />
+    <Compile Include="Ngon.cs" />
+    <Compile Include="Noise.cs" />
+    <Compile Include="Other\Acosech.cs" />
+    <Compile Include="Other\Acosh.cs" />
+    <Compile Include="Other\Acoth.cs" />
+    <Compile Include="Other\AnamorphCyl.cs" />
+    <Compile Include="Other\Apocarpet.cs" />
+    <Compile Include="Other\Apollony.cs" />
+    <Compile Include="Other\Arcsech2.cs" />
+    <Compile Include="Other\Arcsinh.cs" />
+    <Compile Include="Other\Arctanh.cs" />
+    <Compile Include="Other\Asteria.cs" />
+    <Compile Include="Other\Atan.cs" />
+    <Compile Include="Other\Auger.cs" />
+    <Compile Include="Other\Barycentroid.cs" />
+    <Compile Include="Other\Bipolar.cs" />
+    <Compile Include="Other\Blocky.cs" />
+    <Compile Include="Other\BTransform.cs" />
+    <Compile Include="Pdj.cs" />
+    <Compile Include="Perspective.cs" />
+    <Compile Include="Pie.cs" />
+    <Compile Include="Polar.cs" />
+    <Compile Include="Popcorn.cs" />
+    <Compile Include="Power.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RadialBlur.cs" />
+    <Compile Include="Rays.cs" />
+    <Compile Include="Rectangles.cs" />
+    <Compile Include="Rings.cs" />
+    <Compile Include="Rings2.cs" />
+    <Compile Include="Secant2.cs" />
+    <Compile Include="Sinusoidal.cs" />
+    <Compile Include="Spherical.cs" />
+    <Compile Include="Spiral.cs" />
+    <Compile Include="Square.cs" />
+    <Compile Include="Swirl.cs" />
+    <Compile Include="Tangent.cs" />
+    <Compile Include="Twintrian.cs" />
+    <Compile Include="Waves.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FlameBase\FlameBase.csproj">
+      <Project>{89e09b04-9f5f-403a-8701-5db74a23c6f9}</Project>
+      <Name>FlameBase</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

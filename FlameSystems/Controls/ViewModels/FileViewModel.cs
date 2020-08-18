@@ -7,6 +7,8 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using FlameBase.Enums;
 using FlameBase.Models;
+using FlameBase.RenderMachine;
+using FlameBase.RenderMachine.Models;
 using FlameSystems.Infrastructure;
 using FlameSystems.Infrastructure.ValueBind;
 
@@ -14,8 +16,7 @@ namespace FlameSystems.Controls.ViewModels
 {
     internal class FileViewModel : Notifier
     {
-        //TODO: get flames directory
-        private readonly string _flamesDirectory = $"{Environment.CurrentDirectory}\\flames";
+        private readonly string _flamesDirectory = Directories.Flames;
         private FileViewType _viewType;
         private Action<bool, FileViewType, string> _resultAction;
 
@@ -25,9 +26,8 @@ namespace FlameSystems.Controls.ViewModels
 
             Command = new RelayCommand(CommandHandler);
 
-            //TODO: set names for actionFire
-            BindStorage.SetActionFor("SelectedItem", ActSelectedItem);
-            BindStorage.SetActionFor("FileName", ActSelectedItem);
+            BindStorage.SetActionFor("SelectedItem", ActionSelectedItem);
+            BindStorage.SetActionFor("FileName", ActionSelectedItem);
 
             PreviewBorder1 = new Thickness(0);
             SelectedIndex = -1;
@@ -53,7 +53,7 @@ namespace FlameSystems.Controls.ViewModels
 
         #region actions
 
-        private void ActSelectedItem(string arg1, object arg2)
+        private void ActionSelectedItem(string arg1, object arg2)
         {
             var name = (string) arg2;
             var isExist = CheckExist((string) arg2);
@@ -174,8 +174,7 @@ namespace FlameSystems.Controls.ViewModels
                     PreviewBorder2 = new Thickness(0);
                     FlamePreview = null;
                     FlameInfo = null;
-                    //TODO: create RenderMachine
-                    //RenderMachine.RenderStop();
+                    RenderMachine.RenderStop();
                     break;
             }
         }
@@ -190,15 +189,13 @@ namespace FlameSystems.Controls.ViewModels
                     break;
                 case "save":
                     if (!CheckIsValid(FileName)) break;
-                    //TODO: create RenderMachine
-                    // RenderMachine.RenderStop();
+                    RenderMachine.RenderStop();
                     _resultAction(true, _viewType, jsonPath);
                     break;
                 case "load":
                     if (!CheckIsValid(FileName)) break;
                     if (!CheckExist(FileName)) break;
-                    //TODO: create RenderMachine
-                    // RenderMachine.RenderStop();
+                    RenderMachine.RenderStop();
                     _resultAction(true, _viewType, jsonPath);
                     break;
             }
@@ -236,24 +233,22 @@ namespace FlameSystems.Controls.ViewModels
             var aspect = 1.0 * model.ImageHeight / model.ImageWidth;
             var viewSettings = new ViewSettingsModel(width, (int) (aspect * width), model.ViewShiftX,
                 model.ViewShiftY, model.ViewZoom, model.Rotation, model.Symmetry);
-            var variations = GetVariations(model);
-            var transformations = GetTransformations(model);
+            var variations = FlameHelperModel.GetVariationsFromFlameModel(model);
+            var transformations = FlameHelperModel.GetTransformationsFromFlameModel(model);
             var renderSettings = new RenderSettingsModel(50, 10);
-            //TODO: RenderPreview renderPack
+            
             GradientModel gradModel = null;
             var colorMode = FlameColorMode.Color;
-            if (model.GradModelPack != null)
+            if (model.GradientPack != null)
             {
                 colorMode = FlameColorMode.Gradient;
-                gradModel = new GradientModel(model.GradModelPack);
+                gradModel = new GradientModel(model.GradientPack);
             }
 
             var renderPack = new RenderPackModel(transformations, variations, viewSettings, renderSettings,
                 colorMode, gradModel);
             var renderActions = new RenderActionsModel(ActImage, null, null);
-
-            //TODO: create RenderMachine
-            // RenderMachine.Render(renderPack, renderActions);
+            RenderMachine.Render(renderPack, renderActions);
         }
 
         private static string GetInfo(FlameModel model)
@@ -264,41 +259,9 @@ namespace FlameSystems.Controls.ViewModels
             return str;
         }
 
-        private static TransformModel[] GetTransformations(FlameModel model)
-        {
-            var length = model.Coefficients.Count;
-            var transformations = new TransformModel[length];
-            var hasGradient = model.GradModelPack != null;
-            for (var i = 0; i < length; i++)
-            {
-                var t = new TransformModel();
-                var colorPosition = .5;
-                if (hasGradient) colorPosition = model.FunctionColorPositions[i];
-                t.SetFromCoefficients(model.Coefficients[i], model.Coefficients[i][6], model.FunctionColors[i],
-                    colorPosition);
-                transformations[i] = t;
-            }
+       
 
-            return transformations;
-        }
-
-        private VariationModel[] GetVariations(FlameModel model)
-        {
-            var length = model.VariationIds.Count;
-            var variations = new VariationModel[length];
-            var hasParameters = model.Parameters != null;
-            var hasWeights = model.Weights != null;
-            for (var i = 0; i < length; i++)
-            {
-                if (!VariationFactoryModel.StaticVariationFactory.TryGet(model.VariationIds[i], out var v))
-                    throw new ArgumentOutOfRangeException(nameof(model), @"UNKNOWN VARIATION ID");
-                if (hasParameters) v.SetParameters(model.Parameters[i]);
-                if (hasWeights) v.W = model.Weights[i];
-                variations[i] = v;
-            }
-
-            return variations;
-        }
+        
 
         private void GetFiles()
         {

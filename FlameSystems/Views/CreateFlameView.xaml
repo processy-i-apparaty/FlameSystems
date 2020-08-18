@@ -314,12 +314,12 @@
             <Image Source="{Binding ImageSource}" />
         </Border>
 
-        <!-- <ContentControl -->
-        <!--     Content="{Binding TopContent}" -->
-        <!--     Grid.Row="0" -->
-        <!--     Grid.Column="0" -->
-        <!--     Grid.RowSpan="3" -->
-        <!--     Grid.ColumnSpan="2" /> -->
+        <ContentControl
+            Content="{Binding TopContent}"
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.RowSpan="3"
+            Grid.ColumnSpan="2" />
 
     </Grid>
 </UserControl>

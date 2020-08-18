@@ -1,6 +1,7 @@
 ﻿using FlameBase.Enums;
+using FlameBase.Models;
 
-namespace FlameBase.Models
+namespace FlameBase.RenderMachine.Models
 {
     public class RenderPackModel
     {

@@ -36,7 +36,7 @@ namespace FlameSystems.Controls.ViewModels
 
         #region actions
 
-        private void UColorGradPickerCallback(Color color)
+        private void ActionCallback(Color color)
         {
             if (_selectedColorId >= 0)
             {
@@ -160,21 +160,19 @@ namespace FlameSystems.Controls.ViewModels
             CommandCanvasMidMu = new RelayCommand(CanvasMidMu);
             CommandSizeChanged = new RelayCommand(SizeChanged);
             Command = new RelayCommand(ButtonsHandler);
-            //TODO: set name for actionFire
-            ActionFire.AddOrReplace("UColorGradPickerCallback", new Action<Color>(UColorGradPickerCallback), GetType());
+            ActionFire.AddOrReplace("GRADIENT_PICKER_VIEWMODEL-CALLBACK", new Action<Color>(ActionCallback), GetType());
         }
 
         private static void ButtonsHandler(object obj)
         {
-            //TODO: set names for actions
             var button = (string) obj;
             switch (button)
             {
                 case "ok":
-                    ActionFire.Invoke("UCreateColorGradientCallback", true);
+                    ActionFire.Invoke("CREATE_FLAME_VIEWMODEL-TRANSFORM_PICK_GRADIENT_CALLBACK", true);
                     break;
                 case "cancel":
-                    ActionFire.Invoke("UCreateColorGradientCallback", false);
+                    ActionFire.Invoke("CREATE_FLAME_VIEWMODEL-TRANSFORM_PICK_GRADIENT_CALLBACK", false);
                     break;
             }
         }
@@ -518,8 +516,7 @@ namespace FlameSystems.Controls.ViewModels
                 }
             }
 
-            //TODO: set name for action
-            ActionFire.Invoke("UCreatePikGradient", color);
+            ActionFire.Invoke("CREATE_FLAME_VIEWMODEL-PICK_GRADIENT", color);
         }
 
         #endregion

@@ -80,7 +80,7 @@ namespace FlameBase.Models
             };
             if (gradModel != null)
             {
-                model.GradModelPack = gradModel.Pack();
+                model.GradientPack = gradModel.Pack();
                 model.FunctionColorPositions = colorPositions;
             }
 

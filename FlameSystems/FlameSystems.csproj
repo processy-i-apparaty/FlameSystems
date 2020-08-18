@@ -74,6 +74,7 @@
     </Compile>
     <Compile Include="Infrastructure\ActionFire\ActionFire.cs" />
     <Compile Include="Infrastructure\ActionFire\ActionFireReturn.cs" />
+    <Compile Include="Infrastructure\Directories.cs" />
     <Compile Include="Infrastructure\Notifier.cs" />
     <Compile Include="Infrastructure\RelayCommand.cs" />
     <Compile Include="Infrastructure\ValueBind\IValueBind.cs" />
@@ -142,6 +143,10 @@
     <ProjectReference Include="..\FlameBase\FlameBase.csproj">
       <Project>{89E09B04-9F5F-403A-8701-5DB74A23C6F9}</Project>
       <Name>FlameBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Variations\Variations.csproj">
+      <Project>{ca096052-3ec6-4026-92be-a9ba6b882f22}</Project>
+      <Name>Variations</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

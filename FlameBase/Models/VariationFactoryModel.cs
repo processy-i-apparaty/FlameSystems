@@ -18,8 +18,7 @@ namespace FlameBase.Models
 
         public VariationFactoryModel()
         {
-            //TODO: assemblyFile
-            var assemblyFile = $"{AppDomain.CurrentDomain.BaseDirectory}\\VariationsLibrary.dll";
+            var assemblyFile = $"{AppDomain.CurrentDomain.BaseDirectory}\\Variations.dll";
             var assembly = Assembly.LoadFrom(assemblyFile);
             _types = assembly.GetExportedTypes().Where(t => t.IsClass).ToArray();
             Array.Sort(_types, (a, b) => string.CompareOrdinal(a.Name, b.Name));

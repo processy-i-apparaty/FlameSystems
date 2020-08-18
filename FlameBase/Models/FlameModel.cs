@@ -18,6 +18,6 @@ namespace FlameBase.Models
         public int ImageHeight { get; set; }
         public List<double> Weights { get; set; }
         public List<double> FunctionColorPositions { get; set; }
-        public GradientPackModel GradModelPack { get; set; }
+        public GradientPackModel GradientPack { get; set; }
     }
 }

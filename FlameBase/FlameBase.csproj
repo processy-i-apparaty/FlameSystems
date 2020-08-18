@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ColorMine, Version=1.1.3.0, Culture=neutral, processorArchitecture=MSIL">
@@ -52,27 +54,36 @@
     <Compile Include="Enums\ColorPickerMode.cs" />
     <Compile Include="Enums\FileViewType.cs" />
     <Compile Include="FlameMath\Algebra.cs" />
+    <Compile Include="FlameMath\Complex.cs" />
+    <Compile Include="FlameMath\Matrix.cs" />
     <Compile Include="FlameMath\Trigonometry.cs" />
     <Compile Include="Enums\FlameColorMode.cs" />
+    <Compile Include="FlameMath\XorShift.cs" />
     <Compile Include="Models\ColorPickerColorsModel.cs" />
     <Compile Include="Models\ColorPickerColumnModel.cs" />
     <Compile Include="Models\ColorPickerCoordinatesModel.cs" />
     <Compile Include="Models\ColorPickerCubeModel.cs" />
+    <Compile Include="Models\FlameHelperModel.cs" />
     <Compile Include="Models\FlameModel.cs" />
     <Compile Include="Models\GiveIdModel.cs" />
     <Compile Include="Enums\GradientMode.cs" />
     <Compile Include="Models\GradientModel.cs" />
     <Compile Include="Models\GradientPackModel.cs" />
     <Compile Include="Models\JsonFlamesModel.cs" />
-    <Compile Include="Models\RenderActionsModel.cs" />
-    <Compile Include="Models\RenderPackModel.cs" />
-    <Compile Include="Models\RenderSettingsModel.cs" />
+    <Compile Include="RenderMachine\Models\IteratorModel.cs" />
+    <Compile Include="RenderMachine\Models\LogDisplayModel.cs" />
+    <Compile Include="RenderMachine\Models\RandomTransformModel.cs" />
+    <Compile Include="RenderMachine\Models\RenderActionsModel.cs" />
+    <Compile Include="RenderMachine\Models\RenderPackModel.cs" />
+    <Compile Include="RenderMachine\Models\RenderSettingsModel.cs" />
     <Compile Include="Models\TransformModel.cs" />
     <Compile Include="Models\VariationFactoryModel.cs" />
     <Compile Include="Models\VariationHelperModel.cs" />
     <Compile Include="Models\VariationModel.cs" />
     <Compile Include="Models\ViewSettingsModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RenderMachine\Models\TimeStringModel.cs" />
+    <Compile Include="RenderMachine\RenderMachine.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

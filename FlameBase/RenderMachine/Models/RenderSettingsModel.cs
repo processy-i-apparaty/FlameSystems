@@ -1,8 +1,8 @@
-﻿namespace FlameBase.Models
+﻿namespace FlameBase.RenderMachine.Models
 {
     public class RenderSettingsModel
     {
-        public RenderSettingsModel(int iterations = 1000, int renderPerIterations = 100, int shotsPerIteration = 64000,
+        public RenderSettingsModel(int iterations = 20000, int renderPerIterations = 1000, int shotsPerIteration = 64000,
             int draftImageSideWidth = 700)
         {
             Iterations = iterations;
