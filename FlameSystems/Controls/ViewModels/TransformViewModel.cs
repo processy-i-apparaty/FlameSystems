@@ -376,8 +376,6 @@ namespace FlameSystems.Controls.ViewModels
 
         #region private
 
-
-
         private void SelectColor()
         {
             if (_isFrozen) return;
@@ -423,12 +421,25 @@ namespace FlameSystems.Controls.ViewModels
             if (_isFrozen) return;
             var props = _propValues.Concat(_propValues2).ToArray();
             BindStorage.TurnActionFor(false, props);
-            BindStorage.RandomizeFor(props);
+
+            while (true)
+            {
+                BindStorage.RandomizeFor(props);
+                if (CheckRandomization())
+                    break;
+            }
+
             BindStorage.TurnActionFor(true, props);
             SetCoefficients();
             ActionFire.Invoke("CREATE_FLAME_VIEWMODEL-CALL_RENDER", "draft");
         }
 
+        private bool CheckRandomization()
+        {
+            _transformModel.SetFromValues(new[] {ShiftX, ShiftY, ScaleX, ScaleY, ShearX, ShearY, Angle}, Probability,
+                FColor, ColorPosition);
+            return _transformModel.CheckContractive();
+        }
 
         public void SetVariation(int variationId, double[] parameters, double weight = 1.0)
         {
@@ -462,7 +473,7 @@ namespace FlameSystems.Controls.ViewModels
 
             BindStorage.TurnActionFor(true, props);
         }
-        
+
         private void SetCoefficients()
         {
             _transformModel.SetFromValues(new[] {ShiftX, ShiftY, ScaleX, ScaleY, ShearX, ShearY, Angle},
@@ -470,7 +481,6 @@ namespace FlameSystems.Controls.ViewModels
             Coefficients =
                 $"a {$"{_transformModel.A:0.00}",-5} b {$"{_transformModel.B:0.00}",-5} e {$"{_transformModel.E:0.00}",-5}\nc {$"{_transformModel.C:0.00}",-5} d {$"{_transformModel.D:0.00}",-5} f {$"{_transformModel.F:0.00}",-5}";
         }
-
 
 
         private void ShowParameters(IReadOnlyList<string> parametersNames, IReadOnlyList<double> parameters)

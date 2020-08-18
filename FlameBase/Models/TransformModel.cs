@@ -240,5 +240,19 @@ namespace FlameBase.Models
         public double ColorPosition { get; set; } = .5;
 
         #endregion
+
+        public bool CheckContractive()
+        {
+            var aSquare = A * A;
+            var dSquare = D * D;
+            if (aSquare + dSquare >= 1.0) return false;
+            var bSquare = B * B;
+            var eSquare = E * E;
+            if (bSquare + eSquare >= 1.0) return false;
+            var aedb = Math.Pow(A * E - D * B, 2.0);
+            if (aSquare + bSquare + dSquare + eSquare >= 1.0 + aedb) return false;
+
+            return true;
+        }
     }
 }
