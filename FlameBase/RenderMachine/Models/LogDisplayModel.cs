@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -246,14 +244,12 @@ namespace FlameBase.RenderMachine.Models
             byte a = 255;
             var width = bmp.PixelWidth;
             var stride = width * bmp.Format.BitsPerPixel / 8;
-            for (int x = 0; x < width; x++)
+            for (var x = 0; x < width; x++)
+            for (var y = 0; y < bmp.PixelHeight; y++)
             {
-                for (int y = 0; y < bmp.PixelHeight; y++)
-                {
-                    byte[] colorData = {b, g, r, a};
-                    var rect = new Int32Rect(x, y, 1, 1);
-                    bmp.WritePixels(rect, colorData, stride, 0);
-                }
+                byte[] colorData = {b, g, r, a};
+                var rect = new Int32Rect(x, y, 1, 1);
+                bmp.WritePixels(rect, colorData, stride, 0);
             }
         }
 
@@ -301,10 +297,7 @@ namespace FlameBase.RenderMachine.Models
             // FillBitmap(ref img, BackColor);
 
             var strides = new int[length];
-            for (var i = 0; i < length; i++)
-            {
-                strides[i] = stride;
-            }
+            for (var i = 0; i < length; i++) strides[i] = stride;
 
             var parallelOptions = new ParallelOptions
                 {MaxDegreeOfParallelism = Environment.ProcessorCount};
@@ -380,7 +373,7 @@ namespace FlameBase.RenderMachine.Models
                 }
             });
 
-            Debug.WriteLine($"\tPARALLEL END.");
+            Debug.WriteLine("\tPARALLEL END.");
 
             img.Lock();
             img.WritePixels(rect, pixels, stride, 0);

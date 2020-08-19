@@ -40,37 +40,23 @@ namespace FlameSystems.Infrastructure
 
         protected void Notify([CallerMemberName] string propertyName = "")
         {
-            // ConsoleReport.Report($"{propertyName} {PropertyChanged}", MethodBase.GetCurrentMethod());
-          PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         protected dynamic Get([CallerMemberName] string propertyName = "")
         {
             var obj = BindStorage.Get(propertyName);
             var type = obj?.GetType();
-            var dyn = Convert.ChangeType(obj, type ?? throw new InvalidOperationException());
-            // ConsoleReport.Report($"{propertyName} [{dyn}]", MethodBase.GetCurrentMethod());
+            if (type == null) return null;
+
+            var dyn = Convert.ChangeType(obj, type);
             return dyn;
         }
 
         protected void Set<T>(T obj, [CallerMemberName] string propertyName = "")
         {
-            // ConsoleReport.Report($"{propertyName} [{typeof(T)} : {obj}]", MethodBase.GetCurrentMethod());
             BindStorage.Set(propertyName, obj);
         }
 
-        public static dynamic DynamicCast(dynamic source, Type dest)
-        {
-            var dyn = Convert.ChangeType(source, dest);
-            return dyn;
-        }
-
-        // private static dynamic DynamicCast(object entity, Type to)
-        // {
-        //     if (entity == null || to == null) return null;
-        //     var openCast = typeof(DynaCast).GetMethod("Cast", BindingFlags.Static | BindingFlags.Public);
-        //     var closeCast = openCast?.MakeGenericMethod(to);
-        //     return closeCast?.Invoke(entity, new[] {entity});
-        // }
     }
 }
