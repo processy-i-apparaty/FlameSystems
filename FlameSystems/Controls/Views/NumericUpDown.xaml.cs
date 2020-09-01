@@ -56,15 +56,16 @@ namespace FlameSystems.Controls.Views
             }
 
             Value = val;
-            SelectAllNumbers();
+            TextNumbers.SelectAll();
+            //SelectAllNumbers();
         }
 
-        private void SelectAllNumbers()
-        {
-            var length = TextNumbers.Text.Length;
-            TextNumbers.SelectionStart = 0;
-            TextNumbers.SelectionLength = length;
-        }
+        // private void SelectAllNumbers()
+        // {
+        //     var length = TextNumbers.Text.Length;
+        //     TextNumbers.SelectionStart = 0;
+        //     TextNumbers.SelectionLength = length;
+        // }
 
         private void Increase(double n)
         {
@@ -199,12 +200,11 @@ namespace FlameSystems.Controls.Views
 
         private void ScannerOnMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            //var position = e.GetPosition(TextNumbers);
             var change = GetChangeValue();
 
             if (e.Delta > 0) Increase(change);
             else if (e.Delta < 0) Increase(-change);
-
+            e.Handled = true;
             if (Keyboard.FocusedElement is Window)
             {
                 Debug.WriteLine(Keyboard.FocusedElement);
@@ -217,8 +217,11 @@ namespace FlameSystems.Controls.Views
 
         private void ScannerOnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            TextNumbers.Focus();
-            SelectAllNumbers();
+            e.Handled = true;
+            var focus = TextNumbers.Focus();
+            Debug.WriteLine($"{sender} ScannerOnMouseDown {e.ChangedButton}, focus: {focus}");
+            TextNumbers.SelectAll();
+            // SelectAllNumbers();
         }
 
         private double GetChangeValue()

@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:FlameSystems.Controls.Views"
              xmlns:viewModels="clr-namespace:FlameSystems.Controls.ViewModels"
              mc:Ignorable="d"
-             d:DesignWidth="300">
+             d:DesignWidth="260">
     <UserControl.DataContext>
         <viewModels:TransformViewModel />
     </UserControl.DataContext>
@@ -55,7 +55,7 @@
                             Text="shift x"
                             Style="{StaticResource FontBrassMonoText}" />
                         <local:NumericUpDown
-                            Width="50"
+                            Width="60"
                             DecimalPlaces="2"
                             ChangeLarge="1"
                             ChangeNormal="0.1"
@@ -70,7 +70,7 @@
                             Text="shift y"
                             Style="{StaticResource FontBrassMonoText}" />
                         <local:NumericUpDown
-                            Width="50"
+                            Width="60"
                             DecimalPlaces="2"
                             ChangeLarge="1"
                             ChangeNormal="0.1"
@@ -85,7 +85,7 @@
                             Text="angle"
                             Style="{StaticResource FontBrassMonoText}" />
                         <local:NumericUpDown
-                            Width="50"
+                            Width="60"
                             DecimalPlaces="1"
                             Minimum="-1"
                             Maximum="361"
@@ -101,7 +101,7 @@
                             Text="scale x"
                             Style="{StaticResource FontBrassMonoText}" />
                         <local:NumericUpDown
-                            Width="50"
+                            Width="60"
                             DecimalPlaces="2"
                             ChangeLarge="1"
                             ChangeNormal="0.1"
@@ -116,7 +116,7 @@
                             Text="scale y"
                             Style="{StaticResource FontBrassMonoText}" />
                         <local:NumericUpDown
-                            Width="50"
+                            Width="60"
                             DecimalPlaces="2"
                             ChangeLarge="1"
                             ChangeNormal="0.1"
@@ -131,7 +131,7 @@
                             Text="color"
                             Style="{StaticResource FontBrassMonoText}" />
                         <Button
-                            Width="50"
+                            Width="60"
                             Height="16"
                             Style="{StaticResource StyleButtonFlatUiBorder}"
                             Background="{Binding ColorBrush}"
@@ -148,7 +148,7 @@
                             Text="shear x"
                             Style="{StaticResource FontBrassMonoText}" />
                         <local:NumericUpDown
-                            Width="50"
+                            Width="60"
                             DecimalPlaces="2"
                             ChangeLarge="1"
                             ChangeNormal="0.1"
@@ -163,7 +163,7 @@
                             Text="shear y"
                             Style="{StaticResource FontBrassMonoText}" />
                         <local:NumericUpDown
-                            Width="50"
+                            Width="60"
                             DecimalPlaces="2"
                             ChangeLarge="1"
                             ChangeNormal="0.1"
@@ -178,7 +178,7 @@
                             Text="chance"
                             Style="{StaticResource FontBrassMonoText}" />
                         <local:NumericUpDown
-                            Width="50"
+                            Width="60"
                             DecimalPlaces="2"
                             ChangeLarge="1"
                             ChangeNormal="0.1"

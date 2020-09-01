@@ -26,7 +26,7 @@ namespace FlameSystems.ViewModels
     internal class CreateFlameViewModel : Notifier
     {
         private readonly string[] _bindParameters1 =
-            {"ShiftX", "ShiftY", "Zoom", "Rotation", "Symmetry", "ImageWidth", "ImageHeight"};
+            {"ShiftX", "ShiftY", "Zoom", "Rotation", "Symmetry", "ImageWidth", "ImageHeight", "BackColor"};
 
         private readonly RenderSettingsModel _renderSettings = new RenderSettingsModel();
         private ColorPickerView _colorPicker;
@@ -49,7 +49,8 @@ namespace FlameSystems.ViewModels
             InitActions();
             InitDirectories();
             InitStrings();
-            BackColor = Brushes.Black;
+
+            ActRenderSetState(RenderMachine.StateRenderEnded);
         }
 
         #region methods
@@ -79,6 +80,7 @@ namespace FlameSystems.ViewModels
             CommandEditGradient = new RelayCommand(EditGradientHandler);
             Transforms = new ObservableCollection<TransformView>();
             RadioColor = true;
+            BackColor = Brushes.Black;
         }
 
         private void InitActions()

@@ -17,13 +17,12 @@
             <RowDefinition Height="20" />
         </Grid.RowDefinitions>
         <TextBlock VerticalAlignment="Center"
-                   HorizontalAlignment="Left"
                    Margin="10 0"
                    Style="{StaticResource FontBrassMono}"
                    Foreground="{StaticResource BrushBorder}"
                    Text="{Binding UpperString}" FontSize="16" />
 
-        <ContentControl Grid.Row="1" Content="{Binding WindowContent}"></ContentControl>
+        <ContentControl Grid.Row="1" Content="{Binding WindowContent}"/>
         <Border Grid.Row="2" BorderBrush="{StaticResource BrushBorder}" BorderThickness="0 1 0 0">
             <StackPanel VerticalAlignment="Center">
                 <TextBlock Text="{Binding BottomString}"

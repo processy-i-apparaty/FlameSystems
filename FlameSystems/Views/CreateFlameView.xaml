@@ -7,7 +7,7 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:views="clr-namespace:FlameSystems.Controls.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="870">
     <UserControl.DataContext>
         <viewModels:CreateFlameViewModel/>
     </UserControl.DataContext>
@@ -19,7 +19,7 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="230" />
+            <ColumnDefinition Width="260" />
         </Grid.ColumnDefinitions>
 
         <!-- upper panel -->
@@ -298,8 +298,7 @@
                 </StackPanel>
                 <Button
                     Height="33"
-                    Width="213"
-                    HorizontalAlignment="Right"
+                    HorizontalAlignment="Center"
                     Style="{StaticResource StyleButtonFlatUi}"
                     Content="add transform"
                     IsEnabled="{Binding IsEnabledAddTransform}" 
@@ -308,7 +307,7 @@
             </StackPanel>
         </Border>
 
-        <!-- transformations panel -->
+        <!-- transforms panel -->
         <Border
             Grid.Row="2"
             Grid.Column="1"
@@ -332,6 +331,8 @@
         </Border>
 
         <ContentControl
+
+            
             Content="{Binding TopContent}"
             Grid.Row="0"
             Grid.Column="0"

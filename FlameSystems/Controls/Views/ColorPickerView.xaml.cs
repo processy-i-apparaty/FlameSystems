@@ -11,7 +11,7 @@ namespace FlameSystems.Controls.Views
         public ColorPickerView(Color color)
         {
             InitializeComponent();
-            DataContext = new ColorPickerViewModel(Colors.Gray);
+            DataContext = new ColorPickerViewModel(color);
         }
 
         public ColorPickerView()
