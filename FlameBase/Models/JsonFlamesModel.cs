@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Media;
+using FlameBase.RenderMachine.Models;
 using Newtonsoft.Json;
 
 namespace FlameBase.Models
@@ -16,8 +17,13 @@ namespace FlameBase.Models
             return JsonConvert.DeserializeObject<FlameModel>(jsonString, JsonSerializerSettings);
         }
 
+        public static string GetLogDisplayString(LogDisplayModel logDisplay)
+        {
+            var array = logDisplay.GetArrayCopy();
+            return JsonConvert.SerializeObject(array, Formatting.Indented, JsonSerializerSettings);
+        }
 
-        public static string GetFractalString(TransformModel[] transformations, VariationModel[] variations,
+        public static string GetFlameModelJson(TransformModel[] transformations, VariationModel[] variations,
             ViewSettingsModel viewSettings, GradientModel gradModel)
         {
             var coefficients = new List<double[]>();
@@ -63,7 +69,7 @@ namespace FlameBase.Models
                 weights.Add(variations[i].W);
             }
 
-            var model = new FlameModel
+            var flameModel = new FlameModel
             {
                 ImageWidth = viewSettings.ImageWidth,
                 ImageHeight = viewSettings.ImageHeight,
@@ -76,15 +82,16 @@ namespace FlameBase.Models
                 Weights = weights,
                 Parameters = parameters,
                 VariationIds = variationIds,
-                FunctionColors = colors
+                FunctionColors = colors,
+                BackColor = viewSettings.BackColor
             };
             if (gradModel != null)
             {
-                model.GradientPack = gradModel.Pack();
-                model.FunctionColorPositions = colorPositions;
+                flameModel.GradientPack = gradModel.Pack();
+                flameModel.FunctionColorPositions = colorPositions;
             }
 
-            return JsonConvert.SerializeObject(model, Formatting.Indented, JsonSerializerSettings);
+            return JsonConvert.SerializeObject(flameModel, Formatting.Indented, JsonSerializerSettings);
         }
     }
 }

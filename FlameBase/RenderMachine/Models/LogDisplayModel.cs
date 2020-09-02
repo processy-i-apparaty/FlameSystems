@@ -14,6 +14,7 @@ namespace FlameBase.RenderMachine.Models
 {
     public class LogDisplayModel
     {
+        private static readonly Random Rand = new Random();
         private readonly uint[,,] _display;
 
         public LogDisplayModel(int width, int height, int colorCount, Color backColor)
@@ -25,14 +26,14 @@ namespace FlameBase.RenderMachine.Models
             BackColor = backColor;
         }
 
-        // public LogDisplayModel(uint[,,] array)
-        // {
-        //     Width = array.GetLength(0);
-        //     Height = array.GetLength(1);
-        //     ColorCount = array.GetLength(2);
-        //     _display = CopyArray(array);
-        //     GetMaxShots();
-        // }
+        public LogDisplayModel(uint[,,] array, Color backColor)
+        {
+            Width = array.GetLength(0);
+            Height = array.GetLength(1);
+            ColorCount = array.GetLength(2);
+            _display = CopyArray(array);
+            GetMaxShots();
+        }
 
         public Color BackColor { get; set; }
         public uint Max { get; private set; }
@@ -40,6 +41,9 @@ namespace FlameBase.RenderMachine.Models
         public int Width { get; }
         public int ColorCount { get; }
         public double Contrast { get; set; } = 80.0;
+
+        
+
 
         #region log display
 
@@ -64,8 +68,55 @@ namespace FlameBase.RenderMachine.Models
             return labs;
         }
 
+        // private uint[] GetDisplayXy(uint x, uint y)
+        // {
+        //     var displayXy = new uint[ColorCount];
+        //     for (var i = 0; i < ColorCount; i++) displayXy[i] = _display[x, y, i];
+        //     return displayXy;
+        // }
 
-        private Hsb GetColorGm(uint x, uint y, IReadOnlyList<double> gradientValues, GradientModel gradModel)
+
+        // private Hsb GetColorModeGradient(uint x, uint y, IReadOnlyList<double> gradientValues, GradientModel gradModel)
+        // {
+        //
+        //     var displayXy = GetDisplayXy(x, y);
+        //     var colorValue = gradientValues[0];
+        //
+        //     for (int i = 0; i < ColorCount; i++)
+        //     {
+        //         
+        //     }
+        //
+        //     var color = gradModel.GetFromPosition(colorValue);
+        //     var rgb = new Rgb { R = color.R, G = color.G, B = color.B };
+        //     mix = rgb.To<Hsb>();
+        //     return mix;
+        // }
+
+        // private Hsb GetColorModeGradient2(uint x, uint y, IReadOnlyList<double> gradientValues, GradientModel gradModel)
+        // {
+        //     var displayXy = GetDisplayXy(x, y);
+        //     var total = (uint) displayXy.Select(n => (long) n).Sum();
+        //     var mix = new Hsb();
+        //     if (total == 0) return mix;
+        //
+        //     var displayXyDouble = new double[ColorCount];
+        //     for (var i = 0; i < ColorCount; i++) displayXyDouble[i] = (double) displayXy[i] / total;
+        //
+        //     var colorValue = 0.0;
+        //     for (var i = 0; i < ColorCount; i++)
+        //     {
+        //         colorValue += displayXyDouble[i] * gradientValues[i];
+        //     }
+        //
+        //     if (displayXy[0] > 0 && displayXy[1] > 0)
+        //     {
+        //     }
+        //
+        //     return gradModel.GetLabFromPosition(colorValue).To<Hsb>();
+        // }
+
+        private Hsb GetColorModeGradient(uint x, uint y, IReadOnlyList<double> gradientValues, GradientModel gradModel)
         {
             var length = gradientValues.Count;
             var total = 0u;
@@ -77,80 +128,77 @@ namespace FlameBase.RenderMachine.Models
                 total += d;
             }
 
-            var mix = new Hsb();
-            if (total == 0) return mix;
+            if (total == 0) return new Hsb();
+            ;
             var colorValue = sum / total;
-            var color = gradModel.GetFromPosition(colorValue);
-            var rgb = new Rgb {R = color.R, G = color.G, B = color.B};
-            mix = rgb.To<Hsb>();
-            return mix;
+            return gradModel.GetLabFromPosition(colorValue).To<Hsb>();
         }
 
 
-        private Lab GetColorCm1(uint i, uint j, IReadOnlyList<Lab> labs)
-        {
-            var total = 0u;
-            var length = labs.Count;
-            var colorHits = new uint[length];
-            for (var k = 0; k < length; k++)
-            {
-                colorHits[k] = _display[i, j, k];
-                total += colorHits[k];
-            }
+        // private Lab GetColorCm1(uint i, uint j, IReadOnlyList<Lab> labs)
+        // {
+        //     var total = 0u;
+        //     var length = labs.Count;
+        //     var colorHits = new uint[length];
+        //     for (var k = 0; k < length; k++)
+        //     {
+        //         colorHits[k] = _display[i, j, k];
+        //         total += colorHits[k];
+        //     }
+        //
+        //     var backColorLab = new Rgb
+        //     {
+        //         R = BackColor.R,
+        //         G = BackColor.G,
+        //         B = BackColor.B
+        //     }.To<Lab>();
+        //
+        //     var mix = new Lab();
+        //
+        //
+        //     //TODO: GetColorCm mix back
+        //     if (total == 0) return backColorLab;
+        //
+        //     var coefficient = new double[length];
+        //     for (var k = 0; k < length; k++)
+        //         coefficient[k] = Algebra.Map(colorHits[k], 0.0, total, 0.0, 1.0);
+        //     for (var k = 0; k < length; k++)
+        //     {
+        //         mix.L += labs[k].L * coefficient[k];
+        //         mix.A += labs[k].A * coefficient[k];
+        //         mix.B += labs[k].B * coefficient[k];
+        //     }
+        //
+        //     mix.L = (mix.L + backColorLab.L) * .5;
+        //     mix.A = (mix.A + backColorLab.A) * .5;
+        //     mix.B = (mix.B + backColorLab.B) * .5;
+        //
+        //     return mix;
+        // }
 
-            var backColorLab = new Rgb
-            {
-                R = BackColor.R,
-                G = BackColor.G,
-                B = BackColor.B
-            }.To<Lab>();
+        // private Color GetColorModeColor(uint i, uint j, IReadOnlyList<Color> colors)
+        // {
+        //     var length = colors.Count;
+        //     var color = Colors.Black;
+        //
+        //     for (var k = 0; k < length; k++)
+        //     {
+        //         var c = _display[i, j, k];
+        //         for (var x = 0; x < c; x++) color = MixColors(color, colors[k]);
+        //     }
+        //
+        //     return color;
+        // }
 
-            var mix = new Lab();
+        // private static Color MixColors(Color c1, Color c2)
+        // {
+        //     var r = (byte) Math.Round((c1.R + c2.R) * .5);
+        //     var g = (byte) Math.Round((c1.G + c2.G) * .5);
+        //     var b = (byte) Math.Round((c1.B + c2.B) * .5);
+        //     return Color.FromRgb(r, g, b);
+        // }
 
-
-            //TODO: GetColorCm mix back
-            if (total == 0) return backColorLab;
-
-            var coefficient = new double[length];
-            for (var k = 0; k < length; k++)
-                coefficient[k] = Algebra.Map(colorHits[k], 0.0, total, 0.0, 1.0);
-            for (var k = 0; k < length; k++)
-            {
-                mix.L += labs[k].L * coefficient[k];
-                mix.A += labs[k].A * coefficient[k];
-                mix.B += labs[k].B * coefficient[k];
-            }
-
-            mix.L = (mix.L + backColorLab.L) * .5;
-            mix.A = (mix.A + backColorLab.A) * .5;
-            mix.B = (mix.B + backColorLab.B) * .5;
-
-            return mix;
-        }
-
-        private Color GetColorCm(uint i, uint j, IReadOnlyList<Color> colors)
-        {
-            var length = colors.Count;
-            var color = Colors.Black;
-
-            for (var k = 0; k < length; k++)
-            {
-                var c = _display[i, j, k];
-                for (var x = 0; x < c; x++) color = MixColors(color, colors[k]);
-            }
-
-            return color;
-        }
-
-        private static Color MixColors(Color c1, Color c2)
-        {
-            var r = (byte) Math.Round((c1.R + c2.R) * .5);
-            var g = (byte) Math.Round((c1.G + c2.G) * .5);
-            var b = (byte) Math.Round((c1.B + c2.B) * .5);
-            return Color.FromRgb(r, g, b);
-        }
-
-        private Lab GetColorCm(uint i, uint j, IReadOnlyList<Lab> labs)
+        private Lab GetColorModeColor(uint i, uint j, IReadOnlyList<Lab> labs)
         {
             var total = 0u;
             var length = labs.Count;
@@ -236,34 +284,34 @@ namespace FlameBase.RenderMachine.Models
 
         #region gbfr
 
-        private void FillBitmap(ref WriteableBitmap bmp, Color color)
-        {
-            var r = color.R;
-            var g = color.G;
-            var b = color.B;
-            byte a = 255;
-            var width = bmp.PixelWidth;
-            var stride = width * bmp.Format.BitsPerPixel / 8;
-            for (var x = 0; x < width; x++)
-            for (var y = 0; y < bmp.PixelHeight; y++)
-            {
-                byte[] colorData = {b, g, r, a};
-                var rect = new Int32Rect(x, y, 1, 1);
-                bmp.WritePixels(rect, colorData, stride, 0);
-            }
-        }
-
-        private static int ConvertColor(Color color)
-        {
-            var num1 = 0;
-            if (color.A == 0) return num1;
-
-            var num2 = color.A + 1;
-            num1 = (color.A << 24) | ((byte) ((color.R * num2) >> 8) << 16) |
-                   ((byte) ((color.G * num2) >> 8) << 8) | (byte) ((color.B * num2) >> 8);
-
-            return num1;
-        }
+        // private void FillBitmap(ref WriteableBitmap bmp, Color color)
+        // {
+        //     var r = color.R;
+        //     var g = color.G;
+        //     var b = color.B;
+        //     byte a = 255;
+        //     var width = bmp.PixelWidth;
+        //     var stride = width * bmp.Format.BitsPerPixel / 8;
+        //     for (var x = 0; x < width; x++)
+        //     for (var y = 0; y < bmp.PixelHeight; y++)
+        //     {
+        //         byte[] colorData = {b, g, r, a};
+        //         var rect = new Int32Rect(x, y, 1, 1);
+        //         bmp.WritePixels(rect, colorData, stride, 0);
+        //     }
+        // }
+        //
+        // private static int ConvertColor(Color color)
+        // {
+        //     var num1 = 0;
+        //     if (color.A == 0) return num1;
+        //
+        //     var num2 = color.A + 1;
+        //     num1 = (color.A << 24) | ((byte) ((color.R * num2) >> 8) << 16) |
+        //            ((byte) ((color.G * num2) >> 8) << 8) | (byte) ((color.B * num2) >> 8);
+        //
+        //     return num1;
+        // }
 
 
         public BitmapSource GetBitmapForRender(Color[] funColors, bool fast = false)
@@ -330,15 +378,11 @@ namespace FlameBase.RenderMachine.Models
                     //TODO: GetBitmapForRender mix colors
                     // var cCmRgb = GetColorCm(x, y, funColors);
 
-                    var colorCm = GetColorCm(x, y, iLabCm).ToRgb();
+                    var colorCm = GetColorModeColor(x, y, iLabCm).ToRgb();
                     var cCmRgb = Color.FromRgb((byte) colorCm.R, (byte) colorCm.G, (byte) colorCm.B);
-
-                    if (!f)
-                    {
-                        var log = Math.Log(1.0 + shots, Max);
-                        cCmRgb = Blend(cCmRgb, BackColor, log);
-                    }
-
+                    var log = 1.0;
+                    if (!f) log = Math.Log(1.0 + shots, Max);
+                    cCmRgb = Blend(cCmRgb, BackColor, log);
                     var r = cCmRgb.R;
                     var g = cCmRgb.G;
                     var b = cCmRgb.B;
@@ -383,18 +427,18 @@ namespace FlameBase.RenderMachine.Models
             return img;
         }
 
-        private static Color Blend(Color c1, Color c2)
-        {
-            var l1 = new Rgb {R = c1.R, G = c1.G, B = c1.B}.To<Lab>();
-            var l2 = new Rgb {R = c2.R, G = c2.G, B = c2.B}.To<Lab>();
-            var l3 = new Lab
-            {
-                L = (l1.L + l2.L) * .5,
-                A = (l1.A + l2.A) * .5,
-                B = (l1.B + l2.B) * .5
-            }.To<Rgb>();
-            return Color.FromRgb((byte) l3.R, (byte) l3.G, (byte) l3.B);
-        }
+        // private static Color Blend(Color c1, Color c2)
+        // {
+        //     var l1 = new Rgb {R = c1.R, G = c1.G, B = c1.B}.To<Lab>();
+        //     var l2 = new Rgb {R = c2.R, G = c2.G, B = c2.B}.To<Lab>();
+        //     var l3 = new Lab
+        //     {
+        //         L = (l1.L + l2.L) * .5,
+        //         A = (l1.A + l2.A) * .5,
+        //         B = (l1.B + l2.B) * .5
+        //     }.To<Rgb>();
+        //     return Color.FromRgb((byte) l3.R, (byte) l3.G, (byte) l3.B);
+        // }
 
 
         private static Color Blend(Color color, Color backColor, double amount)
@@ -404,18 +448,20 @@ namespace FlameBase.RenderMachine.Models
             var b = (byte) (color.B * amount + backColor.B * (1 - amount));
             return Color.FromRgb(r, g, b);
         }
+        //
+        // private Color MixRgbColors(Color c1, Color c2)
+        // {
+        //     var mix = new Color
+        //     {
+        //         R = (byte) Math.Round(c1.R * c2.R / 255.0),
+        //         G = (byte) Math.Round(c1.G * c2.G / 255.0),
+        //         B = (byte) Math.Round(c1.B * c2.B / 255.0)
+        //     };
+        //     return mix;
+        // }
 
-        private Color MixRgbColors(Color c1, Color c2)
-        {
-            var mix = new Color
-            {
-                R = (byte) Math.Round(c1.R * c2.R / 255.0),
-                G = (byte) Math.Round(c1.G * c2.G / 255.0),
-                B = (byte) Math.Round(c1.B * c2.B / 255.0)
-            };
-            return mix;
-        }
 
+        private GradientModel _gm;
         public BitmapSource GetBitmapForRender(double[] gradientValues, GradientModel gradModel, bool fast = false)
         {
             var rect = new Int32Rect(0, 0, Width, Height);
@@ -428,37 +474,60 @@ namespace FlameBase.RenderMachine.Models
             var stride = Width * 4;
             var a = new byte[stride * Height];
 
+            _gm = gradModel.Copy();
+
             Parallel.For(0, length, i =>
             {
                 var d = dic[i];
                 // var iLabCm = labsCm.ToArray();
                 var f = fast;
-                var contrast = Contrast;
+                // var contrast = Contrast;
                 var str = stride;
                 for (var y = (uint) d[1]; y < d[1] + d[3]; y++)
                 for (var x = (uint) d[0]; x < d[0] + d[2]; x++)
                 {
                     var shots = CountShots(x, y);
-                    if (shots == 0) continue;
-                    var colorHsb = GetColorGm(x, y, gradientValues, gradModel);
-                    // var colorHsb = colorGm.To<Hsb>();
-                    if (!f)
+                    long n;
+                    if (shots == 0)
                     {
-                        // var log = Math.Log(1.0 + shots, Max) * contrast;
-                        // colorGm.L = log;
-                        var colorB = colorHsb.B;
-                        colorB = Algebra.Map(Math.Log(1.0 + shots, Max), 0.0, 1.0, 0.0, colorB);
-                        // colorHsb.B = Math.Log(1.0 + shots, Max);
-                        colorHsb.B = colorB;
+                        n = y * str + x * 4;
+                        a[n] = BackColor.B;
+                        a[n + 1] = BackColor.G;
+                        a[n + 2] = BackColor.R;
+                        a[n + 3] = 255;
+
+                        continue;
                     }
 
-                    // var cCmRgb = colorGm.ToRgb();
-                    var cCmRgb = colorHsb.ToRgb();
-                    var r = (byte) Math.Round(cCmRgb.R);
-                    var g = (byte) Math.Round(cCmRgb.G);
-                    var b = (byte) Math.Round(cCmRgb.B);
+                    var colorHsb = GetColorModeGradient(x, y, gradientValues, _gm);
+                    var colorCm = colorHsb.ToRgb();
+                    var cCmRgb = Color.FromRgb((byte) colorCm.R, (byte) colorCm.G, (byte) colorCm.B);
+                    var log = 1.0;
+                    if (!f) log = Math.Log(1.0 + shots, Max);
 
-                    var n = y * str + x * 4;
+                    cCmRgb = Blend(cCmRgb, BackColor, log);
+                    var r = cCmRgb.R;
+                    var g = cCmRgb.G;
+                    var b = cCmRgb.B;
+
+                    // // var colorHsb = colorGm.To<Hsb>();
+                    // if (!f)
+                    // {
+                    //     // var log = Math.Log(1.0 + shots, Max) * contrast;
+                    //     // colorGm.L = log;
+                    //     var colorB = colorHsb.B;
+                    //     colorB = Algebra.Map(Math.Log(1.0 + shots, Max), 0.0, 1.0, 0.0, colorB);
+                    //     // colorHsb.B = Math.Log(1.0 + shots, Max);
+                    //     colorHsb.B = colorB;
+                    // }
+                    //
+                    // // var cCmRgb = colorGm.ToRgb();
+                    // var cCmRgb = colorHsb.ToRgb();
+                    // var r = (byte) Math.Round(cCmRgb.R);
+                    // var g = (byte) Math.Round(cCmRgb.G);
+                    // var b = (byte) Math.Round(cCmRgb.B);
+
+                    n = y * str + x * 4;
                     a[n] = b;
                     a[n + 1] = g;
                     a[n + 2] = r;
@@ -474,5 +543,10 @@ namespace FlameBase.RenderMachine.Models
         }
 
         #endregion
+
+        public uint[,,] GetArrayCopy()
+        {
+            return CopyArray(_display);
+        }
     }
 }

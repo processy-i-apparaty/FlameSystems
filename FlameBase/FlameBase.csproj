@@ -62,6 +62,7 @@
     <Compile Include="FlameMath\Trigonometry.cs" />
     <Compile Include="Enums\FlameColorMode.cs" />
     <Compile Include="FlameMath\XorShift.cs" />
+    <Compile Include="Models\BinaryFlamesModel.cs" />
     <Compile Include="Models\ColorPickerColorsModel.cs" />
     <Compile Include="Models\ColorPickerColumnModel.cs" />
     <Compile Include="Models\ColorPickerCoordinatesModel.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="Models\GradientModel.cs" />
     <Compile Include="Models\GradientPackModel.cs" />
     <Compile Include="Models\JsonFlamesModel.cs" />
+    <Compile Include="Models\ZipFlamesModel.cs" />
     <Compile Include="RenderMachine\Models\IteratorModel.cs" />
     <Compile Include="RenderMachine\Models\LogDisplayModel.cs" />
     <Compile Include="RenderMachine\Models\RandomTransformModel.cs" />

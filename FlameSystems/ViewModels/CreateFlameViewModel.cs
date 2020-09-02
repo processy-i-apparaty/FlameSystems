@@ -35,7 +35,7 @@ namespace FlameSystems.ViewModels
 
         private FlameColorMode _flameColorMode;
         private string _flameName;
-        private GradientModel _gradModel;
+        private GradientModel _gradientModel;
         private GradientPickerView _gradView;
 
 
@@ -58,8 +58,8 @@ namespace FlameSystems.ViewModels
         private void SetColorModeForAllTransforms(FlameColorMode flameColorMode)
         {
             GradientModel gm = null;
-            if (_gradModel == null) _gradModel = new GradientModel(Colors.Gray, Colors.Gray);
-            if (flameColorMode == FlameColorMode.Gradient) gm = _gradModel;
+            if (_gradientModel == null) _gradientModel = new GradientModel(Colors.Gray, Colors.Gray);
+            if (flameColorMode == FlameColorMode.Gradient) gm = _gradientModel;
 
             foreach (var transformView in Transforms)
             {
@@ -138,14 +138,16 @@ namespace FlameSystems.ViewModels
                     New();
                     break;
                 case "load":
-                    Load();
+                    LoadFlame();
                     break;
                 case "save":
-                    Save();
+                    SaveFlame();
                     break;
                 case "loadRender":
+                    LoadRender();
                     break;
                 case "saveRender":
+                    SaveRender();
                     break;
                 case "startRender":
                     ActionCallRender("render");
@@ -175,13 +177,35 @@ namespace FlameSystems.ViewModels
             TopContent = _colorPicker;
         }
 
-        private void Save()
+
+        private void CreateFileDialog(FileViewType fileViewType)
         {
             var dialog = new FileView();
             var vm = (FileViewModel) dialog.DataContext;
-            vm.Set(FileViewType.Save, ActDialogResult);
+            vm.Set(fileViewType, ActDialogResult);
             TopContent = dialog;
         }
+
+        private void SaveFlame()
+        {
+            CreateFileDialog(FileViewType.SaveFlame);
+        }
+
+        private void LoadFlame()
+        {
+            CreateFileDialog(FileViewType.LoadFlame);
+        }
+
+        private void SaveRender()
+        {
+            CreateFileDialog(FileViewType.SaveRender);
+        }
+
+        private void LoadRender()
+        {
+            CreateFileDialog(FileViewType.LoadRender);
+        }
+
 
         private async void New()
         {
@@ -197,14 +221,6 @@ namespace FlameSystems.ViewModels
             ActRenderSetMessage("New...");
         }
 
-        private void Load()
-        {
-            RenderMachine.RenderStop();
-            var dialog = new FileView();
-            var vm = (FileViewModel) dialog.DataContext;
-            vm.Set(FileViewType.Load, ActDialogResult);
-            TopContent = dialog;
-        }
 
         private void RenderSettings()
         {
@@ -226,7 +242,7 @@ namespace FlameSystems.ViewModels
                     dc.GradientModel = null;
                     break;
                 case FlameColorMode.Gradient:
-                    dc.GradientModel = _gradModel;
+                    dc.GradientModel = _gradientModel;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -451,7 +467,7 @@ namespace FlameSystems.ViewModels
             if (Transforms.Count < 1) return;
             //            Debug.WriteLine($"[ActCallRender] {renderType}");
             RenderPackModel renderPack = null;
-            GetDataForRender(out var transformations, out var variations, out var viewSettings);
+            GetDataForRender(out var transformations, out var variations, out var viewSettings, out var gradientModel);
             var render = true;
             var @continue = false;
             var draftMode = false;
@@ -463,17 +479,17 @@ namespace FlameSystems.ViewModels
                     viewSettings.ImageWidth = renderSettings.DraftImageSideWidth;
                     viewSettings.ImageHeight = (int) (viewSettings.ImageWidth * aspect);
                     renderPack = new RenderPackModel(transformations, variations, viewSettings, renderSettings,
-                        _flameColorMode, _gradModel);
+                        _flameColorMode, gradientModel);
                     IsEnabledContinueRender = false;
                     draftMode = true;
                     break;
                 case "render":
                     renderPack = new RenderPackModel(transformations, variations, viewSettings, _renderSettings,
-                        _flameColorMode, _gradModel);
+                        _flameColorMode, gradientModel);
                     break;
                 case "continue":
                     renderPack = new RenderPackModel(transformations, variations, viewSettings, _renderSettings,
-                        _flameColorMode, _gradModel);
+                        _flameColorMode, gradientModel);
                     @continue = true;
                     break;
                 default:
@@ -499,7 +515,7 @@ namespace FlameSystems.ViewModels
 
 
         private void GetDataForRender(out TransformModel[] transforms, out VariationModel[] variations,
-            out ViewSettingsModel viewSettings)
+            out ViewSettingsModel viewSettings, out GradientModel gradientModel)
         {
             viewSettings =
                 new ViewSettingsModel(ImageWidth, ImageHeight, ShiftX, ShiftY, Zoom, RotationRadians, Symmetry,
@@ -514,6 +530,9 @@ namespace FlameSystems.ViewModels
                 variations[i] = dataContext.GetVariation;
                 transforms[i] = dataContext.GetTransform;
             }
+
+            gradientModel = null;
+            if (_flameColorMode == FlameColorMode.Gradient) gradientModel = _gradientModel;
         }
 
         private void Act(string name, object obj)
@@ -544,42 +563,110 @@ namespace FlameSystems.ViewModels
             ImageSource = img;
         }
 
-        private void ActDialogResult(bool result, FileViewType fileDialogType, string jsonPath)
+        private void ActDialogResult(bool result, FileViewType fileDialogType, string path)
         {
             TopContent = null;
             if (!result) return;
 
-            string jsonString;
+            string flameModelJson;
+            string tempDir;
+
             switch (fileDialogType)
             {
-                case FileViewType.Load:
-                    if (!File.Exists(jsonPath)) return;
-                    jsonString = File.ReadAllText(jsonPath);
-                    var model = JsonFlamesModel.GetFlameModel(jsonString);
+                case FileViewType.LoadFlame:
+                    if (!File.Exists(path)) return;
+                    flameModelJson = File.ReadAllText(path);
+                    var model = JsonFlamesModel.GetFlameModel(flameModelJson);
                     if (model == null) return;
-                    Transforms.Clear();
-                    RadioColor = true;
-                    InitFromModel(model);
-                    _flameName = Path.GetFileNameWithoutExtension(jsonPath);
+                    SetEnvironmentFromFlameModel(model);
+                    _flameName = Path.GetFileNameWithoutExtension(path);
                     RenderMachine.RenderStop();
                     ActRenderSetState(RenderMachine.StateRenderEnded);
                     ActionCallRender("draft");
                     break;
-                case FileViewType.Save:
+                case FileViewType.SaveFlame:
                     RenderMachine.RenderStop();
-                    //TODO: HERE
-                    GetDataForRender(out var transformations, out var variations, out var viewSettings);
-                    GradientModel gradModel = null;
-                    if (_flameColorMode == FlameColorMode.Gradient) gradModel = _gradModel;
-                    jsonString = JsonFlamesModel.GetFractalString(transformations, variations, viewSettings, gradModel);
-                    File.WriteAllText(jsonPath, jsonString);
-                    _flameName = Path.GetFileNameWithoutExtension(jsonPath);
+
+                    flameModelJson = GetFlameModelJson();
+                    File.WriteAllText(path, flameModelJson);
+                    _flameName = Path.GetFileNameWithoutExtension(path);
                     ActRenderSetState(RenderMachine.StateRenderEnded);
                     ActRenderSetMessage($"{_flameName} saved");
+                    break;
+                case FileViewType.SaveRender:
+                    var renderName = Path.GetFileNameWithoutExtension(path);
+                    tempDir = CreateTempDir(renderName);
+
+                    flameModelJson = GetFlameModelJson();
+                    BinaryFlamesModel.SaveObject(RenderMachine.Display.GetArrayCopy(), $"{tempDir}\\logDisplay.bin");
+                    File.WriteAllText($"{tempDir}\\flame.txt", flameModelJson);
+                    ZipFlamesModel.CompressDirectory(tempDir, path);
+                    RemoveTempDir();
+                    break;
+                case FileViewType.LoadRender:
+                    if (!File.Exists(path)) return;
+                    tempDir = CreateTempDir(_flameName);
+                    ZipFlamesModel.DecompressToDirectory(path, tempDir);
+                    var display = (uint[,,]) BinaryFlamesModel.LoadObject($"{tempDir}\\logDisplay.bin");
+                    var json = File.ReadAllText($"{tempDir}\\flame.txt");
+                    var flameModel = JsonFlamesModel.GetFlameModel(json);
+                    SetEnvironmentFromFlameModel(flameModel);
+                    _flameName = Path.GetFileNameWithoutExtension(path);
+                    RenderMachine.RenderStop();
+                    ActRenderSetState(RenderMachine.StateRenderEnded);
+
+                    RenderMachine.LoadDisplay(display, flameModel.BackColor);
+                    GradientModel gradientModel = null;
+                    double[] gradientValues = null;
+                    if (flameModel.GradientPack != null)
+                    {
+                        var gm = new GradientModel(flameModel.GradientPack);
+                        gradientModel = gm.Copy();
+                        gradientValues = flameModel.FunctionColorPositions.ToArray();
+                    }
+
+                    ImageSource = RenderMachine.GetImage(flameModel.FunctionColors.ToArray(), gradientValues,
+                        gradientModel);
+                    ActRenderSetState(RenderMachine.StateRenderEnded, false);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(fileDialogType), fileDialogType, null);
             }
+        }
+
+        private void SetEnvironmentFromFlameModel(FlameModel flameModel)
+        {
+            if (flameModel == null) return;
+            Transforms.Clear();
+            RadioColor = true;
+            InitFromModel(flameModel);
+        }
+
+        private static string CreateTempDir(string flameName)
+        {
+            var tempPath = $"{Path.GetTempPath()}flame-systems-temporary\\{flameName}";
+            if (Directory.Exists(tempPath)) Directory.Delete(tempPath, true);
+            Directory.CreateDirectory(tempPath);
+            return tempPath;
+        }
+
+        private static void RemoveTempDir()
+        {
+            var tempPath = $"{Path.GetTempPath()}flame-systems-temporary";
+            try
+            {
+                if (Directory.Exists(tempPath)) Directory.Delete(tempPath, true);
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+        }
+
+        private string GetFlameModelJson()
+        {
+            GetDataForRender(out var transforms, out var variations, out var viewSettings, out var gradientModel);
+            return JsonFlamesModel.GetFlameModelJson(transforms, variations, viewSettings, gradientModel);
         }
 
 
@@ -587,14 +674,14 @@ namespace FlameSystems.ViewModels
 
         private void EditGradientHandler(object obj)
         {
-            _gradView = new GradientPickerView(_gradModel);
+            _gradView = new GradientPickerView(_gradientModel);
             TopContent = _gradView;
         }
 
         private void ActionTransformPickGradientColor(TransformViewModel model)
         {
             _transformId = model.Id;
-            _gradView = new GradientPickerView(_gradModel, model.ColorPosition);
+            _gradView = new GradientPickerView(_gradientModel, model.ColorPosition);
             TopContent = _gradView;
         }
 
@@ -606,7 +693,7 @@ namespace FlameSystems.ViewModels
             switch (dc.GradientMode)
             {
                 case GradientMode.Edit:
-                    _gradModel = dc.GradientModel;
+                    _gradientModel = dc.GradientModel;
                     //amhere
                     SetTransformationColorMode(_flameColorMode);
                     break;
@@ -665,8 +752,8 @@ namespace FlameSystems.ViewModels
         private void SetTransformationColorMode(FlameColorMode flameColorMode)
         {
             GradientModel gm = null;
-            if (_gradModel == null) _gradModel = new GradientModel(Colors.Gray, Colors.Gray);
-            if (flameColorMode == FlameColorMode.Gradient) gm = _gradModel;
+            if (_gradientModel == null) _gradientModel = new GradientModel(Colors.Gray, Colors.Gray);
+            if (flameColorMode == FlameColorMode.Gradient) gm = _gradientModel;
 
             foreach (var uTransformationView in Transforms)
             {
@@ -692,7 +779,8 @@ namespace FlameSystems.ViewModels
                     Directory.CreateDirectory(directory);
         }
 
-        private void ActRenderSetState(string obj)
+
+        private void ActRenderSetState(string obj, bool saveImage = true)
         {
             switch (obj)
             {
@@ -721,11 +809,12 @@ namespace FlameSystems.ViewModels
                     IsEnabledStopRender = false;
                     FreezeControls(false);
                     IsEnabledAddTransform = true;
-                    if (RenderMachine.HasRender)
+
+                    if (RenderMachine.HasRender && saveImage)
                     {
-                        Debug.WriteLine($"Saving Rendered Image");
+                        Debug.WriteLine("Saving Rendered Image");
                         RenderMachine.SaveImage(Directories.Images, "img", _flameColorMode);
-                        Debug.WriteLine($"Saving Rendered Image end.");
+                        Debug.WriteLine("Saving Rendered Image end.");
                     }
 
                     break;
@@ -753,7 +842,7 @@ namespace FlameSystems.ViewModels
                 .FirstOrDefault(x => ((TransformViewModel) x.DataContext).Id == id)
                 ?.DataContext;
             if (utv == null) return;
-            utv.GradientModel = _gradModel;
+            utv.GradientModel = _gradientModel;
             utv.SetTransformation(model);
             utv.SetVariation(variationId, parameters, weight);
         }
@@ -764,7 +853,7 @@ namespace FlameSystems.ViewModels
             var hasWeights = model.Weights != null;
             var hasGradient = model.GradientPack != null;
 
-            _gradModel = hasGradient ? new GradientModel(model.GradientPack) : null;
+            _gradientModel = hasGradient ? new GradientModel(model.GradientPack) : null;
 
             for (var i = 0; i < model.Coefficients.Count; i++)
             {
@@ -800,6 +889,7 @@ namespace FlameSystems.ViewModels
             Symmetry = model.Symmetry;
             ImageWidth = model.ImageWidth;
             ImageHeight = model.ImageHeight;
+            BackColor = new SolidColorBrush(model.BackColor);
             BindStorage.TurnActionFor(true, _bindParameters1);
         }
 

@@ -6,7 +6,7 @@ namespace FlameBase.RenderMachine.Models
     public class RenderActionsModel
     {
         public RenderActionsModel(Action<BitmapSource> actionDraw, Action<string> actionMessage,
-            Action<string> actionRenderState)
+            Action<string, bool> actionRenderState)
         {
             ActionDraw = actionDraw;
             ActionMessage = actionMessage;
@@ -15,6 +15,6 @@ namespace FlameBase.RenderMachine.Models
 
         public Action<BitmapSource> ActionDraw { get; }
         public Action<string> ActionMessage { get; }
-        public Action<string> ActionRenderState { get; }
+        public Action<string, bool> ActionRenderState { get; }
     }
 }

@@ -2,7 +2,9 @@
 {
     public enum FileViewType
     {
-        Load,
-        Save
+        LoadFlame,
+        SaveFlame,
+        SaveRender,
+        LoadRender
     }
 }

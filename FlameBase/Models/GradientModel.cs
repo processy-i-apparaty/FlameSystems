@@ -180,6 +180,22 @@ namespace FlameBase.Models
             return Lab2Color(labSum);
         }
 
+        public Lab GetLabFromPosition(double position)
+        {
+            var cb = GetColorBetween(position);
+            var p = GetColorsPercent(position);
+
+            var labA = Color2Lab(cb[0]);
+            var labB = Color2Lab(cb[1]);
+            var labSum = new Lab
+            {
+                L = labA.L * p[0] + labB.L * p[1],
+                A = labA.A * p[0] + labB.A * p[1],
+                B = labA.B * p[0] + labB.B * p[1]
+            };
+            return labSum;
+        }
+
         private static Color Lab2Color(IColorSpace lab)
         {
             var rgb = lab.To<Rgb>();

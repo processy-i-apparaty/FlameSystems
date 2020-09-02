@@ -96,6 +96,7 @@ namespace FlameBase.RenderMachine
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
             SaveImage(path, img);
         }
 
@@ -165,7 +166,8 @@ namespace FlameBase.RenderMachine
             if (@continue && HasRender)
                 display = Display;
             else
-                display = new LogDisplayModel((int) imageSize.Width, (int) imageSize.Height, colorCount, renderPack.ViewSettings.BackColor);
+                display = new LogDisplayModel((int) imageSize.Width, (int) imageSize.Height, colorCount,
+                    renderPack.ViewSettings.BackColor);
 
             var translationMatrix = Matrix.FromViewSettings(renderPack.ViewSettings);
             var translationArray = translationMatrix.Array;
@@ -190,7 +192,7 @@ namespace FlameBase.RenderMachine
             _gradModel = renderPack.GradModelCopy;
 
             IsRendering = true;
-            if (!draftMode) renderActionsPack.ActionRenderState?.Invoke(StateRenderStarted);
+            if (!draftMode) renderActionsPack.ActionRenderState?.Invoke(StateRenderStarted, true);
 
             #endregion
 
@@ -420,8 +422,20 @@ namespace FlameBase.RenderMachine
             Display = logDisplay;
             _iterations = maxIterations;
             _renderTime = elapsed;
-            renderActions.ActionRenderState?.Invoke(StateRenderEnded);
+            renderActions.ActionRenderState?.Invoke(StateRenderEnded, true);
             renderActions.ActionMessage?.Invoke(message);
+        }
+
+        public static void LoadDisplay(uint[,,] display, Color backColor)
+        {
+            Display = new LogDisplayModel(display, backColor);
+        }
+
+        public static BitmapSource GetImage(Color[] colors, double[] gradientValues, GradientModel gradientModel)
+        {
+            return gradientModel == null
+                ? Display.GetBitmapForRender(colors)
+                : Display.GetBitmapForRender(gradientValues, gradientModel);
         }
     }
 }

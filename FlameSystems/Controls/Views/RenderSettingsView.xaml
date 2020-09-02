@@ -70,7 +70,6 @@
                     Width="70"
                     Height="20"
                     DecimalPlaces="0"
-                    Maximum="1000"
                     Minimum="50"
                     Value="{Binding RenderPerIterations, Mode=TwoWay}"
                     Margin="2"
