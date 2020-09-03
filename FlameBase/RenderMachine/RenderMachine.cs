@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
@@ -76,6 +77,11 @@ namespace FlameBase.RenderMachine
             Debug.WriteLine($"# end of #{renderId}");
             _sourceRender?.Dispose();
             _sourceRender = null;
+        }
+
+        private static void InitVariations(IEnumerable<VariationModel> variations)
+        {
+            foreach (var variation in variations) variation.Init();
         }
 
         public static void SaveImage(string folder, string name, FlameColorMode colorMode)

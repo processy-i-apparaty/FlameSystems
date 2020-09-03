@@ -21,5 +21,9 @@ namespace Variations
             var n3 = p.Y + F * Math.Sin(tan2);
             return new Point(W * n2, W * n3);
         }
+
+        public override void Init()
+        {
+        }
     }
 }

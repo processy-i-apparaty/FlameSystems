@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Windows; using FlameBase.Models;
+using System.Windows;
+using FlameBase.Models;
 
 namespace Variations
 {
@@ -11,11 +12,15 @@ namespace Variations
 
         public override Point Fun(Point p)
         {
-            var n2 = VariationHelper.Random() * W * VariationHelper.PreSqrt(p);
+            var n2 = VariationHelper.Psi * W * VariationHelper.PreSqrt(p);
             var sin = Math.Sin(n2);
             var n3 = Math.Log10(sin * sin) + Math.Cos(n2);
-            if (Math.Abs(n3) < 1.0E-300) n3 = -30.0;
+            if (Math.Abs(n3) <= VariationHelper.SmallDouble) n3 = -30.0;
             return new Point(W * p.X * n3, W * p.X * (n3 - sin * Math.PI));
+        }
+
+        public override void Init()
+        {
         }
     }
 }

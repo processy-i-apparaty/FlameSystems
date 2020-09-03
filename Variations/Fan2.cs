@@ -1,13 +1,17 @@
 ﻿using System;
-using System.Windows; using FlameBase.Models;
+using System.Windows;
+using FlameBase.Models;
 
 namespace Variations
 {
     public class Fan2 : VariationModel
     {
+        private double _n2;
+        private double _n3;
+
         public Fan2()
         {
-            SetParameters(new[] { 2.0, 2.0 }, new[] { "x", "y" });
+            SetParameters(new[] {2.0, 2.0}, new[] {"x", "y"});
         }
 
         public override int Id { get; } = 25;
@@ -32,15 +36,21 @@ namespace Variations
             else
                 preAtan = 0.0;
 
-            var y = P2;
-            var n2 = Math.PI * (P1*P1) + 1.0E-300;
-            var n3 = n2 * 0.5;
+            // var y = P2;
+            // var n2 = Math.PI * (P1*P1) + 1.0E-300;
+            // var n3 = _n2 * 0.5;
             double n4;
-            if (preAtan + y - (int) ((preAtan + y) / n2) * n2 > n3)
-                n4 = preAtan - n3;
+            if (preAtan + P2 - (int) ((preAtan + P2) / _n2) * _n2 > _n3)
+                n4 = preAtan - _n3;
             else
-                n4 = preAtan + n3;
+                n4 = preAtan + _n3;
             return new Point(W * sqrt * Math.Sin(n4), W * sqrt * Math.Cos(n4));
+        }
+
+        public override void Init()
+        {
+            _n2 = Math.PI * (P1 * P1) + 1.0E-300;
+            _n3 = _n2 * .5;
         }
     }
 }

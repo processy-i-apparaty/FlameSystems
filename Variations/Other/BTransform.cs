@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Windows; using FlameBase.Models;
+using System.Windows;
+using FlameBase.Models;
 
 namespace Variations.Other
 {
@@ -7,7 +8,7 @@ namespace Variations.Other
     {
         public BTransform()
         {
-            SetParameters(new[] { 0.0, 1.0, 0.0, 0.0 }, new[] { "rotate", "power", "move", "split" });
+            SetParameters(new[] {0.0, 1.0, 0.0, 0.0}, new[] {"rotate", "power", "move", "split"});
         }
 
         public override int Id { get; } = 61;
@@ -40,6 +41,10 @@ namespace Variations.Other
             point.Y += W * sin / n5;
 
             return point;
+        }
+
+        public override void Init()
+        {
         }
     }
 }

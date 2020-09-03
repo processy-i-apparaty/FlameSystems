@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Windows; using FlameBase.Models;
+using System.Windows;
+using FlameBase.Models;
 
 namespace Variations
 {
@@ -34,6 +35,10 @@ namespace Variations
                 n4 * (n2 + n3),
                 n4 * (n2 - n3)
             );
+        }
+
+        public override void Init()
+        {
         }
     }
 }

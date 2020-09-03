@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Windows; using FlameBase.Models;
+using System.Windows;
+using FlameBase.Models;
 
 namespace Variations
 {
@@ -19,6 +20,10 @@ namespace Variations
                 n3 * cos,
                 n3 * sin
             );
+        }
+
+        public override void Init()
+        {
         }
     }
 }

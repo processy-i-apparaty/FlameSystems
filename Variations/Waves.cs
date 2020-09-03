@@ -1,10 +1,15 @@
 ﻿using System;
-using System.Windows; using FlameBase.Models;
+using System.Windows;
+using FlameBase.Models;
 
 namespace Variations
 {
     public class Waves : VariationModel
     {
+        private double _getXyCoeff10;
+        private double _getXyCoeff11;
+        private double _getXyCoeff20;
+        private double _getXyCoeff21;
         public override int Id { get; } = 15;
         public override int HasParameters { get; } = 0;
         public override bool IsDependent { get; } = true;
@@ -42,17 +47,20 @@ namespace Variations
             //            xyzPoint2.x += n * (xyzPoint.x + xForm.getXYCoeff10() * MathLib.sin(xyzPoint.y / (xForm.getXYCoeff20() * xForm.getXYCoeff20() + 1.0E-300)));
             //            xyzPoint2.y += n * (xyzPoint.y + xForm.getXYCoeff11() * MathLib.sin(xyzPoint.x / (xForm.getXYCoeff21() * xForm.getXYCoeff21() + 1.0E-300)));
 
-            var getXyCoeff10 = B;
-            var getXyCoeff20 = E;
-            var getXyCoeff11 = D;
-            var getXyCoeff21 = F;
 
-            return new Point
-            {
-                X = W * (p.X + getXyCoeff10 * Math.Sin(p.Y / (getXyCoeff20 * getXyCoeff20 + 1.0E-100))),
-                Y = W * (p.Y + getXyCoeff11 * Math.Sin(p.X / (getXyCoeff21 * getXyCoeff21 + 1.0E-100)))
-            };
-            
+            var x = W * (p.X + _getXyCoeff10 *
+                Math.Sin(p.Y / (_getXyCoeff20 * _getXyCoeff20 + VariationHelper.SmallDouble)));
+            var y = W * (p.Y + _getXyCoeff11 *
+                Math.Sin(p.X / (_getXyCoeff21 * _getXyCoeff21 + VariationHelper.SmallDouble)));
+            return new Point(x, y);
+        }
+
+        public override void Init()
+        {
+            _getXyCoeff10 = B;
+            _getXyCoeff20 = E;
+            _getXyCoeff11 = D;
+            _getXyCoeff21 = F;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Windows; using FlameBase.Models;
+using System.Windows;
+using FlameBase.Models;
 
 namespace Variations
 {
@@ -17,6 +18,10 @@ namespace Variations
                 psi1 * (p.X * Math.Cos(2.0 * Math.PI * psi2)) * W,
                 psi1 * (p.Y * Math.Sin(2.0 * Math.PI * psi2) * W)
             );
+        }
+
+        public override void Init()
+        {
         }
     }
 }

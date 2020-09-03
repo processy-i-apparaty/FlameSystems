@@ -42,5 +42,10 @@ namespace Variations.Other
 
             return new Point(n7 * W, n8 * W);
         }
+
+        public override void Init()
+        {
+            
+        }
     }
 }

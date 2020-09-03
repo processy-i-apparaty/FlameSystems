@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Windows; using FlameBase.Models;
+using System.Windows;
+using FlameBase.Models;
 
 namespace Variations.Other
 {
@@ -7,7 +8,7 @@ namespace Variations.Other
     {
         public Auger()
         {
-            SetParameters(new[] { 1.0, 0.5, 0.1, 0.9 }, new[] { "freq", "weight", "sym", "scale" });
+            SetParameters(new[] {1.0, 0.5, 0.1, 0.9}, new[] {"freq", "weight", "sym", "scale"});
         }
 
         public override int Id { get; } = 60;
@@ -24,6 +25,10 @@ namespace Variations.Other
             point.X += W * (p.X + P3 * (p.X + P2 * (P4 * sin2 * 0.5 + Math.Abs(p.X) * sin2) - p.X));
             point.Y += W * n2;
             return point;
+        }
+
+        public override void Init()
+        {
         }
     }
 }

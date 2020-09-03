@@ -11,16 +11,13 @@ namespace FlameBase.Models
         public double TwoPi { get; } = Math.PI * 2.0;
         public double HalfPi { get; } = Math.PI * .5;
         public double OneRadOfQuadrant { get; } = 1.0 / (Math.PI * .5);
+        public double SmallDouble => 1.0E-300;
+        public double SmallDouble2 => 1.0E-8;
 
 
         public double R(Point p)
         {
             return Math.Sqrt(p.X * p.X + p.Y * p.Y);
-        }
-
-        public double Random()
-        {
-            return _random.NextDouble();
         }
 
         public int RandomInt(int from, int to)

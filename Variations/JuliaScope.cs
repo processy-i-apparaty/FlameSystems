@@ -5,6 +5,9 @@ namespace Variations
 {
     public class JuliaScope : VariationModel
     {
+        private double _power;
+        private int _absPower;
+        private double _cPower;
         private const double TwoPi = Math.PI * 2.0;
 
         public JuliaScope()
@@ -26,21 +29,23 @@ namespace Variations
             //            var dy = r2 * Math.Sin(t);
             //            return new Point(dx, dy);
 
-            var power = Math.Floor(P1);
-            var dist = P2;
-            var absPower = Math.Abs((int) power);
-            var cPower = dist / power * 0.5;
-
-            var random = VariationHelper.RandomNext(absPower);
+            var random = VariationHelper.RandomNext(_absPower);
             double n2;
             if ((random & 0x1) == 0x0)
-                n2 = (TwoPi * random + Math.Atan2(p.Y, p.X)) / power;
+                n2 = (TwoPi * random + Math.Atan2(p.Y, p.X)) / _power;
             else
-                n2 = (TwoPi * random - Math.Atan2(p.Y, p.X)) / power;
+                n2 = (TwoPi * random - Math.Atan2(p.Y, p.X)) / _power;
             var sin = Math.Sin(n2);
             var cos = Math.Cos(n2);
-            var n3 = W * Math.Pow(p.X * p.X + p.Y * p.Y, cPower);
+            var n3 = W * Math.Pow(p.X * p.X + p.Y * p.Y, _cPower);
             return new Point(n3 * cos, n3 * sin);
+        }
+
+        public override void Init()
+        {
+            _power = Math.Floor(P1);
+            _absPower = Math.Abs((int)_power);
+            _cPower = P2 / _power * 0.5;
         }
     }
 }

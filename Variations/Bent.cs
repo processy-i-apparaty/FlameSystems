@@ -1,5 +1,5 @@
-﻿using System.Windows; using FlameBase.Models;
-
+﻿using System.Windows;
+using FlameBase.Models;
 
 namespace Variations
 {
@@ -16,6 +16,10 @@ namespace Variations
             if (x < 0.0) x += x;
             if (y < 0.0) y *= 0.5;
             return new Point(W * x, W * y);
+        }
+
+        public override void Init()
+        {
         }
     }
 }

@@ -81,6 +81,8 @@ namespace FlameBase.Models
 
         public abstract Point Fun(Point p);
 
+        public abstract void Init();
+
         public void SetAffineCoefficients(double[] a)
         {
             for (var i = 0; i < AffineCoefficients.Length; i++) AffineCoefficients[i] = a[i];

@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Windows; using FlameBase.Models;
+using System.Windows;
+using FlameBase.Models;
 
 namespace Variations
 {
@@ -28,6 +29,10 @@ namespace Variations
             var cos = Math.Cos(q);
             var n2 = r * W;
             return new Point(n2 * sin, -(n2 * cos));
+        }
+
+        public override void Init()
+        {
         }
     }
 }

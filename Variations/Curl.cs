@@ -1,4 +1,5 @@
-﻿using System.Windows; using FlameBase.Models;
+﻿using System.Windows;
+using FlameBase.Models;
 
 namespace Variations
 {
@@ -6,7 +7,7 @@ namespace Variations
     {
         public Curl()
         {
-            SetParameters(new[] { 2.0, 2.0 }, new[] { "c1", "c2" });
+            SetParameters(new[] {2.0, 2.0}, new[] {"c1", "c2"});
         }
 
         public override int Id { get; } = 39;
@@ -21,6 +22,10 @@ namespace Variations
             var dx = q * (p.X * t1 + p.Y * t2);
             var dy = q * (p.Y * t1 - p.X * t2);
             return new Point(dx, dy);
+        }
+
+        public override void Init()
+        {
         }
     }
 }

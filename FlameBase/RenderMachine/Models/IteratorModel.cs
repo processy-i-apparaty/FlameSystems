@@ -95,7 +95,11 @@ namespace FlameBase.RenderMachine.Models
         private static VariationModel[] CopyVariations(IReadOnlyList<VariationModel> variationModels)
         {
             var variations = new VariationModel[variationModels.Count];
-            for (var i = 0; i < variations.Length; i++) variations[i] = variationModels[i].Copy();
+            for (var i = 0; i < variations.Length; i++)
+            {
+                variations[i] = variationModels[i].Copy();
+                variations[i].Init();
+            }
             return variations;
         }
 

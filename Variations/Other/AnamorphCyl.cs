@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Windows; using FlameBase.Models;
+using System.Windows;
+using FlameBase.Models;
 
 namespace Variations.Other
 {
@@ -7,7 +8,7 @@ namespace Variations.Other
     {
         public AnamorphCyl()
         {
-            SetParameters(new[] { 1.0, 1.3, 3.0 }, new[] { "a", "b", "k" });
+            SetParameters(new[] {1.0, 1.3, 3.0}, new[] {"a", "b", "k"});
         }
 
         public override int Id { get; } = 52;
@@ -16,12 +17,13 @@ namespace Variations.Other
 
         public override Point Fun(Point p)
         {
-            var a = P1;
-            var b = P2;
-            var k = P3;
-            var evalX = a * (p.Y + b) * Math.Cos(k * p.X);
-            var evalY = a * (p.Y + b) * Math.Sin(k * p.X);
-            return new Point(evalX * W, evalY * W);
+            var x = P1 * (p.Y + P2) * Math.Cos(P3 * p.X);
+            var y = P1 * (p.Y + P2) * Math.Sin(P3 * p.X);
+            return new Point(x * W, y * W);
+        }
+
+        public override void Init()
+        {
         }
     }
 }

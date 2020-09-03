@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Windows; using FlameBase.Models;
+using System.Windows;
+using FlameBase.Models;
 
 namespace Variations.Other
 {
@@ -59,7 +60,12 @@ namespace Variations.Other
                     break;
                 }
             }
+
             return new Point(n2 * W, n3 * W);
+        }
+
+        public override void Init()
+        {
         }
     }
 }

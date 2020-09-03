@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Windows; using FlameBase.Models;
+using System.Windows;
+using FlameBase.Models;
 
 namespace Variations
 {
@@ -22,6 +23,10 @@ namespace Variations
 
             var n2 = W * Math.Pow(preSqrt, preSinA);
             return new Point(n2 * preCosA, n2 * preSinA);
+        }
+
+        public override void Init()
+        {
         }
     }
 }

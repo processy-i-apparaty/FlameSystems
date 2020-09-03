@@ -5,6 +5,8 @@ namespace Variations
 {
     public class JuliaN : VariationModel
     {
+        private double _power;
+        private int _absPower;
         private const double TwoPi = Math.PI * 2.0;
 
         public JuliaN()
@@ -26,16 +28,22 @@ namespace Variations
             //            var dy = r2 * Math.Sin(t);
             //            return new Point(dx, dy);
 
-            var power = Math.Floor(P1);
+            // var power = Math.Floor(P1);
             var dist = P2;
-            var absPower = Math.Abs((int) power);
-            var cPower = dist / power * 0.5;
+            // var absPower = Math.Abs((int) power);
+            var cPower = dist / _power * 0.5;
 
-            var n2 = (Math.Atan2(p.Y, p.X) + TwoPi * VariationHelper.RandomNext(absPower)) / power;
+            var n2 = (Math.Atan2(p.Y, p.X) + TwoPi * VariationHelper.RandomNext(_absPower)) / _power;
             var sin = Math.Sin(n2);
             var cos = Math.Cos(n2);
             var n3 = W * Math.Pow(p.X * p.X + p.Y * p.Y, cPower);
             return new Point(n3 * cos, n3 * sin);
+        }
+
+        public override void Init()
+        {
+            _power = Math.Floor(P1);
+            _absPower = Math.Abs((int)_power);
         }
     }
 }

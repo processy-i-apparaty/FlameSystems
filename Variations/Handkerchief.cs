@@ -22,5 +22,9 @@ namespace Variations
             return new Point(W * (Math.Sin(preAtan + sqrt) * sqrt),
                 W * (Math.Cos(preAtan - sqrt) * sqrt));
         }
+
+        public override void Init()
+        {
+        }
     }
 }

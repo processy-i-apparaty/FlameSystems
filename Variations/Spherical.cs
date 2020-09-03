@@ -1,4 +1,5 @@
-﻿using System.Windows; using FlameBase.Models;
+﻿using System.Windows;
+using FlameBase.Models;
 
 namespace Variations
 {
@@ -13,6 +14,10 @@ namespace Variations
             var r = VariationHelper.R(p);
             var q = 1.0 / (r * r) * W;
             return new Point(p.X * q, p.Y * q);
+        }
+
+        public override void Init()
+        {
         }
     }
 }

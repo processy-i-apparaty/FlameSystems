@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Windows; using FlameBase.Models;
+using System.Windows;
+using FlameBase.Models;
 
 namespace Variations
 {
@@ -13,6 +14,10 @@ namespace Variations
         {
             var n2 = W * Math.Tan(W * VariationHelper.Omega) * (W / (VariationHelper.PreSumSq(p) + 1.0E-300));
             return new Point(n2 * Math.Cos(p.X), n2 * Math.Sin(p.Y));
+        }
+
+        public override void Init()
+        {
         }
     }
 }

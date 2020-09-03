@@ -1,15 +1,19 @@
 ﻿using System;
-using System.Windows; using FlameBase.Models;
+using System.Windows;
+using FlameBase.Models;
 
 namespace Variations
 {
     public class NGon : VariationModel
     {
+        private double _n2;
+        private double _power;
+        private double _n2Half;
         private const double TwoPi = Math.PI * 2.0;
 
         public NGon()
         {
-            SetParameters(new[] { 2.0, 3.0, 5.0, 1.0 }, new[] { "power", "sides", "corners", "circle" });
+            SetParameters(new[] {2.0, 3.0, 5.0, 1.0}, new[] {"power", "sides", "corners", "circle"});
         }
 
         public override int Id { get; } = 38;
@@ -27,18 +31,23 @@ namespace Variations
             //            var k = (P3 * (1.0 / Math.Cos(t4) - 1.0) + P4) / Math.Pow(r, P1);
             //            return new Point(k * p.X, k * p.Y);
             //"power", "sides", "corners", "circle"
-            var power = P1;
-            var sides = P2;
+
             var corners = P3;
             var circle = P4;
-            
-            var pow = Math.Pow(VariationHelper.PreSumSq(p), power / 2.0);
+
+            var pow = Math.Pow(VariationHelper.PreSumSq(p), _power);
             var preAtanYx = VariationHelper.PreAtanYx(p);
-            var n2 = TwoPi / sides;
-            var n3 = preAtanYx - n2 * Math.Floor(preAtanYx / n2);
-            if (n3 > n2 / 2.0) n3 -= n2;
+            var n3 = preAtanYx - _n2 * Math.Floor(preAtanYx / _n2);
+            if (n3 > _n2Half) n3 -= _n2;
             var n4 = (corners * (1.0 / (Math.Cos(n3) + 1.0E-300) - 1.0) + circle) / (pow + 1.0E-300);
             return new Point(W * p.X * n4, W * p.Y * n4);
+        }
+
+        public override void Init()
+        {
+            _n2 = TwoPi / P2;
+            _power = P1 / 2.0;
+            _n2Half = _n2 * .5;
         }
     }
 }

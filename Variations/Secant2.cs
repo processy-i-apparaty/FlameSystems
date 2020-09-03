@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Windows; using FlameBase.Models;
+using System.Windows;
+using FlameBase.Models;
 
 namespace Variations
 {
@@ -22,7 +23,7 @@ namespace Variations
 
 
             var cos = Math.Cos(W * VariationHelper.PreSqrt(p));
-            if (cos == 0.0) return p;
+            if (Math.Abs(cos) <= VariationHelper.SmallDouble) return p;
             var point = new Point();
             var n2 = 1.0 / cos;
             point.X = W * p.X;
@@ -31,6 +32,10 @@ namespace Variations
             else
                 point.Y = W * (n2 - 1.0);
             return point;
+        }
+
+        public override void Init()
+        {
         }
     }
 }

@@ -46,5 +46,10 @@ namespace Variations
             var n5 = W * VariationHelper.R(p);
             return new Point(n5 * cos, n5 * sin);
         }
+
+        public override void Init()
+        {
+            
+        }
     }
 }

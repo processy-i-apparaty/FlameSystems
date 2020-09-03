@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Windows; using FlameBase.Models;
+using System.Windows;
+using FlameBase.Models;
 
 namespace Variations
 {
@@ -29,6 +30,10 @@ namespace Variations
                 (preCosA + sin) * n2,
                 (preSinA - cos) * n2
             );
+        }
+
+        public override void Init()
+        {
         }
     }
 }

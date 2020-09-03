@@ -5,6 +5,7 @@ namespace Variations.Other
 {
     public class Arcsinh : VariationModel
     {
+        private double _scale;
         public override int Id { get; } = 56;
         public override int HasParameters { get; } = 0;
         public override bool IsDependent { get; } = false;
@@ -13,8 +14,13 @@ namespace Variations.Other
         {
             var complex = new Complex(p);
             complex.AsinH();
-            complex.Scale(W * VariationHelper.OneRadOfQuadrant);
+            complex.Scale(_scale);
             return new Point(complex.Re, complex.Im);
+        }
+
+        public override void Init()
+        {
+            _scale = W * VariationHelper.OneRadOfQuadrant;
         }
     }
 }

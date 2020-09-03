@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Windows; using FlameBase.Models;
+using System.Windows;
+using FlameBase.Models;
 
 namespace Variations
 {
@@ -7,7 +8,7 @@ namespace Variations
     {
         public Rectangles()
         {
-            SetParameters(new[] { 2.0, 2.0 }, new[] { "x", "y" });
+            SetParameters(new[] {2.0, 2.0}, new[] {"x", "y"});
         }
 
         public override int Id { get; } = 40;
@@ -31,6 +32,10 @@ namespace Variations
                 point.Y += W * ((2.0 * Math.Floor(p.Y / y) + 1.0) * y - p.Y);
 
             return point;
+        }
+
+        public override void Init()
+        {
         }
     }
 }

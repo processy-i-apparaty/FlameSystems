@@ -5,6 +5,9 @@ namespace Variations
 {
     public class Perspective : VariationModel
     {
+        private double _sin;
+        private double _cos;
+
         public Perspective()
         {
             SetParameters(new[] { 0.62, 2.2 }, new[] { "angle", "dist" });
@@ -17,14 +20,21 @@ namespace Variations
         public override Point Fun(Point p)
         {
             var dist = P2;
-            var q = P1 * Math.PI * .5;
-            var sin = Math.Sin(q);
-            var cos = dist * Math.Cos(q);
+            // var q = P1 * Math.PI * .5;
+            // var sin = Math.Sin(q);
+            // var cos = dist * Math.Cos(q);
 
-            var n2 = dist - p.Y * sin;
+            var n2 = dist - p.Y * _sin;
             if (n2 == 0.0) return p;
             var n3 = 1.0 / n2;
-            return new Point(W * dist * p.X * n3, W * cos * p.Y * n3);
+            return new Point(W * dist * p.X * n3, W * _cos * p.Y * n3);
+        }
+
+        public override void Init()
+        {
+            var q = P1 * Math.PI * .5;
+            _sin = Math.Sin(q);
+            _cos = P2 * Math.Cos(q);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Windows; using FlameBase.Models;
+﻿using System.Windows;
+using FlameBase.Models;
 
 namespace Variations
 {
@@ -11,6 +12,10 @@ namespace Variations
         public override Point Fun(Point p)
         {
             return W == 1.0 ? p : new Point(W * p.X, W * p.Y);
+        }
+
+        public override void Init()
+        {
         }
     }
 }

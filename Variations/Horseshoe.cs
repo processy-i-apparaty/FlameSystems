@@ -1,4 +1,5 @@
-﻿using System.Windows; using FlameBase.Models;
+﻿using System.Windows;
+using FlameBase.Models;
 
 namespace Variations
 {
@@ -22,6 +23,10 @@ namespace Variations
             var preCosA = VariationHelper.PreCosA(p, preSqrt);
             return new Point(W * (preSinA * p.X - preCosA * p.Y),
                 W * (preCosA * p.X + preSinA * p.Y));
+        }
+
+        public override void Init()
+        {
         }
     }
 }

@@ -5,6 +5,7 @@ namespace Variations.Other
 {
     public class Arcsech2 : VariationModel
     {
+        private double _scale;
         public override int Id { get; } = 55;
         public override int HasParameters { get; } = 0;
         public override bool IsDependent { get; } = false;
@@ -22,7 +23,8 @@ namespace Variations.Other
             complex3.Mul(complex2);
             complex.Add(complex3);
             complex.Log();
-            complex.Scale(W * VariationHelper.OneRadOfQuadrant); //2.0 * 0.3183098861837907);
+            complex.Scale(_scale); //2.0 * 0.3183098861837907);
+            //complex.Scale(W * VariationHelper.OneRadOfQuadrant);
             var point = new Point();
 
             point.Y += complex.Im;
@@ -38,6 +40,11 @@ namespace Variations.Other
             }
 
             return point;
+        }
+
+        public override void Init()
+        {
+            _scale = W * VariationHelper.OneRadOfQuadrant;
         }
     }
 }

@@ -5,6 +5,9 @@ namespace Variations.Other
 {
     public class Bipolar : VariationModel
     {
+        private double _wRadiant;
+        private double _wRadiant25;
+
         public Bipolar()
         {
             SetParameters(new[] { 0.0 }, new[] { "shift" });
@@ -29,9 +32,15 @@ namespace Variations.Other
             var n6 = n3 + n4;
             var n7 = n3 - n4;
             if (Math.Abs(n7) < 1E-300 || n6 / n7 <= 0.0) return p;
-            point.X += W * 0.25 * VariationHelper.OneRadOfQuadrant * Math.Log((n3 + n4) / (n3 - n4));
-            point.Y += W * VariationHelper.OneRadOfQuadrant * n5;
+            point.X += _wRadiant25 * Math.Log((n3 + n4) / (n3 - n4));
+            point.Y += _wRadiant * n5;
             return point;
+        }
+
+        public override void Init()
+        {
+            _wRadiant = W * VariationHelper.OneRadOfQuadrant;
+            _wRadiant25 = _wRadiant * .25;
         }
     }
 }

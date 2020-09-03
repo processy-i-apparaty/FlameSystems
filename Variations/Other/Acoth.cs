@@ -1,5 +1,6 @@
-﻿using System.Windows; using FlameBase.Models;
+﻿using System.Windows;
 using FlameBase.FlameMath;
+using FlameBase.Models;
 
 namespace Variations.Other
 {
@@ -16,6 +17,10 @@ namespace Variations.Other
             complex.Flip();
             complex.Scale(W * VariationHelper.OneRadOfQuadrant);
             return new Point(complex.Re, complex.Im);
+        }
+
+        public override void Init()
+        {
         }
     }
 }

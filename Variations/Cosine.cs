@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Windows; using FlameBase.Models;
+using System.Windows;
+using FlameBase.Models;
 
 namespace Variations
 {
@@ -20,6 +21,10 @@ namespace Variations
             var n2 = p.X * Math.PI;
             var sin = Math.Sin(n2);
             return new Point(W * Math.Cos(n2) * Math.Cosh(p.Y), -W * sin * Math.Sinh(p.Y));
+        }
+
+        public override void Init()
+        {
         }
     }
 }

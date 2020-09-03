@@ -1,13 +1,16 @@
 ﻿using System;
-using System.Windows; using FlameBase.Models;
+using System.Windows;
+using FlameBase.Models;
 
 namespace Variations
 {
     public class Blob : VariationModel
     {
+        private double _dif;
+
         public Blob()
         {
-            SetParameters(new[] { 2.0, 1.0, 2.0 }, new[] { "low", "high", "waves" });
+            SetParameters(new[] {2.0, 1.0, 2.0}, new[] {"low", "high", "waves"});
         }
 
         public override int Id { get; } = 23;
@@ -17,10 +20,15 @@ namespace Variations
         public override Point Fun(Point p)
         {
             var preAtan = VariationHelper.PreAtan(p);
-            var n2 = VariationHelper.R(p) * (P1 + (P2 - P1) * (0.5 + 0.5 * Math.Sin(P3 * preAtan)));
+            var n2 = VariationHelper.R(p) * (P1 + _dif * (0.5 + 0.5 * Math.Sin(P3 * preAtan)));
             var n3 = Math.Sin(preAtan) * n2;
             var n4 = Math.Cos(preAtan) * n2;
             return new Point(W * n3, W * n4);
+        }
+
+        public override void Init()
+        {
+            _dif = P2 - P1;
         }
     }
 }
