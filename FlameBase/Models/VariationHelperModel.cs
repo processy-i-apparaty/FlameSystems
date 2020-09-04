@@ -95,5 +95,53 @@ namespace FlameBase.Models
         {
             return oStart + (oStop - oStart) * ((value - iStart) / (iStop - iStart));
         }
+
+        public double Acosh(double n)
+        {
+            return Math.Log(Math.Sqrt(Math.Pow(n, 2.0) - 1.0) + n);
+        }
+
+        public double SqrtSafe(double n)
+        {
+            return n <= 0.0 ? 0.0 : Math.Sqrt(n);
+        }
+
+        public double Hypot(double abs, double abs2)
+        {
+            abs = Math.Abs(abs);
+            abs2 = Math.Abs(abs2);
+            if (abs2 < abs)
+            {
+                var n = abs;
+                abs = abs2;
+                abs2 = n;
+            }
+            else if (abs2 < abs)
+            {
+                if (double.IsPositiveInfinity(abs) || double.IsPositiveInfinity(abs2)) return double.PositiveInfinity;
+                return double.NaN;
+            }
+
+            if (Math.Abs(abs2 - abs - abs2) <= SmallDouble) return abs2;
+            double n2;
+            if (abs > 2.9073548971824276E135)
+            {
+                abs *= 1.688508503057271E-226;
+                abs2 *= 1.688508503057271E-226;
+                n2 = 5.922386521532856E225;
+            }
+            else if (abs2 < 3.4395525670743494E-136)
+            {
+                abs *= 5.922386521532856E225;
+                abs2 *= 5.922386521532856E225;
+                n2 = 1.688508503057271E-226;
+            }
+            else
+            {
+                n2 = 1.0;
+            }
+
+            return n2 * Math.Sqrt(abs * abs + abs2 * abs2);
+        }
     }
 }

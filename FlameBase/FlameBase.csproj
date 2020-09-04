@@ -58,9 +58,14 @@
     <Compile Include="Enums\FileViewType.cs" />
     <Compile Include="FlameMath\Algebra.cs" />
     <Compile Include="FlameMath\Complex.cs" />
+    <Compile Include="FlameMath\G.cs" />
+    <Compile Include="FlameMath\mat2.cs" />
     <Compile Include="FlameMath\Matrix.cs" />
     <Compile Include="FlameMath\Trigonometry.cs" />
     <Compile Include="Enums\FlameColorMode.cs" />
+    <Compile Include="FlameMath\vec2.cs" />
+    <Compile Include="FlameMath\vec3.cs" />
+    <Compile Include="FlameMath\vec4.cs" />
     <Compile Include="FlameMath\XorShift.cs" />
     <Compile Include="Models\BinaryFlamesModel.cs" />
     <Compile Include="Models\ColorPickerColorsModel.cs" />
