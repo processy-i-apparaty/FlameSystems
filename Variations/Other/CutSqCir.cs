@@ -44,11 +44,12 @@ namespace Variations.Other
                 {
                     x = 0.0;
                     y = 0.0;
+                    return p;
                 }
             }
             else if (b)
             {
-                return new Point(p.X, p.Y);
+                return p;
             }
 
             var dx = W * x;

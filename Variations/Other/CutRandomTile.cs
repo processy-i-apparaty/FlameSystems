@@ -73,12 +73,14 @@ namespace Variations.Other
                 {
                     n2 = 0.0;
                     n3 = 0.0;
+                    return p;
                 }
             }
             else if (x <= 0.0)
             {
                 n2 = 0.0;
                 n3 = 0.0;
+                return p;
             }
 
             var dx = W * (n2 - n4);

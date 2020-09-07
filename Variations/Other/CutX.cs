@@ -47,16 +47,16 @@ namespace Variations.Other
             {
                 if (mix < 0.1)
                 {
-                    x = 0.0;
-                    y = 0.0;
-                    // return new Point(p.X,p.Y);
+                    // x = 0.0;
+                    // y = 0.0;
+                    return new Point(p.X,p.Y);
                 }
             }
             else if (mix >= 0.1)
             {
-                x = 0.0;
-                y = 0.0;
-                // return new Point(p.X, p.Y);
+                // x = 0.0;
+                // y = 0.0;
+                return new Point(p.X, p.Y);
             }
 
             var dx = W * x;

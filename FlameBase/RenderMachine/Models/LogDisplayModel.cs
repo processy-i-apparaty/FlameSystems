@@ -42,7 +42,10 @@ namespace FlameBase.RenderMachine.Models
         public int ColorCount { get; }
         public double Contrast { get; set; } = 80.0;
 
-        
+        public uint[,,] GetArrayCopy()
+        {
+            return CopyArray(_display);
+        }
 
 
         #region log display
@@ -350,6 +353,8 @@ namespace FlameBase.RenderMachine.Models
             var parallelOptions = new ParallelOptions
                 {MaxDegreeOfParallelism = Environment.ProcessorCount};
 
+            var gamma = 1.0 / 2.2;
+
             Parallel.For(0, length, parallelOptions, i =>
             {
                 var iLabCm = labsCm.ToArray();
@@ -381,7 +386,12 @@ namespace FlameBase.RenderMachine.Models
                     var colorCm = GetColorModeColor(x, y, iLabCm).ToRgb();
                     var cCmRgb = Color.FromRgb((byte) colorCm.R, (byte) colorCm.G, (byte) colorCm.B);
                     var log = 1.0;
-                    if (!f) log = Math.Log(1.0 + shots, Max);
+                    if (!f)
+                        log = Math.Log(1.0 + shots, Max);
+                    // log = Math.Log(shots) / shots;
+
+                    // log = Math.Pow(log, gamma);
+
                     cCmRgb = Blend(cCmRgb, BackColor, log);
                     var r = cCmRgb.R;
                     var g = cCmRgb.G;
@@ -462,6 +472,7 @@ namespace FlameBase.RenderMachine.Models
 
 
         private GradientModel _gm;
+
         public BitmapSource GetBitmapForRender(double[] gradientValues, GradientModel gradModel, bool fast = false)
         {
             var rect = new Int32Rect(0, 0, Width, Height);
@@ -503,7 +514,9 @@ namespace FlameBase.RenderMachine.Models
                     var colorCm = colorHsb.ToRgb();
                     var cCmRgb = Color.FromRgb((byte) colorCm.R, (byte) colorCm.G, (byte) colorCm.B);
                     var log = 1.0;
-                    if (!f) log = Math.Log(1.0 + shots, Max);
+                    if (!f)
+                        log = Math.Log(1.0 + shots, Max);
+                    // log = Math.Log(shots)/shots;//grad
 
                     cCmRgb = Blend(cCmRgb, BackColor, log);
                     var r = cCmRgb.R;
@@ -543,10 +556,5 @@ namespace FlameBase.RenderMachine.Models
         }
 
         #endregion
-
-        public uint[,,] GetArrayCopy()
-        {
-            return CopyArray(_display);
-        }
     }
 }

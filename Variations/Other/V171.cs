@@ -3,13 +3,13 @@ using FlameBase.Models;
 
 namespace Variations.Other
 {
-    public class V146 : VariationModel
+    public class V171 : VariationModel
     {
-        public override int Id { get; } = 146;
+        public override int Id { get; } = 171;
         public override int HasParameters { get; } = 0;
         public override bool IsDependent { get; } = false;
 
-        public V146()
+        public V171()
         {
             SetParameters(new[] { 0.0, 0.0, 0.0 }, new[] { "", "", "" });
         }

@@ -67,6 +67,7 @@ namespace Variations.Other
                 {
                     n2 = 0.0;
                     n3 = 0.0;
+                    return p;
                     // xyzPoint2.doHide = true;
                 }
             }
@@ -74,6 +75,7 @@ namespace Variations.Other
             {
                 n2 = 0.0;
                 n3 = 0.0;
+                return p;
                 // xyzPoint2.doHide = true;
             }
 

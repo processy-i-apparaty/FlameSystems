@@ -29,6 +29,7 @@ namespace FlameBase.RenderMachine
         private static CancellationTokenSource _sourceRender;
         private static CancellationTokenSource _sourceParallel;
         private static CancellationTokenSource _sourceDraw;
+        private static readonly object LockObj=new object();
         public static bool HasRender => Display != null;
         public static bool IsRendering { get; set; }
 
@@ -212,7 +213,10 @@ namespace FlameBase.RenderMachine
 
                 _sourceParallel?.Cancel(true);
                 _sourceParallel?.Dispose();
-                _sourceParallel = new CancellationTokenSource();
+                lock (LockObj)
+                {
+                    _sourceParallel = new CancellationTokenSource();
+                }
 
                 var parallelOptions = new ParallelOptions
                     {CancellationToken = _sourceParallel.Token, MaxDegreeOfParallelism = cores};
