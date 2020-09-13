@@ -9,11 +9,13 @@
             ShotsPerIteration = shotsPerIteration;
             RenderPerIterations = renderPerIterations;
             DraftImageSideWidth = draftImageSideWidth;
+            RenderColorMode = RenderColorModeModel.RenderColorMode.Hsb;
         }
 
         public int Iterations { get; set; }
         public int ShotsPerIteration { get; set; }
         public int RenderPerIterations { get; set; }
         public int DraftImageSideWidth { get; set; }
+        public RenderColorModeModel.RenderColorMode RenderColorMode { get; set; }
     }
 }

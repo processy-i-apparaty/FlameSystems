@@ -1,0 +1,100 @@
+﻿<UserControl x:Class="FlameSystems.Views.PostFlameView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:FlameSystems.Views"
+             xmlns:viewModels="clr-namespace:FlameSystems.ViewModels"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <viewModels:PostFlameViewModel />
+    </UserControl.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="200" />
+        </Grid.ColumnDefinitions>
+        <Border
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            BorderBrush="{StaticResource BrushBorder}"
+            BorderThickness="0 0 0 1">
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <Border BorderThickness="0 0 0 0"
+                        BorderBrush="{StaticResource BrushBorder}">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="load render"
+                                Style="{StaticResource StyleButtonFlatUi}"
+                                IsEnabled="{Binding IsEnabledLoad}"
+                                Command="{Binding MultiCommand}"
+                                CommandParameter="load" />
+                        <Button Content="save render"
+                                Margin="0 0 2 0"
+                                Style="{StaticResource StyleButtonFlatUi}"
+                                IsEnabled="{Binding IsEnabledSave}"
+                                Command="{Binding MultiCommand}"
+                                CommandParameter="save" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+        <Image Grid.Row="1"
+               Grid.Column="0"
+               Source="{Binding ImageSource}" />
+        <StackPanel Grid.Row="1"
+                    Grid.Column="1"
+                    Orientation="Vertical"
+                    Margin="5">
+            <RadioButton Name="RadioColor"
+                         GroupName="GColor" Content="Color" Foreground="{StaticResource BrushForeground}"
+                         VerticalAlignment="Center" Margin="2"
+                         IsChecked="{Binding RadioColor}"
+                         FontFamily="{StaticResource FamilyBrassMono}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Checked">
+                        <i:InvokeCommandAction Command="{Binding CommandColorRadioChecked}"
+                                               CommandParameter="{Binding ElementName=RadioColor}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </RadioButton>
+            <RadioButton x:Name="RadioGradient"
+                         IsChecked="{Binding RadioGradient}"
+                         FontFamily="{StaticResource FamilyBrassMono}"
+                         GroupName="GColor" Content="Gradient" Foreground="{StaticResource BrushForeground}"
+                         VerticalAlignment="Center" Margin="2">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Checked">
+                        <i:InvokeCommandAction Command="{Binding CommandColorRadioChecked}"
+                                               CommandParameter="{Binding ElementName=RadioGradient}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+
+            </RadioButton>
+            <Rectangle Margin="2"
+                       Height="20"
+                       Stroke="{StaticResource BrushBorder}"
+                       Fill="{Binding GradientFill}"
+                       Visibility="{Binding GradientVisibility}" />
+            <Border BorderBrush="{StaticResource BrushBorder}"
+                    BorderThickness="1"
+                    Margin="3" >
+                <ContentControl Height="200"/>
+            </Border>
+            <ScrollViewer
+                VerticalScrollBarVisibility="Visible"
+                HorizontalScrollBarVisibility="Disabled"
+                Style="{StaticResource LeftScrollViewer}"
+                Margin="3">
+                <ItemsControl  ItemsSource="{Binding Colors}" />
+            </ScrollViewer>
+        </StackPanel>
+    </Grid>
+</UserControl>

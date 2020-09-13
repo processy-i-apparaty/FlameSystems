@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Input;
-using FlameBase.Models;
 using FlameBase.RenderMachine.Models;
 using FlameSystems.Infrastructure;
 using FlameSystems.Infrastructure.ValueBind;
@@ -23,6 +22,8 @@ namespace FlameSystems.Controls.ViewModels
             ShotsPerIteration = _renderSettings.ShotsPerIteration * 0.001;
             Iterations = _renderSettings.Iterations * 0.001;
             RenderPerIterations = _renderSettings.RenderPerIterations;
+            RenderColorMode = new RenderColorModeModel();
+            RenderColorMode.SetMode(_renderSettings.RenderColorMode);
             _callback = callback;
         }
 
@@ -35,6 +36,7 @@ namespace FlameSystems.Controls.ViewModels
                     _renderSettings.ShotsPerIteration = (int) (ShotsPerIteration * 1000.0);
                     _renderSettings.Iterations = (int) (Iterations * 1000.0);
                     _renderSettings.RenderPerIterations = RenderPerIterations;
+                    _renderSettings.RenderColorMode = RenderColorMode.Mode;
                     _callback();
                     break;
                 case "cancel":
@@ -71,6 +73,13 @@ namespace FlameSystems.Controls.ViewModels
         public bool Result { get; set; }
 
         public ICommand Command { get; }
+
+        [ValueBind]
+        public RenderColorModeModel RenderColorMode
+        {
+            get => Get();
+            set => Set(value);
+        }
 
         #endregion
     }

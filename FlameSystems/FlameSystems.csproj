@@ -69,8 +69,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controls\ViewModels\RenderSettingsViewModel.cs" />
+    <Compile Include="Controls\ViewModels\TransformPostColorViewModel.cs" />
     <Compile Include="Controls\Views\RenderSettingsView.xaml.cs">
       <DependentUpon>RenderSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Views\TransformPostColorView.xaml.cs">
+      <DependentUpon>TransformPostColorView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\ActionFire\ActionFire.cs" />
     <Compile Include="Infrastructure\ActionFire\ActionFireReturn.cs" />
@@ -83,11 +87,15 @@
     <Compile Include="Infrastructure\ValueBind\ValueBindStorage.cs" />
     <Compile Include="ViewModels\CreateFlameViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\PostFlameViewModel.cs" />
     <Compile Include="Views\CreateFlameView.xaml.cs">
       <DependentUpon>CreateFlameView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindowView.xaml.cs">
       <DependentUpon>MainWindowView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PostFlameView.xaml.cs">
+      <DependentUpon>PostFlameView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -170,6 +178,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\Views\TransformPostColorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\Views\TransformView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -207,6 +219,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindowView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PostFlameView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

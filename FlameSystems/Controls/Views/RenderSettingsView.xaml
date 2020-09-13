@@ -80,6 +80,21 @@
                            Margin="2" />
             </StackPanel>
             <StackPanel Orientation="Horizontal"
+                        Margin="8"
+                        HorizontalAlignment="Right"
+                        DataContext="{Binding RenderColorMode}">
+                
+                <TextBlock Text="color mode"
+                           Style="{StaticResource FontBrassMono}"
+                           VerticalAlignment="Center"
+                           Margin="2"
+                           FontSize="16"/>
+                <RadioButton Content="HSB" Foreground="{StaticResource BrushForeground}" IsChecked="{Binding ModeHsb}"/>
+                <RadioButton Content="LAB" Foreground="{StaticResource BrushForeground}" IsChecked="{Binding ModeLab}"/>
+                <RadioButton Content="LogGamma" Foreground="{StaticResource BrushForeground}" IsChecked="{Binding ModeLogGamma}"/>
+                
+            </StackPanel>
+            <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center">
                 <Button Content="ok"
                         Margin="2"

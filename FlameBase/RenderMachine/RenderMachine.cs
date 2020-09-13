@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using FlameBase.Enums;
 using FlameBase.FlameMath;
+using FlameBase.Helpers;
 using FlameBase.Models;
 using FlameBase.RenderMachine.Models;
 using Matrix = FlameBase.FlameMath.Matrix;
@@ -89,8 +90,25 @@ namespace FlameBase.RenderMachine
         {
             if (Display == null) return;
             var now = DateTime.Now;
+
+            var rcMode = "";
+            switch (Display.RenderColorMode)
+            {
+                case RenderColorModeModel.RenderColorMode.Hsb:
+                    rcMode = "hsb";
+                    break;
+                case RenderColorModeModel.RenderColorMode.Lab:
+                    rcMode = "lab";
+                    break;
+                case RenderColorModeModel.RenderColorMode.LogGamma:
+                    rcMode = "log";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
             var path =
-                $"{folder}\\{name}-{now.Year}{now.Month:00}{now.Day:00}-{(int) now.TimeOfDay.TotalSeconds}-{_iterations}-{(int) _renderTime.TotalSeconds}.png";
+                $"{folder}\\{name}-{now.Year}{now.Month:00}{now.Day:00}-{(int) now.TimeOfDay.TotalSeconds}-{_iterations}-{(int) _renderTime.TotalSeconds}_{rcMode}.png";
             BitmapSource img;
             switch (colorMode)
             {
@@ -163,6 +181,7 @@ namespace FlameBase.RenderMachine
             var totalPointsPerIteration = renderPack.RenderSettings.ShotsPerIteration;
             var totalIterations = renderPack.RenderSettings.Iterations;
             var totalPointsPerCore = totalPointsPerIteration / cores / symmetry;
+            var renderColorMode = renderPack.RenderSettings.RenderColorMode;
 
             var imageSize = new Size(renderPack.ViewSettings.ImageWidth, renderPack.ViewSettings.ImageHeight);
 
@@ -175,6 +194,8 @@ namespace FlameBase.RenderMachine
             else
                 display = new LogDisplayModel((int) imageSize.Width, (int) imageSize.Height, colorCount,
                     renderPack.ViewSettings.BackColor);
+
+            display.RenderColorMode = renderColorMode;
 
             var translationMatrix = Matrix.FromViewSettings(renderPack.ViewSettings);
             var translationArray = translationMatrix.Array;
@@ -275,7 +296,9 @@ namespace FlameBase.RenderMachine
                 if (!isDrawingIntermediate && iteration % renderPack.RenderSettings.RenderPerIterations == 0)
                 {
                     isDrawingIntermediate = true;
+                    
                     var tmpDisplay = display.Copy();
+                    
                     _sourceDraw?.Cancel(true);
                     _sourceDraw?.Dispose();
                     _sourceDraw = new CancellationTokenSource();

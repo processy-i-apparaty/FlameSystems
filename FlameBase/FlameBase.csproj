@@ -67,6 +67,7 @@
     <Compile Include="FlameMath\vec3.cs" />
     <Compile Include="FlameMath\vec4.cs" />
     <Compile Include="FlameMath\XorShift.cs" />
+    <Compile Include="Helpers\ObjectCloneHelper.cs" />
     <Compile Include="Models\BinaryFlamesModel.cs" />
     <Compile Include="Models\ColorPickerColorsModel.cs" />
     <Compile Include="Models\ColorPickerColumnModel.cs" />
@@ -82,8 +83,10 @@
     <Compile Include="Models\ZipFlamesModel.cs" />
     <Compile Include="RenderMachine\Models\IteratorModel.cs" />
     <Compile Include="RenderMachine\Models\LogDisplayModel.cs" />
+    <Compile Include="RenderMachine\Models\MixColorModel.cs" />
     <Compile Include="RenderMachine\Models\RandomTransformModel.cs" />
     <Compile Include="RenderMachine\Models\RenderActionsModel.cs" />
+    <Compile Include="RenderMachine\Models\RenderColorModeModel.cs" />
     <Compile Include="RenderMachine\Models\RenderPackModel.cs" />
     <Compile Include="RenderMachine\Models\RenderSettingsModel.cs" />
     <Compile Include="Models\TransformModel.cs" />
