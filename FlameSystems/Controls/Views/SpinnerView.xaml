@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:FlameSystems.Controls.Views"
              xmlns:viewModels="clr-namespace:FlameSystems.Controls.ViewModels"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="100" d:DesignWidth="100">
     <UserControl.DataContext>
         <viewModels:SpinnerViewModel />
     </UserControl.DataContext>
@@ -111,38 +111,40 @@
                             </Trigger>
                         </ControlTemplate.Triggers>
 
-                        <Border BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                Background="{TemplateBinding Background}">
-                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <Viewbox Width="30">
-                                    <Canvas Height="60" Width="60">
-                                        <Canvas.Resources>
-                                            <Style TargetType="Ellipse">
-                                                <Setter Property="Width" Value="15" />
-                                                <Setter Property="Height" Value="15" />
-                                                <Setter Property="Fill" Value="Transparent" />
-                                                <Setter Property="Stroke" Value="Transparent" />
-                                            </Style>
-                                        </Canvas.Resources>
+                        <Grid Background="{TemplateBinding Background}">
+                            <Border BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <StackPanel>
+                                    <Viewbox Width="30" Height="30" Margin="5">
+                                        <Canvas Height="60" Width="60">
+                                            <Canvas.Resources>
+                                                <Style TargetType="Ellipse">
+                                                    <Setter Property="Width" Value="15" />
+                                                    <Setter Property="Height" Value="15" />
+                                                    <Setter Property="Fill" Value="Transparent" />
+                                                    <Setter Property="Stroke" Value="Transparent" />
+                                                </Style>
+                                            </Canvas.Resources>
 
-                                        <Ellipse x:Name="ellipse0" Canvas.Left="1.75" Canvas.Top="21" />
-                                        <Ellipse x:Name="ellipse1" Canvas.Top="7" Canvas.Left="6.5" />
-                                        <Ellipse x:Name="ellipse2" Canvas.Left="20.5" Canvas.Top="0.75" />
-                                        <Ellipse x:Name="ellipse3" Canvas.Left="34.75" Canvas.Top="6.75" />
-                                        <Ellipse x:Name="ellipse4" Canvas.Left="40.5" Canvas.Top="20.75" />
-                                        <Ellipse x:Name="ellipse5" Canvas.Left="34.75" Canvas.Top="34.5" />
-                                        <Ellipse x:Name="ellipse6" Canvas.Left="20.75" Canvas.Top="39.75" />
-                                        <Ellipse x:Name="ellipse7" Canvas.Top="34.25" Canvas.Left="7" />
-                                        <Ellipse Width="39.5" Height="39.5" Canvas.Left="8.75" Canvas.Top="8"
-                                                 Visibility="Hidden" />
-                                    </Canvas>
-                                </Viewbox>
-                                <TextBlock Text="{Binding Text}"
-                                           Style="{StaticResource FontBrassMonoText}"
-                                           VerticalAlignment="Center" />
-                            </StackPanel>
-                        </Border>
+                                            <Ellipse x:Name="ellipse0" Canvas.Left="1.75" Canvas.Top="21" />
+                                            <Ellipse x:Name="ellipse1" Canvas.Top="7" Canvas.Left="6.5" />
+                                            <Ellipse x:Name="ellipse2" Canvas.Left="20.5" Canvas.Top="0.75" />
+                                            <Ellipse x:Name="ellipse3" Canvas.Left="34.75" Canvas.Top="6.75" />
+                                            <Ellipse x:Name="ellipse4" Canvas.Left="40.5" Canvas.Top="20.75" />
+                                            <Ellipse x:Name="ellipse5" Canvas.Left="34.75" Canvas.Top="34.5" />
+                                            <Ellipse x:Name="ellipse6" Canvas.Left="20.75" Canvas.Top="39.75" />
+                                            <Ellipse x:Name="ellipse7" Canvas.Top="34.25" Canvas.Left="7" />
+                                            <Ellipse Width="39.5" Height="39.5" Canvas.Left="8.75" Canvas.Top="8"
+                                                     Visibility="Hidden" />
+                                        </Canvas>
+                                    </Viewbox>
+                                    <TextBlock Text="{Binding Text}"
+                                               Style="{StaticResource FontBrassMonoText}"
+                                               VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Border>
+                        </Grid>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>

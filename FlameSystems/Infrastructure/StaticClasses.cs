@@ -1,4 +1,5 @@
-﻿using FlameSystems.Controls.ViewModels;
+﻿using System.Windows.Controls;
+using FlameSystems.Controls.ViewModels;
 using FlameSystems.Controls.Views;
 
 namespace FlameSystems.Infrastructure
@@ -18,6 +19,12 @@ namespace FlameSystems.Infrastructure
         public static void SetSpinnerText(string text)
         {
             SpinnerVm.Text = text;
+        }
+
+        public static Control GetSpinner(string message="wait...")
+        {
+            SetSpinnerText(message);
+            return Spinner;
         }
     }
 }

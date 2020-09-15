@@ -73,81 +73,90 @@
             </Grid>
         </Border>
 
-        <StackPanel Grid.Row="1"
-                    Grid.Column="1"
-                    Orientation="Vertical"
-                    Margin="5">
-            <RadioButton Name="RadioColor"
-                         GroupName="GColor" Content="Color" Foreground="{StaticResource BrushForeground}"
-                         VerticalAlignment="Center" Margin="3"
-                         FlowDirection="RightToLeft"
-                         IsChecked="{Binding RadioColor}"
-                         FontFamily="{StaticResource FamilyBrassMono}">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Checked">
-                        <i:InvokeCommandAction Command="{Binding CommandRadioChecked}"
-                                               CommandParameter="{Binding ElementName=RadioColor}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </RadioButton>
-            <RadioButton x:Name="RadioGradient"
-                         IsChecked="{Binding RadioGradient}"
-                         FontFamily="{StaticResource FamilyBrassMono}"
-                         FlowDirection="RightToLeft"
-                         GroupName="GColor" Content="Gradient" Foreground="{StaticResource BrushForeground}"
-                         VerticalAlignment="Center" Margin="3">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Checked">
-                        <i:InvokeCommandAction Command="{Binding CommandRadioChecked}"
-                                               CommandParameter="{Binding ElementName=RadioGradient}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
+        <Border Grid.Row="1"
+                Grid.Column="1"
+                BorderBrush="{StaticResource BrushBorder}"
+                BorderThickness="1 0 0 0">
+            <StackPanel
+                Orientation="Vertical"
+                Margin="5">
+                <RadioButton Name="RadioColor"
+                             GroupName="GColor" Content="Color" Foreground="{StaticResource BrushForeground}"
+                             VerticalAlignment="Center" Margin="3"
+                             FlowDirection="RightToLeft"
+                             IsChecked="{Binding RadioColor}"
+                             FontFamily="{StaticResource FamilyBrassMono}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Checked">
+                            <i:InvokeCommandAction Command="{Binding CommandRadioChecked}"
+                                                   CommandParameter="{Binding ElementName=RadioColor}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </RadioButton>
+                <RadioButton x:Name="RadioGradient"
+                             IsChecked="{Binding RadioGradient}"
+                             FontFamily="{StaticResource FamilyBrassMono}"
+                             FlowDirection="RightToLeft"
+                             GroupName="GColor" Content="Gradient" Foreground="{StaticResource BrushForeground}"
+                             VerticalAlignment="Center" Margin="3">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Checked">
+                            <i:InvokeCommandAction Command="{Binding CommandRadioChecked}"
+                                                   CommandParameter="{Binding ElementName=RadioGradient}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
 
-            </RadioButton>
-            <Rectangle Margin="2"
-                       Height="20"
-                       Stroke="{StaticResource BrushBorder}"
-                       Fill="{Binding GradientFill}"
-                       Visibility="{Binding GradientVisibility}" />
-            <TextBlock Text="colors"
-                       HorizontalAlignment="Right"
-                       Margin="3"
-                       Style="{StaticResource FontBrassMonoText}" />
-
-            <ItemsControl ItemsSource="{Binding ColorRectangles}"
-                          HorizontalAlignment="Right"
-                          Margin="3">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="3">
-                <TextBlock Text="back color"
-                           Margin="3"
-                           VerticalAlignment="Center"
-                           Style="{StaticResource FontBrassMonoText}" />
-
-                <Rectangle Width="30" Height="28" Margin="3"
+                </RadioButton>
+                <Rectangle Margin="2"
+                           Height="20"
                            Stroke="{StaticResource BrushBorder}"
-                           Fill="{Binding BackColor}">
+                           Fill="{Binding GradientFill}"
+                           Visibility="{Binding GradientVisibility}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseDown">
-                            <i:InvokeCommandAction Command="{Binding CommandBackColor}" />
+                            <i:InvokeCommandAction Command="{Binding CommandSetGradient}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </Rectangle>
+                <TextBlock Text="colors"
+                           HorizontalAlignment="Right"
+                           Margin="3"
+                           Style="{StaticResource FontBrassMonoText}" />
+
+                <ItemsControl ItemsSource="{Binding ColorRectangles}"
+                              HorizontalAlignment="Right"
+                              Margin="3">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="3">
+                    <TextBlock Text="back color"
+                               Margin="3"
+                               VerticalAlignment="Center"
+                               Style="{StaticResource FontBrassMonoText}" />
+
+                    <Rectangle Width="30" Height="28" Margin="3"
+                               Stroke="{StaticResource BrushBorder}"
+                               Fill="{Binding BackColor}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseDown">
+                                <i:InvokeCommandAction Command="{Binding CommandBackColor}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Rectangle>
+                </StackPanel>
+                <Border BorderBrush="{StaticResource BrushBorder}"
+                        BorderThickness="1"
+                        Margin="3">
+                    <ContentControl Height="200" />
+                </Border>
+
             </StackPanel>
-            <Border BorderBrush="{StaticResource BrushBorder}"
-                    BorderThickness="1"
-                    Margin="3">
-                <ContentControl Height="200" />
-            </Border>
-
-        </StackPanel>
-
+        </Border>
         <ContentControl
             Content="{Binding TopContent}"
             Grid.Row="0"

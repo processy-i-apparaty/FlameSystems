@@ -8,10 +8,10 @@ namespace FlameSystems.Controls.ViewModels
 {
     internal class TransformPostColorViewModel : Notifier
     {
-        private GradientModel _gradientModel;
+        // private GradientModel _gradientModel;
 
         private Color _transformColor;
-        private double _transformGradientPosition;
+        // private double _transformGradientPosition;
 
         public TransformPostColorViewModel()
         {
@@ -35,15 +35,15 @@ namespace FlameSystems.Controls.ViewModels
         public ICommand CommandSelectColor { get; }
         public int Id { get; set; }
 
-        public double TransformGradientPosition
-        {
-            get => _transformGradientPosition;
-            set
-            {
-                _transformGradientPosition = value;
-                ColorBrush = new SolidColorBrush(_gradientModel.GetFromPosition(value));
-            }
-        }
+        // public double TransformGradientPosition
+        // {
+        //     get => _transformGradientPosition;
+        //     set
+        //     {
+        //         _transformGradientPosition = value;
+        //         ColorBrush = new SolidColorBrush(_gradientModel.GetFromPosition(value));
+        //     }
+        // }
 
         public Color TransformColor
         {

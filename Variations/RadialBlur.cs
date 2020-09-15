@@ -10,7 +10,7 @@ namespace Variations
 
         private double _n4;
 
-        private double _q;
+        // private double _q;
         // private const double HalfPi = Math.PI * .5;
 
         public RadialBlur()

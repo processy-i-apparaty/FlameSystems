@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,8 +12,6 @@ using FlameBase.Enums;
 using FlameBase.Helpers;
 using FlameBase.Models;
 using FlameBase.RenderMachine;
-using FlameSystems.Controls.ViewModels;
-using FlameSystems.Controls.Views;
 using FlameSystems.Infrastructure;
 using FlameSystems.Infrastructure.ActionFire;
 using FlameSystems.Infrastructure.ValueBind;
@@ -23,57 +20,44 @@ namespace FlameSystems.ViewModels
 {
     internal class PostFlameViewModel : Notifier
     {
-        private ColorPickProvider _colorPickProvider;
-        private LoaderSaverProvider _loaderSaverProvider;
-        private string _multiCommand;
-        private int _selectedColorIndex = -1;
-        private BitmapSource _img;
+        private ColorPickProvider _currentColorPickProvider;
+        private BitmapSource _currentImg;
+        private LoaderSaverProvider _currentLoaderSaverProvider;
+        private string _currentMultiCommand;
+        private int _currentSelectedColorIndex = -1;
 
         public PostFlameViewModel()
         {
             MultiCommand = new RelayCommand(MultiCommandHandler);
             CommandRadioChecked = new RelayCommand(RadioCheckedHandler);
             CommandBackColor = new RelayCommand(BackColorHandler);
+            CommandSetGradient = new RelayCommand(SetGradientHandler);
             RadioColor = true;
             GradientVisibility = Visibility.Collapsed;
-        }
-
-
-        private static void GetGradientModel(FlameModel flameModel, out GradientModel gradientModel,
-            out double[] gradientValues)
-        {
-            gradientModel = null;
-            gradientValues = null;
-            if (flameModel?.GradientPack == null) return;
-            var gm = new GradientModel(flameModel.GradientPack);
-            gradientModel = gm.Copy();
-            gradientValues = flameModel.FunctionColorPositions.ToArray();
         }
 
         #region events
 
         private void RectangleMouseDown(object sender, MouseButtonEventArgs e)
         {
-            
             var rectangle = (Rectangle) sender;
-            _selectedColorIndex = ColorRectangles.IndexOf(rectangle);
+            _currentSelectedColorIndex = ColorRectangles.IndexOf(rectangle);
 
             if (RadioColor)
             {
-                var color = _loaderSaverProvider.Flame.FunctionColors[_selectedColorIndex];
-                Debug.WriteLine($"{_selectedColorIndex} {color}");
-                _colorPickProvider = new ColorPickProvider(ColorPickerProviderCallback, color);
+                var color = _currentLoaderSaverProvider.Flame.FunctionColors[_currentSelectedColorIndex];
+                Debug.WriteLine($"{_currentSelectedColorIndex} {color}");
+                _currentColorPickProvider = new ColorPickProvider(ColorPickerProviderCallback, color);
             }
 
             if (RadioGradient)
             {
-                var color = _loaderSaverProvider.Flame.GradientPack.Values[_selectedColorIndex];
+                var color = _currentLoaderSaverProvider.Flame.GradientPack.Values[_currentSelectedColorIndex];
                 //_gradientPickProvider = new GradientPickProvider()
             }
         }
 
         #endregion
-
 
         #region set ui
 
@@ -88,24 +72,19 @@ namespace FlameSystems.ViewModels
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     ImageSource = null;
-                    ImageTopContent = new SpinnerView();
+                    ImageTopContent = StaticClasses.GetSpinner();
                 });
-                Thread.Sleep(100);
+                // Thread.Sleep(100);
             });
 
             await Task.Run(() =>
             {
-                Thread.Sleep(100);
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    _img = RenderMachine.GetImage(
-                        flameModel.FunctionColors.ToArray(), gradientValues,
-                        gradientModel);
-                    ImageSource = _img;
-                    ImageTopContent = null;
-
-                    SetUi(flameModel, gradientModel, gradientValues);
-                });
+                _currentImg = RenderMachine.GetImage(
+                    flameModel.FunctionColors.ToArray(), gradientValues,
+                    gradientModel);
+                ImageSource = _currentImg;
+                ImageTopContent = null;
+                Application.Current.Dispatcher.Invoke(() => { SetUi(flameModel, gradientModel, gradientValues); });
             });
         }
 
@@ -154,17 +133,17 @@ namespace FlameSystems.ViewModels
 
         private void SetColor(Color color)
         {
-            _loaderSaverProvider.Flame.FunctionColors[_selectedColorIndex] = color;
-            ShowRender(_loaderSaverProvider);
-            _selectedColorIndex = -1;
+            _currentLoaderSaverProvider.Flame.FunctionColors[_currentSelectedColorIndex] = color;
+            ShowRender(_currentLoaderSaverProvider);
+            _currentSelectedColorIndex = -1;
         }
 
         private void SetBackColor(Color color)
         {
-            _loaderSaverProvider.Flame.BackColor = color;
+            _currentLoaderSaverProvider.Flame.BackColor = color;
             RenderMachine.Display.BackColor = color;
-            ShowRender(_loaderSaverProvider);
-            _selectedColorIndex = -1;
+            ShowRender(_currentLoaderSaverProvider);
+            _currentSelectedColorIndex = -1;
         }
 
 
@@ -181,6 +160,17 @@ namespace FlameSystems.ViewModels
             ShowRender(flameModel);
         }
 
+        private static void GetGradientModel(FlameModel flameModel, out GradientModel gradientModel,
+            out double[] gradientValues)
+        {
+            gradientModel = null;
+            gradientValues = null;
+            if (flameModel?.GradientPack == null) return;
+            var gm = new GradientModel(flameModel.GradientPack);
+            gradientModel = gm.Copy();
+            gradientValues = flameModel.FunctionColorPositions.ToArray();
+        }
+
         #endregion
 
         #region handlers
@@ -188,7 +178,7 @@ namespace FlameSystems.ViewModels
         private void BackColorHandler(object obj)
         {
             var color = BackColor.Color;
-            _colorPickProvider = new ColorPickProvider(ColorPickerProviderCallback, color);
+            _currentColorPickProvider = new ColorPickProvider(ColorPickerProviderCallback, color);
         }
 
         private void RadioCheckedHandler(object obj)
@@ -198,42 +188,47 @@ namespace FlameSystems.ViewModels
             if (RadioGradient) GradientVisibility = Visibility.Visible;
         }
 
+        private void SetGradientHandler(object obj)
+        {
+        }
+
         private void MultiCommandHandler(object obj)
         {
             if (!(obj is string mc)) return;
-            _multiCommand = mc;
+            _currentMultiCommand = mc;
 
             switch (mc)
             {
                 case "toCreateFlame":
+                    RenderMachine.DestroyDisplay();
                     ActionFire.Invoke("MAIN_WINDOW_VIEWMODEL-SET_WINDOW_CONTENT_BY_PARAMS", "CreateFlame", null);
                     return;
                 case "loadRender":
-                    _loaderSaverProvider =
+                    _currentLoaderSaverProvider =
                         new LoaderSaverProvider(FileViewType.LoadRender, LoaderSaverProviderCallback);
                     return;
                 case "saveRender":
                     return;
                 case "saveImage":
-                    if (_img == null) return;
                     SaveImage();
                     return;
             }
 
-            _multiCommand = string.Empty;
+            _currentMultiCommand = string.Empty;
         }
 
         private async void SaveImage()
         {
-            StaticClasses.SetSpinnerText("saving image...");
-            TopContent = StaticClasses.Spinner;
+            if (_currentImg == null) return;
+
+            TopContent = StaticClasses.GetSpinner();
 
             await Task.Run(() =>
             {
                 var now = DateTime.Now;
                 var filename =
-                    $"{Directories.Images}\\{_loaderSaverProvider.FlameName}_{now.Year}{now.Month:00}{now.Day:00}-{(int) now.TimeOfDay.TotalSeconds}.png";
-                ImageHelper.SaveImage(filename, _img);
+                    $"{Directories.Images}\\{_currentLoaderSaverProvider.FlameName}_{now.Year}{now.Month:00}{now.Day:00}-{(int) now.TimeOfDay.TotalSeconds}.png";
+                ImageHelper.SaveImage(filename, _currentImg);
             });
             TopContent = null;
         }
@@ -246,13 +241,7 @@ namespace FlameSystems.ViewModels
         {
             if (command == "spinner")
             {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    var spinner = new SpinnerView();
-                    var vm = (SpinnerViewModel) spinner.DataContext;
-                    vm.Text = message;
-                    TopContent = spinner;
-                });
+                Application.Current.Dispatcher.Invoke(() => { TopContent = StaticClasses.GetSpinner(message); });
                 return;
             }
 
@@ -260,15 +249,15 @@ namespace FlameSystems.ViewModels
             if (control != null) return;
 
 
-            switch (_multiCommand)
+            switch (_currentMultiCommand)
             {
                 case "loadRender":
-                    ShowRender(_loaderSaverProvider);
+                    ShowRender(_currentLoaderSaverProvider);
                     break;
             }
 
-            _multiCommand = string.Empty;
-            ActionFire.Invoke("MAIN_WINDOW_VIEWMODEL-SET_BOTTOM_STRING", _loaderSaverProvider.ResultString);
+            _currentMultiCommand = string.Empty;
+            ActionFire.Invoke("MAIN_WINDOW_VIEWMODEL-SET_BOTTOM_STRING", _currentLoaderSaverProvider.ResultString);
         }
 
         private void ColorPickerProviderCallback(string command, string message, Control control)
@@ -280,12 +269,13 @@ namespace FlameSystems.ViewModels
                     break;
                 case "end":
                     TopContent = null;
-                    if (!_colorPickProvider.Result) break;
+                    if (!_currentColorPickProvider.Result) break;
 
-                    if (_selectedColorIndex == -1)
-                        SetBackColor(_colorPickProvider.ResultColor);
+                    if (_currentSelectedColorIndex == -1)
+                        SetBackColor(_currentColorPickProvider.ResultColor);
                     else
-                        SetColor(_colorPickProvider.ResultColor);
+                        SetColor(_currentColorPickProvider.ResultColor);
+                    _currentColorPickProvider = null;
 
                     break;
             }
@@ -357,6 +347,8 @@ namespace FlameSystems.ViewModels
             get => Get();
             set => Set(value);
         }
+
+        public ICommand CommandSetGradient { get; }
 
         #endregion
     }
