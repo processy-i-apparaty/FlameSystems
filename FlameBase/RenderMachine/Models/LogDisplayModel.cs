@@ -624,5 +624,22 @@ namespace FlameBase.RenderMachine.Models
         // }
 
         #endregion
+
+        public double GetAvgShots()
+        {
+            var sum = 0.0;
+            var count = 1.0 * _display.GetLength(0) * _display.GetLength(1);
+            for (int x = 0; x < _display.GetLength(0); x++)
+            {
+                for (int y = 0; y < _display.GetLength(1); y++)
+                {
+                    for (int c = 0; c < _display.GetLength(2); c++)
+                    {
+                        sum += _display[x, y, c];
+                    }
+                }
+            }
+            return sum / count;
+        }
     }
 }

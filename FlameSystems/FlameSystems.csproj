@@ -69,18 +69,26 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controls\ViewModels\RenderSettingsViewModel.cs" />
+    <Compile Include="Controls\ViewModels\SpinnerViewModel.cs" />
     <Compile Include="Controls\ViewModels\TransformPostColorViewModel.cs" />
     <Compile Include="Controls\Views\RenderSettingsView.xaml.cs">
       <DependentUpon>RenderSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Views\SpinnerView.xaml.cs">
+      <DependentUpon>SpinnerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Views\TransformPostColorView.xaml.cs">
       <DependentUpon>TransformPostColorView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\ActionFire\ActionFire.cs" />
     <Compile Include="Infrastructure\ActionFire\ActionFireReturn.cs" />
+    <Compile Include="Infrastructure\ColorPickProvider.cs" />
     <Compile Include="Infrastructure\Directories.cs" />
+    <Compile Include="Infrastructure\ImageProvider.cs" />
+    <Compile Include="Infrastructure\LoaderSaverProvider.cs" />
     <Compile Include="Infrastructure\Notifier.cs" />
     <Compile Include="Infrastructure\RelayCommand.cs" />
+    <Compile Include="Infrastructure\StaticClasses.cs" />
     <Compile Include="Infrastructure\ValueBind\IValueBind.cs" />
     <Compile Include="Infrastructure\ValueBind\ValueBind.cs" />
     <Compile Include="Infrastructure\ValueBind\ValueBindAttribute.cs" />
@@ -175,6 +183,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\Views\RenderSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Views\SpinnerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -11,13 +11,17 @@ namespace FlameSystems.ViewModels
     {
         private const string ProgramName = "Flame Systems";
 
-
         public MainWindowViewModel()
         {
             var thisType = GetType();
-            ActionFire.AddOrReplace("MAIN_WINDOW_VIEWMODEL-SET_VERSION", new Action<int, int, int>(ActionSetVersionString), thisType);
-            ActionFire.AddOrReplace("MAIN_WINDOW_VIEWMODEL-SET_BOTTOM_STRING", new Action<string>(ActionSetBottomString), thisType);
-            ActionFire.AddOrReplace("MAIN_WINDOW_VIEWMODEL-SET_WINDOW_CONTENT", new Action<Control>(ActionSetWindowContent), thisType);
+            ActionFire.AddOrReplace("MAIN_WINDOW_VIEWMODEL-SET_VERSION",
+                new Action<int, int, int>(ActionSetVersionString), thisType);
+            ActionFire.AddOrReplace("MAIN_WINDOW_VIEWMODEL-SET_BOTTOM_STRING",
+                new Action<string>(ActionSetBottomString), thisType);
+            ActionFire.AddOrReplace("MAIN_WINDOW_VIEWMODEL-SET_WINDOW_CONTENT",
+                new Action<Control>(ActionSetWindowContent), thisType);
+            ActionFire.AddOrReplace("MAIN_WINDOW_VIEWMODEL-SET_WINDOW_CONTENT_BY_PARAMS",
+                new Action<string, object>(ActionSetWindowContentByParams), thisType);
 
             WindowContent = new CreateFlameView();
         }
@@ -66,6 +70,19 @@ namespace FlameSystems.ViewModels
         {
             if (control == null) return;
             WindowContent = control;
+        }
+
+        private void ActionSetWindowContentByParams(string contentName, object parameter)
+        {
+            switch (contentName)
+            {
+                case "CreateFlame":
+                    WindowContent = new CreateFlameView();
+                    break;
+                case "PostFlame":
+                    WindowContent = new PostFlameView();
+                    break;
+            }
         }
 
         #endregion

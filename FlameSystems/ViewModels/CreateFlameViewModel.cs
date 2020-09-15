@@ -167,6 +167,9 @@ namespace FlameSystems.ViewModels
                 case "back color":
                     SelectBackColor();
                     break;
+                case "toPostPro":
+                    ActionFire.Invoke("MAIN_WINDOW_VIEWMODEL-SET_WINDOW_CONTENT_BY_PARAMS", "PostFlame", null);
+                    break;
             }
         }
 
@@ -616,6 +619,7 @@ namespace FlameSystems.ViewModels
                     ActRenderSetState(RenderMachine.StateRenderEnded);
 
                     RenderMachine.LoadDisplay(display, flameModel.BackColor);
+
                     GradientModel gradientModel = null;
                     double[] gradientValues = null;
                     if (flameModel.GradientPack != null)

@@ -30,7 +30,7 @@ namespace FlameBase.RenderMachine
         private static CancellationTokenSource _sourceRender;
         private static CancellationTokenSource _sourceParallel;
         private static CancellationTokenSource _sourceDraw;
-        private static readonly object LockObj=new object();
+        private static readonly object LockObj = new object();
         public static bool HasRender => Display != null;
         public static bool IsRendering { get; set; }
 
@@ -107,13 +107,17 @@ namespace FlameBase.RenderMachine
                     throw new ArgumentOutOfRangeException();
             }
 
+            Density.Estimation(Display, 0, 9, .4, out var di);
+
+
             var path =
                 $"{folder}\\{name}-{now.Year}{now.Month:00}{now.Day:00}-{(int) now.TimeOfDay.TotalSeconds}-{_iterations}-{(int) _renderTime.TotalSeconds}_{rcMode}.png";
             BitmapSource img;
             switch (colorMode)
             {
                 case FlameColorMode.Color:
-                    img = Display.GetBitmapForRender(_transformationColors);
+                    // img = Display.GetBitmapForRender(_transformationColors);
+                    img = di.GetBitmapForRender(_transformationColors);
                     break;
                 case FlameColorMode.Gradient:
                     img = Display.GetBitmapForRender(_transformationGradientValues, _gradModel);
@@ -122,45 +126,10 @@ namespace FlameBase.RenderMachine
                     throw new ArgumentOutOfRangeException();
             }
 
-            SaveImage(path, img);
+            ImageHelper.SaveImage(path, img);
         }
 
-        private static void SaveImage(string filename, BitmapSource bitmapSource)
-        {
-            if (string.IsNullOrEmpty(filename)) return;
-            var imageType = Path.GetExtension(filename).Trim('.');
-            BitmapEncoder encoder;
-            switch (imageType.ToLower())
-            {
-                case "png":
-                    encoder = new PngBitmapEncoder();
-                    break;
-                case "jpg":
-                case "jpeg":
-                    encoder = new JpegBitmapEncoder();
-                    break;
-                case "bmp":
-                    encoder = new BmpBitmapEncoder();
-                    break;
-                case "tiff":
-                    encoder = new TiffBitmapEncoder();
-                    break;
-                case "gif":
-                    encoder = new GifBitmapEncoder();
-                    break;
-                case "wmb":
-                    encoder = new WmpBitmapEncoder();
-                    break;
-                default:
-                    return;
-            }
-
-            using (var fileStream = new FileStream(filename, FileMode.Create))
-            {
-                encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
-                encoder.Save(fileStream);
-            }
-        }
+       
 
         public static void DestroyDisplay()
         {
@@ -296,9 +265,9 @@ namespace FlameBase.RenderMachine
                 if (!isDrawingIntermediate && iteration % renderPack.RenderSettings.RenderPerIterations == 0)
                 {
                     isDrawingIntermediate = true;
-                    
+
                     var tmpDisplay = display.Copy();
-                    
+
                     _sourceDraw?.Cancel(true);
                     _sourceDraw?.Dispose();
                     _sourceDraw = new CancellationTokenSource();

@@ -105,6 +105,19 @@
                     </StackPanel>
                 </Border>
 
+                <Border BorderThickness="0 0 0 0"
+                        BorderBrush="{StaticResource BrushBorder}">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="to post pro"
+                                Margin="2 0 0 0"
+                                Style="{StaticResource StyleButtonFlatUi}"
+                                IsEnabled="{Binding IsEnabledLoadRender}"
+                                Command="{Binding MultiCommand}"
+                                CommandParameter="toPostPro" />
+                    </StackPanel>
+                </Border>
+
+
             </StackPanel>
         </Border>
 

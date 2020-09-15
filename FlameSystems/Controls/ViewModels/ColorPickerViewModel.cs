@@ -18,8 +18,10 @@ namespace FlameSystems.Controls.ViewModels
 {
     internal class ColorPickerViewModel : Notifier
     {
-        private readonly Canvas _columnArrows;
-        private readonly Ellipse _cubeEllipse;
+        private Canvas _columnArrows;
+        private Ellipse _cubeEllipse;
+        private string _actionFireCallback;
+        private Color _initialColor = Colors.Gray;
 
         private readonly Dictionary<string, ColorPickerMode> _elementModes = new Dictionary<string, ColorPickerMode>
         {
@@ -53,6 +55,13 @@ namespace FlameSystems.Controls.ViewModels
 
         public ColorPickerViewModel(Color initialColor)
         {
+            _actionFireCallback = "CREATE_FLAME_VIEWMODEL-TRANSFORM_PICK_COLOR_CALLBACK";
+            _initialColor = initialColor;
+            Init();
+        }
+
+        private void Init()
+        {
             CommandCanvasLoaded = new RelayCommand(CommandCanvasLoadedHandler);
             CommandCanvasMouseDown = new RelayCommand(CommandCanvasMouseDownHandler);
             CommandCanvasMouseUp = new RelayCommand(CommandCanvasMouseUpHandler);
@@ -69,10 +78,17 @@ namespace FlameSystems.Controls.ViewModels
             _columnArrows = Application.Current.TryFindResource("ArrowsBox") as Canvas;
             if (_columnArrows != null) _columnArrows.Height = 8.0;
 
-            ColorCurrent = new SolidColorBrush(initialColor);
+            ColorCurrent = new SolidColorBrush(_initialColor);
             RadioH = true;
             BindStorage.SetActionFor(ActRadio, "RadioH", "RadioS", "RadioV", "RadioR", "RadioG", "RadioB");
             BindStorage.SetActionFor(ActText, "TextH", "TextS", "TextV", "TextR", "TextG", "TextB", "TextHex");
+        }
+
+        public ColorPickerViewModel(Color initialColor, string actionFireCallback)
+        {
+            _actionFireCallback = actionFireCallback;
+            _initialColor = initialColor;
+            Init();
         }
 
         public bool Initiated { get; set; }
@@ -85,11 +101,11 @@ namespace FlameSystems.Controls.ViewModels
             {
                 case "ok":
                     _canvasColumn.Children.Remove(_columnArrows);
-                    ActionFire.Invoke("CREATE_FLAME_VIEWMODEL-TRANSFORM_PICK_COLOR_CALLBACK", true, ColorNew.Color);
+                    ActionFire.Invoke(_actionFireCallback, true, ColorNew.Color);
                     break;
                 case "cancel":
                     _canvasColumn.Children.Remove(_columnArrows);
-                    ActionFire.Invoke("CREATE_FLAME_VIEWMODEL-TRANSFORM_PICK_COLOR_CALLBACK", false, ColorNew.Color);
+                    ActionFire.Invoke(_actionFireCallback, false, ColorNew.Color);
                     break;
                 case "current":
                     ColorNew = new SolidColorBrush(ColorCurrent.Color);
@@ -324,15 +340,15 @@ namespace FlameSystems.Controls.ViewModels
         }
 
 
-        public ICommand CommandCanvasLoaded { get; }
+        public ICommand CommandCanvasLoaded { get; set; }
 
-        public ICommand CommandCanvasMouseDown { get; }
+        public ICommand CommandCanvasMouseDown { get; set; }
 
-        public ICommand CommandCanvasMouseUp { get; }
+        public ICommand CommandCanvasMouseUp { get; set; }
 
-        public ICommand CommandCanvasMouseMove { get; }
+        public ICommand CommandCanvasMouseMove { get; set; }
 
-        public ICommand Command { get; }
+        public ICommand Command { get; set; }
 
         #endregion bind
 

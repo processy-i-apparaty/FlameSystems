@@ -67,6 +67,8 @@
     <Compile Include="FlameMath\vec3.cs" />
     <Compile Include="FlameMath\vec4.cs" />
     <Compile Include="FlameMath\XorShift.cs" />
+    <Compile Include="Helpers\Density.cs" />
+    <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\ObjectCloneHelper.cs" />
     <Compile Include="Models\BinaryFlamesModel.cs" />
     <Compile Include="Models\ColorPickerColorsModel.cs" />
