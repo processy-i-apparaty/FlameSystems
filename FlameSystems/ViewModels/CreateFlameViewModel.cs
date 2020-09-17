@@ -15,8 +15,11 @@ using FlameBase.FlameMath;
 using FlameBase.Models;
 using FlameBase.RenderMachine;
 using FlameBase.RenderMachine.Models;
+using FlameSystems.Controls.Pickers.Enums;
+using FlameSystems.Controls.Pickers.Providers;
 using FlameSystems.Controls.ViewModels;
 using FlameSystems.Controls.Views;
+using FlameSystems.Enums;
 using FlameSystems.Infrastructure;
 using FlameSystems.Infrastructure.ActionFire;
 using FlameSystems.Infrastructure.ValueBind;
@@ -29,19 +32,12 @@ namespace FlameSystems.ViewModels
             {"ShiftX", "ShiftY", "Zoom", "Rotation", "Symmetry", "ImageWidth", "ImageHeight", "BackColor"};
 
         private readonly RenderSettingsModel _renderSettings = new RenderSettingsModel();
-        private ColorPickerView _colorPicker;
-
         private string _colorPikMode = "transform";
-
         private FlameColorMode _flameColorMode;
         private string _flameName;
         private GradientModel _gradientModel;
-        private GradientPickerView _gradView;
-
-
         private RenderActionsModel _renderActionsPack;
         private int _transformId;
-
 
         public CreateFlameViewModel()
         {
@@ -93,16 +89,16 @@ namespace FlameSystems.ViewModels
 
             ActionFire.AddOrReplace("CREATE_FLAME_VIEWMODEL-TRANSFORM_PICK_COLOR",
                 new Action<TransformViewModel>(ActionTransformPickColor), thisType);
-            ActionFire.AddOrReplace("CREATE_FLAME_VIEWMODEL-TRANSFORM_PICK_COLOR_CALLBACK",
-                new Action<bool, Color>(ActionTransformPickColorCallback), thisType);
+            // ActionFire.AddOrReplace("CREATE_FLAME_VIEWMODEL-TRANSFORM_PICK_COLOR_CALLBACK",
+            // new Action<bool, Color>(ActionTransformPickColorCallback), thisType);
 
             ActionFire.AddOrReplace("CREATE_FLAME_VIEWMODEL-TRANSFORM_PICK_GRADIENT_COLOR",
                 new Action<TransformViewModel>(ActionTransformPickGradientColor), thisType);
-            ActionFire.AddOrReplace("CREATE_FLAME_VIEWMODEL-TRANSFORM_PICK_GRADIENT_CALLBACK",
-                new Action<bool>(ActionTransformPickGradientCallback), thisType);
+            // ActionFire.AddOrReplace("CREATE_FLAME_VIEWMODEL-TRANSFORM_PICK_GRADIENT_CALLBACK",
+            //     new Action<bool>(ActionTransformPickGradientCallback), thisType);
 
-            ActionFire.AddOrReplace("CREATE_FLAME_VIEWMODEL-PICK_GRADIENT", new Action<Color>(ActionPickGradient),
-                thisType);
+            // ActionFire.AddOrReplace("CREATE_FLAME_VIEWMODEL-PICK_GRADIENT", new Action<Color>(ActionPickGradient),
+            // thisType);
 
             _renderActionsPack = new RenderActionsModel(ActRenderSetImage, ActRenderSetMessage, ActRenderSetState);
         }
@@ -175,9 +171,13 @@ namespace FlameSystems.ViewModels
 
         private void SelectBackColor()
         {
-            _colorPikMode = "back color";
-            _colorPicker = new ColorPickerView(BackColor.Color);
-            TopContent = _colorPicker;
+            // _colorPikMode = "back color";
+            // _colorPicker = new ColorPickerView(BackColor.Color);
+            // TopContent = _colorPicker;
+            //TODO: SelectBackColor
+            _uiPickMode = UiPickMode.BackColor;
+            _colorPickProvider = new ColorPickProvider(CallbackColorPickProvider, BackColor.Color);
+            _colorPickProvider.Exec();
         }
 
 
@@ -253,7 +253,6 @@ namespace FlameSystems.ViewModels
 
             dc.FlameColorMode = _flameColorMode;
             Transforms.Add(utv);
-            //TODO: name of act
             if (act) Act("AddTransformation", id);
             return id;
         }
@@ -458,10 +457,15 @@ namespace FlameSystems.ViewModels
 
         private void ActionTransformPickColor(TransformViewModel model)
         {
-            _colorPikMode = "transform";
-            _colorPicker = new ColorPickerView(model.ColorBrush.Color);
+            // _colorPikMode = "transform";
+            // _colorPicker = new ColorPickerView(model.ColorBrush.Color);
+            // TopContent = _colorPicker;
+
+            //TODO: ActionTransformPickColor
+            _uiPickMode = UiPickMode.TransformColor;
             _transformId = model.Id;
-            TopContent = _colorPicker;
+            _colorPickProvider = new ColorPickProvider(CallbackColorPickProvider, model.ColorBrush.Color);
+            _colorPickProvider.Exec();
         }
 
 
@@ -678,72 +682,25 @@ namespace FlameSystems.ViewModels
 
         private void EditGradientHandler(object obj)
         {
-            _gradView = new GradientPickerView(_gradientModel);
-            TopContent = _gradView;
+            //            _gradView = new GradientPickerView(_gradientModel);
+            //          TopContent = _gradView;
+            //TODO: EditGradientHandler
+            _uiPickMode = UiPickMode.EditGradient;
+            _gradientPickProvider = new GradientPickProvider(CallbackGradientPickProvider, _gradientModel);
+            _gradientPickProvider.Exec();
         }
 
         private void ActionTransformPickGradientColor(TransformViewModel model)
         {
+            // _gradView = new GradientPickerView(_gradientModel, model.ColorPosition);
+            // TopContent = _gradView;
+
+            //TODO: ActionTransformPickGradientColor
+            _uiPickMode = UiPickMode.GradientColor;
             _transformId = model.Id;
-            _gradView = new GradientPickerView(_gradientModel, model.ColorPosition);
-            TopContent = _gradView;
-        }
-
-        private void ActionTransformPickGradientCallback(bool isOk)
-        {
-            TopContent = null;
-            if (!isOk) return;
-            var dc = (GradientPickerViewModel) _gradView.DataContext;
-            switch (dc.GradientMode)
-            {
-                case GradientMode.Edit:
-                    _gradientModel = dc.GradientModel;
-                    SetTransformationColorMode(_flameColorMode);
-                    break;
-                case GradientMode.Select:
-                    var t = (TransformViewModel) Transforms.FirstOrDefault(x =>
-                            ((TransformViewModel) x.DataContext).Id == _transformId)
-                        ?.DataContext;
-                    if (t != null) t.ColorPosition = dc.GetColorPosition();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-
-        private void ActionTransformPickColorCallback(bool result, Color color)
-        {
-            _colorPicker.DataContext = null;
-            _colorPicker = null;
-            TopContent = null;
-
-            switch (_colorPikMode)
-            {
-                case "transform":
-                    if (!result) return;
-                    var t = (TransformViewModel) Transforms
-                        .FirstOrDefault(x => ((TransformViewModel) x.DataContext).Id == _transformId)
-                        ?.DataContext;
-                    if (t == null) return;
-                    t.FColor = color;
-                    break;
-                case "gradient":
-                    if (result)
-                    {
-                        TopContent = _gradView;
-                        ActionFire.Invoke("GRADIENT_PICKER_VIEWMODEL-CALLBACK", color);
-                    }
-                    else
-                    {
-                        TopContent = _gradView;
-                    }
-
-                    break;
-                case "back color":
-                    if (!result) return;
-                    BackColor = new SolidColorBrush(color);
-                    break;
-            }
+            _gradientPickProvider =
+                new GradientPickProvider(CallbackGradientPickProvider, _gradientModel, model.ColorPosition);
+            _gradientPickProvider.Exec();
         }
 
         #endregion
@@ -766,13 +723,13 @@ namespace FlameSystems.ViewModels
             }
         }
 
-        private void ActionPickGradient(Color color)
-        {
-            if (TopContent.GetType() != typeof(GradientPickerView)) return;
-            _colorPikMode = "gradient";
-            _colorPicker = new ColorPickerView(color);
-            TopContent = _colorPicker;
-        }
+        // private void ActionPickGradient(Color color)
+        // {
+        //     if (TopContent.GetType() != typeof(GradientPickerView)) return;
+        //     _colorPikMode = "gradient";
+        //     _colorPicker = new ColorPickerView(color);
+        //     TopContent = _colorPicker;
+        // }
 
         private static void InitDirectories()
         {
@@ -828,7 +785,6 @@ namespace FlameSystems.ViewModels
         {
             BindStorage.SetActionFor(Act, _bindParameters1);
 
-            //TODO: set names for actions
             ActionFire.Invoke("MAIN_WINDOW_VIEWMODEL-SET_VERSION", 1, 1, 1);
             ActionFire.Invoke("MAIN_WINDOW_VIEWMODEL-SET_BOTTOM_STRING", "app started...");
         }
@@ -895,6 +851,164 @@ namespace FlameSystems.ViewModels
             BackColor = new SolidColorBrush(model.BackColor);
             BindStorage.TurnActionFor(true, _bindParameters1);
         }
+
+        #endregion
+
+        #region picker providers
+
+        private ColorPickProvider _colorPickProvider;
+        private GradientPickProvider _gradientPickProvider;
+        private double _providerGradientValue;
+        private Color _providerColor;
+        private GradientModel _providerGradientModel;
+        private UiPickMode _uiPickMode;
+
+        private void CallbackGradientPickProvider(ProviderCallbackType callbackType, string message)
+        {
+            switch (callbackType)
+            {
+                case ProviderCallbackType.ShowControl:
+                    TopContent = _gradientPickProvider.ShowControl;
+                    break;
+                case ProviderCallbackType.End:
+                    TopContent = null;
+                    if (_gradientPickProvider.Result)
+                        switch (_gradientPickProvider.GradientMode)
+                        {
+                            case GradientMode.Edit:
+                                _providerGradientModel = _gradientPickProvider.ResultGradientModel.Copy();
+                                break;
+                            case GradientMode.Select:
+                                _providerGradientValue = _gradientPickProvider.ResultValue;
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+
+                    if (_gradientPickProvider.Result)
+                    {
+                        AfterProvider();
+                        //UpdateUi();
+                    }
+
+                    _gradientPickProvider = null;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(callbackType), callbackType, null);
+            }
+        }
+
+        private void CallbackColorPickProvider(ProviderCallbackType callbackType, string message)
+        {
+            switch (callbackType)
+            {
+                case ProviderCallbackType.ShowControl:
+                    TopContent = _colorPickProvider.ShowControl;
+                    break;
+                case ProviderCallbackType.End:
+                    TopContent = null;
+                    if (_colorPickProvider.Result)
+                    {
+                        _providerColor = _colorPickProvider.ResultColor;
+                        AfterProvider();
+                        //UpdateUi();
+                    }
+
+                    _colorPickProvider = null;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(callbackType), callbackType, null);
+            }
+        }
+
+        private void AfterProvider()
+        {
+            TransformViewModel transformViewModel;
+            switch (_uiPickMode)
+            {
+                case UiPickMode.BackColor:
+                    BackColor = new SolidColorBrush(_providerColor);
+                    break;
+                case UiPickMode.TransformColor:
+                    transformViewModel = (TransformViewModel)Transforms
+                        .FirstOrDefault(x => ((TransformViewModel) x.DataContext).Id == _transformId)
+                        ?.DataContext;
+                    if (transformViewModel == null) return;
+                    transformViewModel.FColor = _providerColor;
+                    break;
+                case UiPickMode.EditGradient:
+                    _gradientModel = _providerGradientModel.Copy();
+                    SetTransformationColorMode(_flameColorMode);
+                    break;
+                case UiPickMode.GradientColor:
+                    transformViewModel = (TransformViewModel) Transforms.FirstOrDefault(x =>
+                            ((TransformViewModel) x.DataContext).Id == _transformId)
+                        ?.DataContext;
+                    if (transformViewModel != null) transformViewModel.ColorPosition = _providerGradientValue;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+
+        // private void ActionTransformPickColorCallback(bool result, Color color)
+        // {
+        //     _colorPicker.DataContext = null;
+        //     _colorPicker = null;
+        //     TopContent = null;
+        //
+        //     switch (_colorPikMode)
+        //     {
+        //         case "transform":
+        //             if (!result) return;
+        //             var t = (TransformViewModel) Transforms
+        //                 .FirstOrDefault(x => ((TransformViewModel) x.DataContext).Id == _transformId)
+        //                 ?.DataContext;
+        //             if (t == null) return;
+        //             t.FColor = color;
+        //             break;
+        //         case "gradient":
+        //             if (result)
+        //             {
+        //                 TopContent = _gradView;
+        //                 ActionFire.Invoke("GRADIENT_PICKER_VIEWMODEL-CALLBACK", color);
+        //             }
+        //             else
+        //             {
+        //                 TopContent = _gradView;
+        //             }
+        //
+        //             break;
+        //         case "back color":
+        //             if (!result) return;
+        //             BackColor = new SolidColorBrush(color);
+        //             break;
+        //     }
+        // }
+
+        // private void ActionTransformPickGradientCallback(bool isOk)
+        // {
+        //     TopContent = null;
+        //     if (!isOk) return;
+        //     var dc = (GradientPickerViewModel) _gradView.DataContext;
+        //     switch (dc.GradientMode)
+        //     {
+        //         case GradientMode.Edit:
+        //             _gradientModel = dc.GradientModel;
+        //             SetTransformationColorMode(_flameColorMode);
+        //             break;
+        //         case GradientMode.Select:
+        //             var t = (TransformViewModel) Transforms.FirstOrDefault(x =>
+        //                     ((TransformViewModel) x.DataContext).Id == _transformId)
+        //                 ?.DataContext;
+        //             if (t != null) t.ColorPosition = dc.GetColorPosition();
+        //             break;
+        //         default:
+        //             throw new ArgumentOutOfRangeException();
+        //     }
+        // }
+
 
         #endregion
     }

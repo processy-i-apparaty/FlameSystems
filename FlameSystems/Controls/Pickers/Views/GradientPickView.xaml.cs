@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Controls;
+using FlameBase.Models;
 using FlameSystems.Controls.Pickers.Enums;
-using FlameSystems.Controls.Pickers.Models;
 using FlameSystems.Controls.Pickers.ViewModels;
 
 namespace FlameSystems.Controls.Pickers.Views

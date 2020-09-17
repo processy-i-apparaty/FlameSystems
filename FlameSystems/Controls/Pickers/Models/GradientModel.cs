@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
 using ColorMine.ColorSpaces;
+using FlameBase.FlameMath;
+using FlameSystems.Models;
 
 namespace FlameSystems.Controls.Pickers.Models
 {

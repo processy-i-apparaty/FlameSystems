@@ -4,8 +4,8 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ColorMine.ColorSpaces;
-using FlameBase.Enums;
 using FlameBase.FlameMath;
+using FlameSystems.Controls.Pickers.Enums;
 
 namespace FlameSystems.Controls.Pickers.Models
 {

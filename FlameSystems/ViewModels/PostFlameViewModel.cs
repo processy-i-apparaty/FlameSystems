@@ -12,10 +12,11 @@ using FlameBase.Helpers;
 using FlameBase.Models;
 using FlameBase.RenderMachine;
 using FlameBase.RenderMachine.Models;
+using FlameSystems.Controls.Pickers.Enums;
 using FlameSystems.Controls.Pickers.Providers;
+using FlameSystems.Controls.Providers;
 using FlameSystems.Infrastructure;
 using FlameSystems.Infrastructure.ActionFire;
-using FlameSystems.Infrastructure.Providers;
 using FlameSystems.Infrastructure.ValueBind;
 
 namespace FlameSystems.ViewModels
@@ -205,9 +206,32 @@ namespace FlameSystems.ViewModels
 
         private void RadioCheckedHandler(object obj)
         {
-            if (RadioColor) GradientVisibility = Visibility.Collapsed;
+            if (RadioColor)
+            {
+                GradientVisibility = Visibility.Collapsed;
+                SetUi();
+                ShowRender();
+            }
 
-            if (RadioGradient) GradientVisibility = Visibility.Visible;
+            if (RadioGradient)
+            {
+                GradientVisibility = Visibility.Visible;
+
+                if (_postModel.GradientModel == null)
+                {
+                    _postModel.GradientModel = new GradientModel(Colors.Gray, Colors.Gray);
+                    _postModel.GradientValues = new double[_postModel.TransformColors.Length];
+                    _currentLoaderSaverProvider.Flame.GradientPack = _postModel.GradientModel.Pack();
+                }
+
+                if (_postModel.GradientValues.Length != _postModel.TransformColors.Length)
+                {
+                    _postModel.GradientValues = new double[_postModel.TransformColors.Length];
+                }
+
+                SetUi();
+                ShowRender();
+            }
         }
 
         private void SetGradientHandler(object obj)
@@ -266,17 +290,17 @@ namespace FlameSystems.ViewModels
 
         #region providers
 
-        private void LoaderSaverProviderCallback(ProviderEnums.CallbackType callbackType, string message)
+        private void LoaderSaverProviderCallback(ProviderCallbackType callbackType, string message)
         {
             switch (callbackType)
             {
-                case ProviderEnums.CallbackType.ShowControl:
+                case ProviderCallbackType.ShowControl:
                     TopContent = _currentLoaderSaverProvider.ShowControl;
                     return;
-                case ProviderEnums.CallbackType.ShowSpinner:
+                case ProviderCallbackType.ShowSpinner:
                     Application.Current.Dispatcher.Invoke(() => { TopContent = StaticClasses.GetSpinner(message); });
                     return;
-                case ProviderEnums.CallbackType.End:
+                case ProviderCallbackType.End:
                     switch (_currentMultiCommand)
                     {
                         case "loadRender":
@@ -295,17 +319,17 @@ namespace FlameSystems.ViewModels
             }
         }
 
-        private void ColorPickProviderCallback(ProviderEnums.CallbackType callbackType, string message)
+        private void ColorPickProviderCallback(ProviderCallbackType callbackType, string message)
         {
             switch (callbackType)
             {
-                case ProviderEnums.CallbackType.ShowControl:
+                case ProviderCallbackType.ShowControl:
                     TopContent = _currentColorPickProvider.ShowControl;
                     return;
-                case ProviderEnums.CallbackType.ShowSpinner:
+                case ProviderCallbackType.ShowSpinner:
                     TopContent = StaticClasses.GetSpinner(message);
                     return;
-                case ProviderEnums.CallbackType.End:
+                case ProviderCallbackType.End:
                     TopContent = null;
                     if (!_currentColorPickProvider.Result)
                     {
@@ -335,40 +359,31 @@ namespace FlameSystems.ViewModels
             }
         }
 
-        private void GradientPickProviderCallback(ProviderEnums.CallbackType callbackType, string message)
+        private void GradientPickProviderCallback(ProviderCallbackType callbackType, string message)
         {
             switch (callbackType)
             {
-                case ProviderEnums.CallbackType.ShowControl:
-                    if (string.IsNullOrWhiteSpace(message))
-                    {
-                        TopContent = _currentGradientPickProvider.ShowControl;
-                        break;
-                    }
-
-                    TopContent = null;
-                    var color = (Color) ColorConverter.ConvertFromString("#FFDFD991");
-                    SelectColorForGradient(color);
-
+                case ProviderCallbackType.ShowControl:
+                    TopContent = _currentGradientPickProvider.ShowControl;
                     break;
-                case ProviderEnums.CallbackType.ShowSpinner:
+                case ProviderCallbackType.ShowSpinner:
                     TopContent = StaticClasses.GetSpinner(message);
                     break;
-                case ProviderEnums.CallbackType.End:
+                case ProviderCallbackType.End:
                     TopContent = null;
-                    if (!_currentGradientPickProvider.Result) return;
-                    switch (_currentGradientPickProvider.PickerType)
-                    {
-                        case GradientPickProvider.GradientPickerType.Gradient:
-                            _postModel.GradientModel = _currentGradientPickProvider.ResultGradientModel;
-                            break;
-                        case GradientPickProvider.GradientPickerType.Position:
-                            _postModel.GradientValues[_currentSelectedColorIndex] =
-                                _currentGradientPickProvider.ResultGradientPosition;
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
+                    if (_currentGradientPickProvider.Result)
+                        switch (_currentGradientPickProvider.GradientMode)
+                        {
+                            case GradientMode.Edit:
+                                _postModel.GradientModel = _currentGradientPickProvider.ResultGradientModel.Copy();
+                                break;
+                            case GradientMode.Select:
+                                _postModel.GradientValues[_currentSelectedColorIndex] =
+                                    _currentGradientPickProvider.ResultValue;
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
 
                     _currentGradientPickProvider = null;
                     _currentSelectedColorIndex = -1;

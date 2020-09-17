@@ -3,6 +3,7 @@
     internal enum ProviderCallbackType
     {
         ShowControl,
-        End
+        End,
+        ShowSpinner
     }
 }

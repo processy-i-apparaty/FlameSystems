@@ -4,22 +4,23 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using FlameBase.Enums;
 using FlameBase.Models;
-using FlameBase.RenderMachine;
+using FlameSystems.Controls.Pickers.Enums;
 using FlameSystems.Controls.ViewModels;
 using FlameSystems.Controls.Views;
+using FlameSystems.Infrastructure;
 
-namespace FlameSystems.Infrastructure.Providers
+namespace FlameSystems.Controls.Providers
 {
     internal class LoaderSaverProvider : Notifier
     {
         private readonly uint[,,] _display;
         private readonly FileViewType _fileViewType;
         private readonly object _model;
-        private readonly Action<ProviderEnums.CallbackType, string> _providerCallback;
+        private readonly Action<ProviderCallbackType, string> _providerCallback;
         private FileView _fileView;
 
         public LoaderSaverProvider(FileViewType fileViewType,
-            Action<ProviderEnums.CallbackType, string> providerCallback, object model = null, uint[,,] display = null)
+            Action<ProviderCallbackType, string> providerCallback, object model = null, uint[,,] display = null)
         {
             _fileViewType = fileViewType;
             _model = model;
@@ -44,7 +45,7 @@ namespace FlameSystems.Infrastructure.Providers
             _fileView = new FileView();
             var vm = (FileViewModel) _fileView.DataContext;
             vm.Set(_fileViewType, CallbackAction);
-            _providerCallback.Invoke(ProviderEnums.CallbackType.ShowControl, string.Empty);
+            _providerCallback.Invoke(ProviderCallbackType.ShowControl, string.Empty);
         }
 
         private async void CallbackAction(bool result, FileViewType fileViewType, string resultPath)
@@ -55,7 +56,7 @@ namespace FlameSystems.Infrastructure.Providers
             {
                 Busy = false;
                 ResultString = "Operation canceled";
-                _providerCallback.Invoke(ProviderEnums.CallbackType.End, string.Empty);
+                _providerCallback.Invoke(ProviderCallbackType.End, string.Empty);
                 return;
             }
 
@@ -90,7 +91,7 @@ namespace FlameSystems.Infrastructure.Providers
                 if (_model is string flameModelJson && _display != null)
                 {
                     FlameName = Path.GetFileNameWithoutExtension(ResultPath);
-                    _providerCallback.Invoke(ProviderEnums.CallbackType.ShowSpinner, $"saving render {FlameName}...");
+                    _providerCallback.Invoke(ProviderCallbackType.ShowSpinner, $"saving render {FlameName}...");
 
                     var tempDir = CreateTempDir(FlameName);
                     BinaryFlamesModel.SaveObject(_display, $"{tempDir}\\logDisplay.bin");
@@ -103,7 +104,7 @@ namespace FlameSystems.Infrastructure.Providers
                     Result = false;
                     ResultString = "Model is not a json string or display is null";
                     Busy = false;
-                    _providerCallback.Invoke(ProviderEnums.CallbackType.End, string.Empty);
+                    _providerCallback.Invoke(ProviderCallbackType.End, string.Empty);
                     return;
                 }
             }
@@ -112,13 +113,13 @@ namespace FlameSystems.Infrastructure.Providers
                 Result = false;
                 ResultString = $"SaveRender exception: {e.Message}";
                 Busy = false;
-                _providerCallback.Invoke(ProviderEnums.CallbackType.End, string.Empty);
+                _providerCallback.Invoke(ProviderCallbackType.End, string.Empty);
                 return;
             }
 
             Result = true;
             ResultString = $"Render saved successfully with name: {FlameName}";
-            _providerCallback.Invoke(ProviderEnums.CallbackType.End, string.Empty);
+            _providerCallback.Invoke(ProviderCallbackType.End, string.Empty);
             Busy = false;
         }
 
@@ -129,7 +130,7 @@ namespace FlameSystems.Infrastructure.Providers
             try
             {
                 FlameName = Path.GetFileNameWithoutExtension(ResultPath);
-                _providerCallback.Invoke(ProviderEnums.CallbackType.ShowSpinner, $"loading render {FlameName}...");
+                _providerCallback.Invoke(ProviderCallbackType.ShowSpinner, $"loading render {FlameName}...");
 
                 var tempDir = CreateTempDir(FlameName);
                 ZipFlamesModel.DecompressToDirectory(ResultPath, tempDir);
@@ -146,13 +147,13 @@ namespace FlameSystems.Infrastructure.Providers
                 Result = false;
                 ResultString = $"SaveRender exception: {e.Message}";
                 Busy = false;
-                _providerCallback.Invoke(ProviderEnums.CallbackType.End, string.Empty);
+                _providerCallback.Invoke(ProviderCallbackType.End, string.Empty);
                 return;
             }
 
             Result = true;
             ResultString = $"Render {FlameName} loaded successfully";
-            _providerCallback.Invoke(ProviderEnums.CallbackType.End, string.Empty);
+            _providerCallback.Invoke(ProviderCallbackType.End, string.Empty);
             Busy = false;
         }
 
@@ -163,7 +164,7 @@ namespace FlameSystems.Infrastructure.Providers
                 if (_model is string str && ResultPath != null)
                 {
                     FlameName = Path.GetFileNameWithoutExtension(ResultPath);
-                    _providerCallback.Invoke(ProviderEnums.CallbackType.ShowSpinner, $"saving flame {FlameName}...");
+                    _providerCallback.Invoke(ProviderCallbackType.ShowSpinner, $"saving flame {FlameName}...");
 
                     File.WriteAllText(ResultPath, str);
                 }
@@ -172,7 +173,7 @@ namespace FlameSystems.Infrastructure.Providers
                     Result = false;
                     ResultString = "Model is not a json string";
                     Busy = false;
-                    _providerCallback.Invoke(ProviderEnums.CallbackType.End, string.Empty);
+                    _providerCallback.Invoke(ProviderCallbackType.End, string.Empty);
                     return;
                 }
             }
@@ -181,13 +182,13 @@ namespace FlameSystems.Infrastructure.Providers
                 Result = false;
                 ResultString = $"SaveFlame exception: {e.Message}";
                 Busy = false;
-                _providerCallback.Invoke(ProviderEnums.CallbackType.End, string.Empty);
+                _providerCallback.Invoke(ProviderCallbackType.End, string.Empty);
                 return;
             }
 
             Result = true;
             ResultString = $"Flame saved successfully with name: {FlameName}";
-            _providerCallback.Invoke(ProviderEnums.CallbackType.End, string.Empty);
+            _providerCallback.Invoke(ProviderCallbackType.End, string.Empty);
             Busy = false;
         }
 
@@ -201,7 +202,7 @@ namespace FlameSystems.Infrastructure.Providers
                 FlameName = Path.GetFileNameWithoutExtension(ResultPath)
                             ?? throw new ArgumentNullException(nameof(ResultPath), @"ResultPath is null");
 
-                _providerCallback.Invoke(ProviderEnums.CallbackType.ShowControl, $"loading flame {FlameName}...");
+                _providerCallback.Invoke(ProviderCallbackType.ShowControl, $"loading flame {FlameName}...");
 
                 var flameModelJson = File.ReadAllText(ResultPath);
                 Flame = JsonFlamesModel.GetFlameModel(flameModelJson);
@@ -210,7 +211,7 @@ namespace FlameSystems.Infrastructure.Providers
                 {
                     Result = false;
                     ResultString = "Flame read error";
-                    _providerCallback.Invoke(ProviderEnums.CallbackType.End, string.Empty);
+                    _providerCallback.Invoke(ProviderCallbackType.End, string.Empty);
                     Busy = false;
                     return;
                 }
@@ -220,7 +221,7 @@ namespace FlameSystems.Infrastructure.Providers
                 Result = false;
                 ResultString = $"LoadFlame exception: {e.Message}";
                 Busy = false;
-                _providerCallback.Invoke(ProviderEnums.CallbackType.End, string.Empty);
+                _providerCallback.Invoke(ProviderCallbackType.End, string.Empty);
                 return;
             }
 
@@ -235,7 +236,7 @@ namespace FlameSystems.Infrastructure.Providers
             ResultString = "File not exist";
             Result = false;
             Busy = false;
-            _providerCallback.Invoke(ProviderEnums.CallbackType.End, string.Empty);
+            _providerCallback.Invoke(ProviderCallbackType.End, string.Empty);
             return false;
         }
 

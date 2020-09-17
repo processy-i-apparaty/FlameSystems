@@ -8,7 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using ColorMine.ColorSpaces;
-using FlameBase.Enums;
+using FlameSystems.Controls.Pickers.Enums;
 using FlameSystems.Controls.Pickers.Models;
 using FlameSystems.Infrastructure;
 using FlameSystems.Infrastructure.ValueBind;
@@ -17,6 +17,8 @@ namespace FlameSystems.Controls.Pickers.ViewModels
 {
     internal class ColorPickViewModel : Notifier
     {
+        private readonly Action<bool, Color> _callback;
+
         private readonly Dictionary<string, ColorPickerMode> _elementModes = new Dictionary<string, ColorPickerMode>
         {
             {"RadioH", ColorPickerMode.H},
@@ -28,7 +30,6 @@ namespace FlameSystems.Controls.Pickers.ViewModels
         };
 
         private readonly Color _initialColor;
-        private readonly Action<bool, Color> _callback;
 
         private readonly Dictionary<string, int> _textCodes = new Dictionary<string, int>
         {

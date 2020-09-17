@@ -9,11 +9,10 @@ namespace FlameBase.Models
 {
     public class GradientModel
     {
-        //TODO: Properties should not return arrays:
-        //public Color[] Colors { get; set; } public double[] Values { get; set; } public int[] Ids { get; set; }
-
         public GradientModel(Color startColor, Color endColor)
         {
+            ModelId = GiveIdModel.Get;
+
             StartColor = startColor;
             EndColor = endColor;
             InitArrays();
@@ -22,6 +21,8 @@ namespace FlameBase.Models
         public GradientModel(Color startColor, Color endColor, IReadOnlyList<Color> midColors,
             IReadOnlyList<double> midValues)
         {
+            ModelId = GiveIdModel.Get;
+
             StartColor = startColor;
             EndColor = endColor;
             InitArrays();
@@ -43,8 +44,8 @@ namespace FlameBase.Models
         public Color[] Colors { get; set; }
         public double[] Values { get; set; }
         public int[] Ids { get; set; }
-
         public int Length => Values.Length;
+        public int ModelId { get; }
 
 
         private void InitArrays()
@@ -106,8 +107,6 @@ namespace FlameBase.Models
                     break;
             return i;
         }
-
-       
 
 
         public double[] GetValueBetween(double position)
@@ -220,22 +219,12 @@ namespace FlameBase.Models
             return GetFromPosition(p);
         }
 
-
-        // private static double Scale(double oldMin, double oldMax, double newMin, double newMax, double oldValue)
-        // {
-        //     var oldRange = oldMax - oldMin;
-        //     var newRange = newMax - newMin;
-        //     var newValue = (oldValue - oldMin) * newRange / oldRange + newMin;
-        //
-        //     return newValue;
-        // }
-
         public double[] GetColorsPercent(double position)
         {
             var vb = GetValueBetween(position);
             var c1 = Algebra.Map(position, vb[0], vb[1], 0.0, 1.0);
             // var c1 = Scale(vb[0], vb[1], 0.0, 1.0, position);
-            
+
             var c2 = 1.0 - c1;
             return new[] {c2, c1};
         }
@@ -248,6 +237,18 @@ namespace FlameBase.Models
 
         public void ChangeColor(int id, Color color)
         {
+            if (id == -11)
+            {
+                StartColor = color;
+                return;
+            }
+
+            if (id == -22)
+            {
+                EndColor = color;
+                return;
+            }
+
             var i = Ids.ToList().FindIndex(x => x == id);
             Colors[i] = color;
         }
@@ -269,7 +270,7 @@ namespace FlameBase.Models
         {
             return new GradientModel(StartColor, EndColor, Colors, Values);
         }
-
+        
         public GradientPackModel Pack()
         {
             var packLength = Length + 2;
@@ -290,5 +291,6 @@ namespace FlameBase.Models
 
             return pack;
         }
+
     }
 }

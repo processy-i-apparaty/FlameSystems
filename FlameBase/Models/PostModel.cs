@@ -12,10 +12,10 @@ namespace FlameBase.Models
 
         public PostModel()
         {
-            GradientModel = new GradientModel(Colors.Gray, Colors.Gray);
-            GradientValues = new double[0];
-            TransformColors = new Color[0];
-            BackColor = Colors.Black;
+            // GradientModel = new GradientModel(Colors.Gray, Colors.Gray);
+            // GradientValues = new double[0];
+            // TransformColors = new Color[0];
+            // BackColor = Colors.Black;
         }
     }
 }

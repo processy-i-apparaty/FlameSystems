@@ -76,8 +76,6 @@
     <Compile Include="Controls\Pickers\Models\ColorPickerColumnModel.cs" />
     <Compile Include="Controls\Pickers\Models\ColorPickerCoordinatesModel.cs" />
     <Compile Include="Controls\Pickers\Models\ColorPickerCubeModel.cs" />
-    <Compile Include="Controls\Pickers\Models\GiveIdModel.cs" />
-    <Compile Include="Controls\Pickers\Models\GradientModel.cs" />
     <Compile Include="Controls\Pickers\Providers\ColorPickProvider.cs" />
     <Compile Include="Controls\Pickers\Providers\GradientPickProvider.cs" />
     <Compile Include="Controls\Pickers\ViewModels\ColorPickViewModel.cs" />
@@ -100,13 +98,13 @@
     <Compile Include="Controls\Views\TransformPostColorView.xaml.cs">
       <DependentUpon>TransformPostColorView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Enums\UiPickMode.cs" />
     <Compile Include="Infrastructure\ActionFire\ActionFire.cs" />
     <Compile Include="Infrastructure\ActionFire\ActionFireReturn.cs" />
     <Compile Include="Infrastructure\Directories.cs" />
     <Compile Include="Infrastructure\ImageProvider.cs" />
-    <Compile Include="Infrastructure\Providers\LoaderSaverProvider.cs" />
+    <Compile Include="Controls\Providers\LoaderSaverProvider.cs" />
     <Compile Include="Infrastructure\Notifier.cs" />
-    <Compile Include="Infrastructure\Providers\ProviderEnums.cs" />
     <Compile Include="Infrastructure\RelayCommand.cs" />
     <Compile Include="Infrastructure\StaticClasses.cs" />
     <Compile Include="Infrastructure\ValueBind\IValueBind.cs" />

@@ -72,6 +72,8 @@
     <Compile Include="Models\BinaryFlamesModel.cs" />
     <Compile Include="Models\FlameHelperModel.cs" />
     <Compile Include="Models\FlameModel.cs" />
+    <Compile Include="Models\GiveIdModel.cs" />
+    <Compile Include="Models\GradientModel.cs" />
     <Compile Include="Models\GradientPackModel.cs" />
     <Compile Include="Models\JsonFlamesModel.cs" />
     <Compile Include="Models\PostModel.cs" />

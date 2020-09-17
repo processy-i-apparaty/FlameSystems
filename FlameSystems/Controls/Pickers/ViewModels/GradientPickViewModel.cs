@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using FlameBase.Models;
 using FlameSystems.Controls.Pickers.Enums;
 using FlameSystems.Controls.Pickers.Models;
 using FlameSystems.Infrastructure;

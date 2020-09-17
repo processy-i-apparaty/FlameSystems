@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using FlameBase.Models;
 using FlameSystems.Controls.Pickers.Enums;
-using FlameSystems.Controls.Pickers.Models;
 using FlameSystems.Controls.Pickers.ViewModels;
 using FlameSystems.Controls.Pickers.Views;
 
@@ -10,13 +11,11 @@ namespace FlameSystems.Controls.Pickers.Providers
 {
     internal class GradientPickProvider
     {
-        private GradientPickView _gradientPickView;
         private readonly Action<ProviderCallbackType, string> _providerCallback;
-        public GradientMode GradientMode { get; }
-        private GradientModel _gradientModel;
-        private readonly double _gradientValue;
         private ColorPickProvider _colorPickProvider;
         private int _gradientId;
+        private GradientModel _gradientModel;
+        private GradientPickView _gradientPickView;
 
         public GradientPickProvider(Action<ProviderCallbackType, string> providerCallback, GradientModel gradientModel)
         {
@@ -33,10 +32,16 @@ namespace FlameSystems.Controls.Pickers.Providers
         {
             _providerCallback = providerCallback;
             _gradientModel = gradientModel.Copy();
-            _gradientValue = gradientValue;
-            _gradientPickView = new GradientPickView(_gradientModel, _gradientValue, GradientPickCallback);
+            _gradientPickView = new GradientPickView(_gradientModel, gradientValue, GradientPickCallback);
             GradientMode = GradientMode.Select;
         }
+
+        public GradientMode GradientMode { get; }
+
+        public bool Result { get; private set; }
+        public double ResultValue { get; private set; }
+        public GradientModel ResultGradientModel { get; private set; }
+        public Control ShowControl { get; private set; }
 
         private void GradientPickCallback(GradientCallbackType gradientCallbackType, object obj, double gradientValue)
         {
@@ -96,16 +101,11 @@ namespace FlameSystems.Controls.Pickers.Providers
             }
         }
 
-        private GradientModel GetGradientModel(GradientPickView gradientPickView)
+        private static GradientModel GetGradientModel(FrameworkElement gradientPickView)
         {
-            var dc = (GradientPickViewModel) _gradientPickView.DataContext;
+            var dc = (GradientPickViewModel) gradientPickView.DataContext;
             return dc.GradientModel;
         }
-
-        public bool Result { get; private set; }
-        public double ResultValue { get; private set; }
-        public GradientModel ResultGradientModel { get; private set; }
-        public Control ShowControl { get; private set; }
 
         public void Exec()
         {

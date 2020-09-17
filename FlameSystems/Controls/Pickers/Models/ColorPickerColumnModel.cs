@@ -4,8 +4,8 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ColorMine.ColorSpaces;
-using FlameBase.Enums;
 using FlameBase.FlameMath;
+using FlameSystems.Controls.Pickers.Enums;
 
 namespace FlameSystems.Controls.Pickers.Models
 {
@@ -44,8 +44,8 @@ namespace FlameSystems.Controls.Pickers.Models
             var a = new byte[stride * height];
             var step = 255.0 / height;
 
-            var g = (byte)Math.Round(255.0 - cubePoint.Y * 255.0);
-            var r = (byte)Math.Round(cubePoint.X * 255.0);
+            var g = (byte) Math.Round(255.0 - cubePoint.Y * 255.0);
+            var r = (byte) Math.Round(cubePoint.X * 255.0);
 
             Parallel.For(0, length, i =>
             {
@@ -53,14 +53,14 @@ namespace FlameSystems.Controls.Pickers.Models
                 var str = stride;
                 var stp = step;
                 for (var y = d[1]; y < d[1] + d[3]; y++)
-                    for (var x = d[0]; x < d[0] + d[2]; x++)
-                    {
-                        var n = y * str + x * 4;
-                        a[n] = (byte)Math.Round(255.0 - stp * y);
-                        a[n + 1] = g;
-                        a[n + 2] = r;
-                        a[n + 3] = 255;
-                    }
+                for (var x = d[0]; x < d[0] + d[2]; x++)
+                {
+                    var n = y * str + x * 4;
+                    a[n] = (byte) Math.Round(255.0 - stp * y);
+                    a[n + 1] = g;
+                    a[n + 2] = r;
+                    a[n + 3] = 255;
+                }
             });
             var rect = new Int32Rect(0, 0, width, height);
             var img = new WriteableBitmap(width, height, 96, 96, PixelFormats.Bgr32, null);
@@ -79,8 +79,8 @@ namespace FlameSystems.Controls.Pickers.Models
             var a = new byte[stride * height];
             var step = 255.0 / height;
 
-            var r = (byte)Math.Round(255.0 - cubePoint.Y * 255.0);
-            var b = (byte)Math.Round(cubePoint.X * 255.0);
+            var r = (byte) Math.Round(255.0 - cubePoint.Y * 255.0);
+            var b = (byte) Math.Round(cubePoint.X * 255.0);
 
             Parallel.For(0, length, i =>
             {
@@ -88,14 +88,14 @@ namespace FlameSystems.Controls.Pickers.Models
                 var str = stride;
                 var stp = step;
                 for (var y = d[1]; y < d[1] + d[3]; y++)
-                    for (var x = d[0]; x < d[0] + d[2]; x++)
-                    {
-                        var n = y * str + x * 4;
-                        a[n] = b;
-                        a[n + 1] = (byte)Math.Round(255.0 - stp * y);
-                        a[n + 2] = r;
-                        a[n + 3] = 255;
-                    }
+                for (var x = d[0]; x < d[0] + d[2]; x++)
+                {
+                    var n = y * str + x * 4;
+                    a[n] = b;
+                    a[n + 1] = (byte) Math.Round(255.0 - stp * y);
+                    a[n + 2] = r;
+                    a[n + 3] = 255;
+                }
             });
             var rect = new Int32Rect(0, 0, width, height);
             var img = new WriteableBitmap(width, height, 96, 96, PixelFormats.Bgr32, null);
@@ -114,8 +114,8 @@ namespace FlameSystems.Controls.Pickers.Models
             var a = new byte[stride * height];
             var step = 255.0 / height;
 
-            var g = (byte)Math.Round(255.0 - cubePoint.Y * 255.0);
-            var b = (byte)Math.Round(cubePoint.X * 255.0);
+            var g = (byte) Math.Round(255.0 - cubePoint.Y * 255.0);
+            var b = (byte) Math.Round(cubePoint.X * 255.0);
 
             Parallel.For(0, length, i =>
             {
@@ -123,14 +123,14 @@ namespace FlameSystems.Controls.Pickers.Models
                 var str = stride;
                 var stp = step;
                 for (var y = d[1]; y < d[1] + d[3]; y++)
-                    for (var x = d[0]; x < d[0] + d[2]; x++)
-                    {
-                        var n = y * str + x * 4;
-                        a[n] = b;
-                        a[n + 1] = g;
-                        a[n + 2] = (byte)Math.Round(255.0 - stp * y);
-                        a[n + 3] = 255;
-                    }
+                for (var x = d[0]; x < d[0] + d[2]; x++)
+                {
+                    var n = y * str + x * 4;
+                    a[n] = b;
+                    a[n + 1] = g;
+                    a[n + 2] = (byte) Math.Round(255.0 - stp * y);
+                    a[n + 3] = 255;
+                }
             });
             var rect = new Int32Rect(0, 0, width, height);
             var img = new WriteableBitmap(width, height, 96, 96, PixelFormats.Bgr32, null);
@@ -158,21 +158,21 @@ namespace FlameSystems.Controls.Pickers.Models
                 var str = stride;
                 var stp = step;
                 for (var y = d[1]; y < d[1] + d[3]; y++)
-                    for (var x = d[0]; x < d[0] + d[2]; x++)
+                for (var x = d[0]; x < d[0] + d[2]; x++)
+                {
+                    var n = y * str + x * 4;
+                    var hsb = new Hsb
                     {
-                        var n = y * str + x * 4;
-                        var hsb = new Hsb
-                        {
-                            H = h,
-                            S = s,
-                            B = 1.0 - stp * y
-                        };
-                        var rgb = hsb.To<Rgb>();
-                        a[n] = (byte)Math.Round(rgb.B);
-                        a[n + 1] = (byte)Math.Round(rgb.G);
-                        a[n + 2] = (byte)Math.Round(rgb.R);
-                        a[n + 3] = 255;
-                    }
+                        H = h,
+                        S = s,
+                        B = 1.0 - stp * y
+                    };
+                    var rgb = hsb.To<Rgb>();
+                    a[n] = (byte) Math.Round(rgb.B);
+                    a[n + 1] = (byte) Math.Round(rgb.G);
+                    a[n + 2] = (byte) Math.Round(rgb.R);
+                    a[n + 3] = 255;
+                }
             });
             var rect = new Int32Rect(0, 0, width, height);
             var img = new WriteableBitmap(width, height, 96, 96, PixelFormats.Bgr32, null);
@@ -200,21 +200,21 @@ namespace FlameSystems.Controls.Pickers.Models
                 var str = stride;
                 var stp = step;
                 for (var y = d[1]; y < d[1] + d[3]; y++)
-                    for (var x = d[0]; x < d[0] + d[2]; x++)
+                for (var x = d[0]; x < d[0] + d[2]; x++)
+                {
+                    var n = y * str + x * 4;
+                    var hsb = new Hsb
                     {
-                        var n = y * str + x * 4;
-                        var hsb = new Hsb
-                        {
-                            H = h,
-                            S = 1.0 - stp * y,
-                            B = b
-                        };
-                        var rgb = hsb.To<Rgb>();
-                        a[n] = (byte)Math.Round(rgb.B);
-                        a[n + 1] = (byte)Math.Round(rgb.G);
-                        a[n + 2] = (byte)Math.Round(rgb.R);
-                        a[n + 3] = 255;
-                    }
+                        H = h,
+                        S = 1.0 - stp * y,
+                        B = b
+                    };
+                    var rgb = hsb.To<Rgb>();
+                    a[n] = (byte) Math.Round(rgb.B);
+                    a[n + 1] = (byte) Math.Round(rgb.G);
+                    a[n + 2] = (byte) Math.Round(rgb.R);
+                    a[n + 3] = 255;
+                }
             });
             var rect = new Int32Rect(0, 0, width, height);
             var img = new WriteableBitmap(width, height, 96, 96, PixelFormats.Bgr32, null);
@@ -239,21 +239,21 @@ namespace FlameSystems.Controls.Pickers.Models
                 var str = stride;
                 var stp = step;
                 for (var y = d[1]; y < d[1] + d[3]; y++)
-                    for (var x = d[0]; x < d[0] + d[2]; x++)
+                for (var x = d[0]; x < d[0] + d[2]; x++)
+                {
+                    var n = y * str + x * 4;
+                    var hsb = new Hsb
                     {
-                        var n = y * str + x * 4;
-                        var hsb = new Hsb
-                        {
-                            H = 360.0 - y * stp,
-                            S = 1.0,
-                            B = 1.0
-                        };
-                        var rgb = hsb.To<Rgb>();
-                        a[n] = (byte)Math.Round(rgb.B);
-                        a[n + 1] = (byte)Math.Round(rgb.G);
-                        a[n + 2] = (byte)Math.Round(rgb.R);
-                        a[n + 3] = 255;
-                    }
+                        H = 360.0 - y * stp,
+                        S = 1.0,
+                        B = 1.0
+                    };
+                    var rgb = hsb.To<Rgb>();
+                    a[n] = (byte) Math.Round(rgb.B);
+                    a[n + 1] = (byte) Math.Round(rgb.G);
+                    a[n + 2] = (byte) Math.Round(rgb.R);
+                    a[n + 3] = 255;
+                }
             });
             var rect = new Int32Rect(0, 0, width, height);
             var img = new WriteableBitmap(width, height, 96, 96, PixelFormats.Bgr32, null);
