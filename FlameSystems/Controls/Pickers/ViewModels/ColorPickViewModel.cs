@@ -9,21 +9,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using ColorMine.ColorSpaces;
 using FlameBase.Enums;
-using FlameBase.Models;
+using FlameSystems.Controls.Pickers.Models;
 using FlameSystems.Infrastructure;
-using FlameSystems.Infrastructure.ActionFire;
 using FlameSystems.Infrastructure.ValueBind;
-using ColorPickerMode = FlameSystems.Controls.Pickers.Enums.ColorPickerMode;
 
-namespace FlameSystems.Controls.ViewModels
+namespace FlameSystems.Controls.Pickers.ViewModels
 {
-    internal class ColorPickerViewModel : Notifier
+    internal class ColorPickViewModel : Notifier
     {
-        private Canvas _columnArrows;
-        private Ellipse _cubeEllipse;
-        private string _actionFireCallback;
-        private Color _initialColor = Colors.Gray;
-
         private readonly Dictionary<string, ColorPickerMode> _elementModes = new Dictionary<string, ColorPickerMode>
         {
             {"RadioH", ColorPickerMode.H},
@@ -33,6 +26,9 @@ namespace FlameSystems.Controls.ViewModels
             {"RadioG", ColorPickerMode.G},
             {"RadioB", ColorPickerMode.B}
         };
+
+        private readonly Color _initialColor;
+        private readonly Action<bool, Color> _callback;
 
         private readonly Dictionary<string, int> _textCodes = new Dictionary<string, int>
         {
@@ -48,18 +44,23 @@ namespace FlameSystems.Controls.ViewModels
         private Canvas _canvasColumn;
         private Canvas _canvasCube;
         private ColorPickerMode _colorMode;
+        private Canvas _columnArrows;
         private bool _columnDrag;
         private double _columnY;
         private bool _cubeDrag;
+        private Ellipse _cubeEllipse;
         private Point _cubeXy;
         private int _textFromTextField = -1;
 
-        public ColorPickerViewModel(Color initialColor)
+        public ColorPickViewModel(Color initialColor, Action<bool, Color> callback)
         {
-            _actionFireCallback = "CREATE_FLAME_VIEWMODEL-TRANSFORM_PICK_COLOR_CALLBACK";
             _initialColor = initialColor;
+            _callback = callback;
+
             Init();
         }
+
+        public bool Initiated { get; set; }
 
         private void Init()
         {
@@ -85,15 +86,6 @@ namespace FlameSystems.Controls.ViewModels
             BindStorage.SetActionFor(ActText, "TextH", "TextS", "TextV", "TextR", "TextG", "TextB", "TextHex");
         }
 
-        public ColorPickerViewModel(Color initialColor, string actionFireCallback)
-        {
-            _actionFireCallback = actionFireCallback;
-            _initialColor = initialColor;
-            Init();
-        }
-
-        public bool Initiated { get; set; }
-
         #region buttons
 
         private void CommandHandler(object obj)
@@ -102,11 +94,11 @@ namespace FlameSystems.Controls.ViewModels
             {
                 case "ok":
                     _canvasColumn.Children.Remove(_columnArrows);
-                    ActionFire.Invoke(_actionFireCallback, true, ColorNew.Color);
+                    _callback.Invoke(true, ColorNew.Color);
                     break;
                 case "cancel":
                     _canvasColumn.Children.Remove(_columnArrows);
-                    ActionFire.Invoke(_actionFireCallback, false, ColorNew.Color);
+                    _callback.Invoke(false, ColorCurrent.Color);
                     break;
                 case "current":
                     ColorNew = new SolidColorBrush(ColorCurrent.Color);

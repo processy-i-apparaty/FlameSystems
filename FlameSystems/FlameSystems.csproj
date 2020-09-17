@@ -68,6 +68,26 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controls\Pickers\Enums\ColorPickerMode.cs" />
+    <Compile Include="Controls\Pickers\Enums\GradientCallbackType.cs" />
+    <Compile Include="Controls\Pickers\Enums\GradientMode.cs" />
+    <Compile Include="Controls\Pickers\Enums\ProviderCallbackType.cs" />
+    <Compile Include="Controls\Pickers\Models\ColorPickerColorsModel.cs" />
+    <Compile Include="Controls\Pickers\Models\ColorPickerColumnModel.cs" />
+    <Compile Include="Controls\Pickers\Models\ColorPickerCoordinatesModel.cs" />
+    <Compile Include="Controls\Pickers\Models\ColorPickerCubeModel.cs" />
+    <Compile Include="Controls\Pickers\Models\GiveIdModel.cs" />
+    <Compile Include="Controls\Pickers\Models\GradientModel.cs" />
+    <Compile Include="Controls\Pickers\Providers\ColorPickProvider.cs" />
+    <Compile Include="Controls\Pickers\Providers\GradientPickProvider.cs" />
+    <Compile Include="Controls\Pickers\ViewModels\ColorPickViewModel.cs" />
+    <Compile Include="Controls\Pickers\ViewModels\GradientPickViewModel.cs" />
+    <Compile Include="Controls\Pickers\Views\ColorPickView.xaml.cs">
+      <DependentUpon>ColorPickView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Pickers\Views\GradientPickView.xaml.cs">
+      <DependentUpon>GradientPickView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ViewModels\RenderSettingsViewModel.cs" />
     <Compile Include="Controls\ViewModels\SpinnerViewModel.cs" />
     <Compile Include="Controls\ViewModels\TransformPostColorViewModel.cs" />
@@ -82,9 +102,7 @@
     </Compile>
     <Compile Include="Infrastructure\ActionFire\ActionFire.cs" />
     <Compile Include="Infrastructure\ActionFire\ActionFireReturn.cs" />
-    <Compile Include="Infrastructure\Providers\ColorPickProvider.cs" />
     <Compile Include="Infrastructure\Directories.cs" />
-    <Compile Include="Infrastructure\Providers\GradientPickProvider.cs" />
     <Compile Include="Infrastructure\ImageProvider.cs" />
     <Compile Include="Infrastructure\Providers\LoaderSaverProvider.cs" />
     <Compile Include="Infrastructure\Notifier.cs" />
@@ -109,18 +127,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\ViewModels\ColorPickerViewModel.cs" />
     <Compile Include="Controls\ViewModels\FileViewModel.cs" />
-    <Compile Include="Controls\ViewModels\GradientPickerViewModel.cs" />
     <Compile Include="Controls\ViewModels\TransformViewModel.cs" />
-    <Compile Include="Controls\Views\ColorPickerView.xaml.cs">
-      <DependentUpon>ColorPickerView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\Views\FileView.xaml.cs">
       <DependentUpon>FileView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Views\GradientPickerView.xaml.cs">
-      <DependentUpon>GradientPickerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Views\NumericUpDown.xaml.cs">
       <DependentUpon>NumericUpDown.xaml</DependentUpon>
@@ -168,15 +178,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Controls\Views\ColorPickerView.xaml">
+    <Page Include="Controls\Pickers\Views\ColorPickView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Pickers\Views\GradientPickView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\Views\FileView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\Views\GradientPickerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
