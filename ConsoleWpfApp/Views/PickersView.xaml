@@ -3,18 +3,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ConsoleWpfApp.Views"
         xmlns:viewModels="clr-namespace:ConsoleWpfApp.ViewModels"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
-        Title="PickersView" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+        Title="PickersView" Height="450" Width="800" WindowStartupLocation="CenterScreen"
+        Background="#FF111111">
     <Window.DataContext>
         <viewModels:PickersViewModel />
     </Window.DataContext>
     <Grid>
         <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <TextBlock Text="Color" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <TextBlock Style="{StaticResource FontBrassMono}" Text="Color" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 <Rectangle Width="80" Height="80" Margin="5"
                            Stroke="DarkGray"
                            Fill="{Binding BrushColor}">
@@ -27,7 +27,7 @@
                 </Rectangle>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <TextBlock Text="Gradient" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <TextBlock Style="{StaticResource FontBrassMono}" Text="Gradient" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 <Rectangle Width="200" Height="80" Margin="5"
                            Stroke="DarkGray"
                            Fill="{Binding BrushGradient}">
