@@ -8,44 +8,43 @@ using FlameBase.RenderMachine;
 using FlameSystems.Controls.ViewModels;
 using FlameSystems.Controls.Views;
 
-namespace FlameSystems.Infrastructure
+namespace FlameSystems.Infrastructure.Providers
 {
     internal class LoaderSaverProvider : Notifier
     {
-        private readonly Action<string, string, Control> _providerCallback;
         private readonly uint[,,] _display;
         private readonly FileViewType _fileViewType;
         private readonly object _model;
+        private readonly Action<ProviderEnums.CallbackType, string> _providerCallback;
+        private FileView _fileView;
 
-        public LoaderSaverProvider(FileViewType fileViewType, Action<string, string, Control> providerCallbackAction,
-            object model = null,
-            uint[,,] display = null)
+        public LoaderSaverProvider(FileViewType fileViewType,
+            Action<ProviderEnums.CallbackType, string> providerCallback, object model = null, uint[,,] display = null)
         {
             _fileViewType = fileViewType;
             _model = model;
             _display = display;
-            _providerCallback = providerCallbackAction;
-            Exec();
+            _providerCallback = providerCallback;
         }
 
-        // public Control Content { get; private set; }
+        public Control ShowControl => _fileView;
         public bool Result { get; private set; }
         public string ResultPath { get; private set; }
         public string ResultString { get; private set; }
         public string FlameName { get; private set; }
         public FlameModel Flame { get; private set; }
-        public uint[,,] Display { get; private set; }
+        public uint[,,] DisplayArray { get; private set; }
 
         public bool Busy { get; private set; }
         // public bool IsDialogOn { get; private set; }
 
-        private void Exec()
+        public void Exec()
         {
             Busy = true;
-            var dialog = new FileView();
-            var vm = (FileViewModel) dialog.DataContext;
+            _fileView = new FileView();
+            var vm = (FileViewModel) _fileView.DataContext;
             vm.Set(_fileViewType, CallbackAction);
-            _providerCallback.Invoke("dialog", "", dialog);
+            _providerCallback.Invoke(ProviderEnums.CallbackType.ShowControl, string.Empty);
         }
 
         private async void CallbackAction(bool result, FileViewType fileViewType, string resultPath)
@@ -56,7 +55,7 @@ namespace FlameSystems.Infrastructure
             {
                 Busy = false;
                 ResultString = "Operation canceled";
-                _providerCallback.Invoke("end", "", null);
+                _providerCallback.Invoke(ProviderEnums.CallbackType.End, string.Empty);
                 return;
             }
 
@@ -91,7 +90,7 @@ namespace FlameSystems.Infrastructure
                 if (_model is string flameModelJson && _display != null)
                 {
                     FlameName = Path.GetFileNameWithoutExtension(ResultPath);
-                    _providerCallback.Invoke("spinner", $"saving render {FlameName}...", null);
+                    _providerCallback.Invoke(ProviderEnums.CallbackType.ShowSpinner, $"saving render {FlameName}...");
 
                     var tempDir = CreateTempDir(FlameName);
                     BinaryFlamesModel.SaveObject(_display, $"{tempDir}\\logDisplay.bin");
@@ -104,7 +103,7 @@ namespace FlameSystems.Infrastructure
                     Result = false;
                     ResultString = "Model is not a json string or display is null";
                     Busy = false;
-                    _providerCallback.Invoke("end", "", null);
+                    _providerCallback.Invoke(ProviderEnums.CallbackType.End, string.Empty);
                     return;
                 }
             }
@@ -113,13 +112,13 @@ namespace FlameSystems.Infrastructure
                 Result = false;
                 ResultString = $"SaveRender exception: {e.Message}";
                 Busy = false;
-                _providerCallback.Invoke("end", "", null);
+                _providerCallback.Invoke(ProviderEnums.CallbackType.End, string.Empty);
                 return;
             }
 
             Result = true;
             ResultString = $"Render saved successfully with name: {FlameName}";
-            _providerCallback.Invoke("end", "", null);
+            _providerCallback.Invoke(ProviderEnums.CallbackType.End, string.Empty);
             Busy = false;
         }
 
@@ -130,15 +129,15 @@ namespace FlameSystems.Infrastructure
             try
             {
                 FlameName = Path.GetFileNameWithoutExtension(ResultPath);
-                _providerCallback.Invoke("spinner", $"loading render {FlameName}...", null);
+                _providerCallback.Invoke(ProviderEnums.CallbackType.ShowSpinner, $"loading render {FlameName}...");
 
                 var tempDir = CreateTempDir(FlameName);
                 ZipFlamesModel.DecompressToDirectory(ResultPath, tempDir);
 
-                Display = (uint[,,]) BinaryFlamesModel.LoadObject($"{tempDir}\\logDisplay.bin");
+                DisplayArray = (uint[,,]) BinaryFlamesModel.LoadObject($"{tempDir}\\logDisplay.bin");
                 var json = File.ReadAllText($"{tempDir}\\flame.txt");
                 Flame = JsonFlamesModel.GetFlameModel(json);
-                RenderMachine.LoadDisplay(Display, Flame.BackColor);
+                // RenderMachine.LoadDisplay(Display, Flame.BackColor);
 
                 RemoveTempDir();
             }
@@ -147,13 +146,13 @@ namespace FlameSystems.Infrastructure
                 Result = false;
                 ResultString = $"SaveRender exception: {e.Message}";
                 Busy = false;
-                _providerCallback.Invoke("end", "", null);
+                _providerCallback.Invoke(ProviderEnums.CallbackType.End, string.Empty);
                 return;
             }
 
             Result = true;
             ResultString = $"Render {FlameName} loaded successfully";
-            _providerCallback.Invoke("end", "", null);
+            _providerCallback.Invoke(ProviderEnums.CallbackType.End, string.Empty);
             Busy = false;
         }
 
@@ -164,7 +163,7 @@ namespace FlameSystems.Infrastructure
                 if (_model is string str && ResultPath != null)
                 {
                     FlameName = Path.GetFileNameWithoutExtension(ResultPath);
-                    _providerCallback.Invoke("spinner", $"saving flame {FlameName}...", null);
+                    _providerCallback.Invoke(ProviderEnums.CallbackType.ShowSpinner, $"saving flame {FlameName}...");
 
                     File.WriteAllText(ResultPath, str);
                 }
@@ -173,7 +172,7 @@ namespace FlameSystems.Infrastructure
                     Result = false;
                     ResultString = "Model is not a json string";
                     Busy = false;
-                    _providerCallback.Invoke("end", "", null);
+                    _providerCallback.Invoke(ProviderEnums.CallbackType.End, string.Empty);
                     return;
                 }
             }
@@ -182,13 +181,13 @@ namespace FlameSystems.Infrastructure
                 Result = false;
                 ResultString = $"SaveFlame exception: {e.Message}";
                 Busy = false;
-                _providerCallback.Invoke("end", "", null);
+                _providerCallback.Invoke(ProviderEnums.CallbackType.End, string.Empty);
                 return;
             }
 
             Result = true;
             ResultString = $"Flame saved successfully with name: {FlameName}";
-            _providerCallback.Invoke("end", "", null);
+            _providerCallback.Invoke(ProviderEnums.CallbackType.End, string.Empty);
             Busy = false;
         }
 
@@ -202,7 +201,7 @@ namespace FlameSystems.Infrastructure
                 FlameName = Path.GetFileNameWithoutExtension(ResultPath)
                             ?? throw new ArgumentNullException(nameof(ResultPath), @"ResultPath is null");
 
-                _providerCallback.Invoke("spinner", $"loading flame {FlameName}...", null);
+                _providerCallback.Invoke(ProviderEnums.CallbackType.ShowControl, $"loading flame {FlameName}...");
 
                 var flameModelJson = File.ReadAllText(ResultPath);
                 Flame = JsonFlamesModel.GetFlameModel(flameModelJson);
@@ -211,7 +210,7 @@ namespace FlameSystems.Infrastructure
                 {
                     Result = false;
                     ResultString = "Flame read error";
-                    _providerCallback.Invoke("end", "", null);
+                    _providerCallback.Invoke(ProviderEnums.CallbackType.End, string.Empty);
                     Busy = false;
                     return;
                 }
@@ -221,7 +220,7 @@ namespace FlameSystems.Infrastructure
                 Result = false;
                 ResultString = $"LoadFlame exception: {e.Message}";
                 Busy = false;
-                _providerCallback.Invoke("end", "", null);
+                _providerCallback.Invoke(ProviderEnums.CallbackType.End, string.Empty);
                 return;
             }
 
@@ -236,7 +235,7 @@ namespace FlameSystems.Infrastructure
             ResultString = "File not exist";
             Result = false;
             Busy = false;
-            _providerCallback.Invoke("end", "", null);
+            _providerCallback.Invoke(ProviderEnums.CallbackType.End, string.Empty);
             return false;
         }
 

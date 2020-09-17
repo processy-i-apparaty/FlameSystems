@@ -9,19 +9,18 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using FlameBase.Enums;
-using FlameBase.Models;
-using FlameSystems.Infrastructure;
-using FlameSystems.Infrastructure.ActionFire;
-using FlameSystems.Infrastructure.ValueBind;
+using ConsoleWpfApp.Infrastructure;
+using ConsoleWpfApp.Infrastructure.ValueBind;
+using ConsoleWpfApp.Pickers.Enums;
+using ConsoleWpfApp.Pickers.Models;
 
-namespace FlameSystems.Controls.ViewModels
+namespace ConsoleWpfApp.Pickers.ViewModels
 {
-    internal class GradientPickerViewModel : Notifier
+    internal class GradientPickViewModel : Notifier
     {
         private const double EllipseWidth = 18.0;
-        private static string _callbackString1 = "CREATE_FLAME_VIEWMODEL-TRANSFORM_PICK_GRADIENT_CALLBACK";
-        private static string _callbackString2 = "CREATE_FLAME_VIEWMODEL-PICK_GRADIENT";
+        private readonly Action<GradientCallbackType, object, double> _callbackPickGradient;
+
         private readonly Dictionary<int, Point> _ellipseCoordinates = new Dictionary<int, Point>();
         private readonly Dictionary<int, Ellipse> _ellipses = new Dictionary<int, Ellipse>();
         private readonly double _gap;
@@ -31,46 +30,9 @@ namespace FlameSystems.Controls.ViewModels
         private Canvas _canvasMiddle;
         private Canvas _canvasMiddleScanner;
         private int _clickOn = -1;
-        private int _colorMode;
         private int _dragId = -1;
         private double _newPosition;
-        private int _selectedColorId;
 
-        #region actions
-
-        private void ActionCallback(Color color)
-        {
-            if (_selectedColorId >= 0)
-            {
-                var e = _ellipses[_selectedColorId];
-                e.Fill = new SolidColorBrush(color);
-                switch (_colorMode)
-                {
-                    case 2:
-                        GradientModel.Add(_selectedColorId, color, _newPosition);
-                        break;
-                    case 1:
-                        GradientModel.ChangeColor(_selectedColorId, color);
-                        break;
-                }
-            }
-            else
-            {
-                switch (_selectedColorId)
-                {
-                    case -11:
-                        ColorLeft = new SolidColorBrush(color);
-                        break;
-                    case -22:
-                        ColorRight = new SolidColorBrush(color);
-                        break;
-                }
-            }
-
-            RedrawGradient();
-        }
-
-        #endregion
 
         #region public
 
@@ -87,7 +49,7 @@ namespace FlameSystems.Controls.ViewModels
 
         #region constructors
 
-        public GradientPickerViewModel()
+        public GradientPickViewModel()
         {
             Id = GiveIdModel.Get;
             _stopwatch.Start();
@@ -102,30 +64,30 @@ namespace FlameSystems.Controls.ViewModels
             RedrawGradient();
         }
 
-        public GradientPickerViewModel(GradientModel gradientModel, double position, string callbackString1 = "", string callbackString2 = "")
+        public GradientPickViewModel(GradientModel gradientModel, double position,
+            Action<GradientCallbackType, object, double> gradientPickCallback)
         {
-            if (!string.IsNullOrWhiteSpace(callbackString1)) _callbackString1 = callbackString1;
-            if (!string.IsNullOrWhiteSpace(callbackString2)) _callbackString2 = callbackString2;
+            _callbackPickGradient = gradientPickCallback;
 
             _stopwatch.Start();
             _halfWidth = EllipseWidth * .5;
             _gap = (20.0 - EllipseWidth) * .5;
-            GradientModel = gradientModel;
+            GradientModel = gradientModel.Copy();
             GradientMode = GradientMode.Select;
             InitCommands();
             InitGradientSelect(position);
             RedrawGradient();
         }
 
-        public GradientPickerViewModel(GradientModel gradientModel, string callbackString1 = "", string callbackString2 = "")
+        public GradientPickViewModel(GradientModel gradientModel,
+            Action<GradientCallbackType, object, double> gradientPickCallback)
         {
-            if (!string.IsNullOrWhiteSpace(callbackString1)) _callbackString1 = callbackString1;
-            if (!string.IsNullOrWhiteSpace(callbackString2)) _callbackString2 = callbackString2;
+            _callbackPickGradient = gradientPickCallback;
 
             _stopwatch.Start();
             _halfWidth = EllipseWidth * .5;
             _gap = (20.0 - EllipseWidth) * .5;
-            GradientModel = gradientModel;
+            GradientModel = gradientModel.Copy();
             GradientMode = GradientMode.Edit;
             InitCommands();
 
@@ -145,7 +107,10 @@ namespace FlameSystems.Controls.ViewModels
                 while (_canvasMiddle == null || _canvasMiddleScanner == null) Thread.Sleep(10);
             });
             for (var i = 0; i < GradientModel.Length; i++)
+            {
+                Debug.WriteLine($"InitGradientEdit: {i}");
                 CreateEllipse(GradientModel.Ids[i], GradientModel.Colors[i], GradientModel.Values[i]);
+            }
         }
 
         private async void InitGradientSelect(double position)
@@ -168,19 +133,51 @@ namespace FlameSystems.Controls.ViewModels
             CommandCanvasMidMu = new RelayCommand(CanvasMidMu);
             CommandSizeChanged = new RelayCommand(SizeChanged);
             Command = new RelayCommand(ButtonsHandler);
-            ActionFire.AddOrReplace("GRADIENT_PICKER_VIEWMODEL-CALLBACK", new Action<Color>(ActionCallback), GetType());
+            // ActionFire.AddOrReplace("GRADIENT_PICKER_VIEWMODEL-CALLBACK", new Action<Color>(ActionCallback), GetType());
         }
 
-        private static void ButtonsHandler(object obj)
+        private void ButtonsHandler(object obj)
         {
             var button = (string) obj;
-            switch (button)
+            switch (GradientMode)
             {
-                case "ok":
-                    ActionFire.Invoke(_callbackString1, true);
+                case GradientMode.Edit:
+                    switch (button)
+                    {
+                        case "ok":
+                            _callbackPickGradient.Invoke(
+                                GradientCallbackType.EndGradientTrue,
+                                GradientModel, _newPosition);
+                            break;
+                        case "cancel":
+                            _callbackPickGradient.Invoke(
+                                GradientCallbackType.EndGradientFalse,
+                                GradientModel, _newPosition);
+                            break;
+                    }
+
                     break;
-                case "cancel":
-                    ActionFire.Invoke(_callbackString1, false);
+                case GradientMode.Select:
+                    double position;
+                    double x;
+                    switch (button)
+                    {
+                        case "ok":
+                            x = _ellipseCoordinates.Values.ElementAt(0).X;
+                            position = x / _canvasMiddleScanner.ActualWidth;
+                            _callbackPickGradient.Invoke(
+                                GradientCallbackType.EndValueTrue,
+                                position, position);
+                            break;
+                        case "cancel":
+                            x = _ellipseCoordinates.Values.ElementAt(0).X;
+                            position = x / _canvasMiddleScanner.ActualWidth;
+                            _callbackPickGradient.Invoke(
+                                GradientCallbackType.EndValueFalse,
+                                position, position);
+                            break;
+                    }
+
                     break;
             }
         }
@@ -281,8 +278,6 @@ namespace FlameSystems.Controls.ViewModels
 
         #region ui interactions
 
-        #region loaded
-
         private void CanvasLoadedHandler(object obj)
         {
             var canvas = (Canvas) obj;
@@ -297,15 +292,10 @@ namespace FlameSystems.Controls.ViewModels
             }
         }
 
-        #endregion
-
-        #region size changed
 
         private void SizeChanged(object obj)
         {
         }
-
-        #endregion
 
         #region mouse mid
 
@@ -357,7 +347,7 @@ namespace FlameSystems.Controls.ViewModels
                     //double click
                     if (GetEllipse(pos, out var id))
                         //set color
-                        SelectColor(id, 1);
+                        SelectColor(id);
                     else
                         CreateEllipse(pos);
                 }
@@ -441,7 +431,9 @@ namespace FlameSystems.Controls.ViewModels
             _ellipses.Add(id, ellipse);
             _ellipseCoordinates.Add(id, pos);
             _newPosition = pos.X / _canvasMiddleScanner.ActualWidth;
-            SelectColor(id, 2);
+
+            GradientModel.Add(id, GradientModel.GetFromPosition(_newPosition), _newPosition);
+            SelectColor(id);
         }
 
         private void CreateEllipse(int id, Color color, double value)
@@ -458,7 +450,8 @@ namespace FlameSystems.Controls.ViewModels
             _canvasMiddle.Children.Add(ellipse);
             _ellipses.Add(id, ellipse);
             _ellipseCoordinates.Add(id, pos);
-//            _gradModel.Add(id, color, value);
+            Debug.WriteLine($"GradientPickViewModel.CreateEllipse {id} {color} {value}");
+            //            _gradModel.Add(id, color, value);
         }
 
         private void SetPos(UIElement ellipse, Point pos)
@@ -500,11 +493,9 @@ namespace FlameSystems.Controls.ViewModels
             RedrawGradient();
         }
 
-        private void SelectColor(int id, int mode = 0)
-        {
-            _colorMode = mode;
-            _selectedColorId = id;
 
+        private void SelectColor(int id)
+        {
             Color color;
             if (id == -22)
             {
@@ -512,19 +503,20 @@ namespace FlameSystems.Controls.ViewModels
             }
             else
             {
+                double value;
                 if (_ellipses.ContainsKey(id))
                 {
-                    var value = _ellipseCoordinates[id].X / _canvasMiddleScanner.ActualWidth;
+                    value = _ellipseCoordinates[id].X / _canvasMiddleScanner.ActualWidth;
                     color = GradientModel.GetFromPosition(value);
                 }
                 else
                 {
-                    var value = _newPosition / _canvasMiddleScanner.ActualWidth;
+                    value = _newPosition / _canvasMiddleScanner.ActualWidth;
                     color = GradientModel.GetFromPosition(value);
                 }
             }
 
-            ActionFire.Invoke(_callbackString2, color);
+            _callbackPickGradient.Invoke(GradientCallbackType.SelectColor, color, id);
         }
 
         #endregion

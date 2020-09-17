@@ -1,9 +1,18 @@
 ﻿<Application x:Class="ConsoleWpfApp.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:ConsoleWpfApp"
-             StartupUri="MainWindow.xaml">
+             StartupUri="Views/PickersView.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Resources/Styles/ResourceColors.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Resources/Styles/ResourceFonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Resources/Styles/ResourceButtons.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Resources/Styles/ResourceComboBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Resources/Styles/ResourceRadioButton.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Resources/Styles/ResourceScrollBar.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Resources/Styles/ResourceShapes.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

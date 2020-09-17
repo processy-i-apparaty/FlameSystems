@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Media;
+using ConsoleWpfApp.FlameMath;
 using Encog.Neural.Networks;
 using Encog.Persist;
-using FlameBase.FlameMath;
-using FlameBase.RenderMachine.Models;
 
 namespace ConsoleWpfApp
 {
@@ -41,29 +40,29 @@ namespace ConsoleWpfApp
                 var color1 = RandomColor();
                 var color2 = RandomColor();
 
-                var additiveMix = MixColorModel.AdditiveMix(new[] {color1, color2});
-                var subtractiveMix = MixColorModel.SubtractiveMix(new[] {color1, color2});
-                var dilutingSubtractiveMix =
-                    MixColorModel.DilutingSubtractiveMix(new[] {color1, color2});
-                var mixC = MixColorModel.MixC(color1, color2);
-                var rgb = MixColorModel.MixRgb(color1, color2);
-
-                var km = new MixColorModel.KmColor(color1);
-                km.Mix(color2);
-
-                var output = new double[3];
-                _network.Compute(ColorPairToDouble(color1, color2), output);
-
-                var netC = DoubleToColor2(output);
-
-
-                Color1.Fill = ColorToBrush(color1);
-                Color2.Fill = ColorToBrush(color2);
-                // M1.Fill = ColorToBrush(additiveMix);
-                M2.Fill = ColorToBrush(netC);
-                M3.Fill = ColorToBrush(km.GetColor());
-                M4.Fill = ColorToBrush(mixC);
-                M5.Fill = ColorToBrush(rgb);
+                // var additiveMix = MixColorModel.AdditiveMix(new[] {color1, color2});
+                // var subtractiveMix = MixColorModel.SubtractiveMix(new[] {color1, color2});
+                // var dilutingSubtractiveMix =
+                //     MixColorModel.DilutingSubtractiveMix(new[] {color1, color2});
+                // var mixC = MixColorModel.MixC(color1, color2);
+                // var rgb = MixColorModel.MixRgb(color1, color2);
+                //
+                // var km = new MixColorModel.KmColor(color1);
+                // km.Mix(color2);
+                //
+                // var output = new double[3];
+                // _network.Compute(ColorPairToDouble(color1, color2), output);
+                //
+                // var netC = DoubleToColor2(output);
+                //
+                //
+                // Color1.Fill = ColorToBrush(color1);
+                // Color2.Fill = ColorToBrush(color2);
+                // // M1.Fill = ColorToBrush(additiveMix);
+                // M2.Fill = ColorToBrush(netC);
+                // M3.Fill = ColorToBrush(km.GetColor());
+                // M4.Fill = ColorToBrush(mixC);
+                // M5.Fill = ColorToBrush(rgb);
             }
         }
 

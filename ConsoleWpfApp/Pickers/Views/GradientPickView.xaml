@@ -1,0 +1,95 @@
+﻿<UserControl x:Class="ConsoleWpfApp.Pickers.Views.GradientPickView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Background="{StaticResource BrushBlackTransparent}">
+        <StackPanel Orientation="Vertical"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+            <Grid Width="500">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="20" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="22" />
+                    <RowDefinition Height="50" />
+                </Grid.RowDefinitions>
+                <Border BorderBrush="{StaticResource BrushBorder}" BorderThickness="{Binding ThicknessSquares}">
+                    <Canvas x:Name="ColorLeft" Background="{Binding ColorLeft}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseLeftButtonDown">
+                                <i:InvokeCommandAction Command="{Binding CommandCanvasLeftMd}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Canvas>
+                </Border>
+                <Border Grid.Row="0" Grid.Column="2" BorderBrush="{StaticResource BrushBorder}"
+                        BorderThickness="{Binding ThicknessSquares}">
+                    <Canvas x:Name="ColorRight" Background="{Binding ColorRight}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseLeftButtonDown">
+                                <i:InvokeCommandAction Command="{Binding CommandCanvasRightMd}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Canvas>
+                </Border>
+                <Border Grid.Row="0" Grid.Column="1"
+                        BorderBrush="{StaticResource BrushBorder}" BorderThickness="{Binding ThicknessSquares}">
+                    <Canvas x:Name="CanvasMiddle">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Loaded">
+                                <i:InvokeCommandAction Command="{Binding CommandCanvasLoaded}"
+                                                       CommandParameter="{Binding ElementName=CanvasMiddle}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Canvas>
+                </Border>
+                <Canvas x:Name="ColorMiddle"
+                        Grid.Row="0" Grid.Column="1"
+                        Background="Transparent"
+                        Height="20">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Loaded">
+                            <i:InvokeCommandAction Command="{Binding CommandCanvasLoaded}"
+                                                   CommandParameter="{Binding ElementName=ColorMiddle}" />
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="MouseLeftButtonDown">
+                            <i:InvokeCommandAction Command="{Binding CommandCanvasMidMd}" />
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="MouseRightButtonDown">
+                            <i:InvokeCommandAction Command="{Binding CommandCanvasMidMrd}" />
+                        </i:EventTrigger>
+
+                        <i:EventTrigger EventName="MouseLeftButtonUp">
+                            <i:InvokeCommandAction Command="{Binding CommandCanvasMidMu}" />
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="MouseMove">
+                            <i:InvokeCommandAction Command="{Binding CommandCanvasMidMm}" />
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="SizeChanged">
+                            <i:InvokeCommandAction Command="{Binding CommandSizeChanged}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Canvas>
+                <Canvas Grid.Row="1" Grid.Column="1"
+                        Background="{Binding Gradient}" />
+            </Grid>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                <Button Style="{StaticResource StyleButtonFlatUi2}"
+                        Content="ok" Width="50" Margin="5"
+                        Command="{Binding Command}"
+                        CommandParameter="ok" />
+                <Button Style="{StaticResource StyleButtonFlatUi2}"
+                        Content="cancel" Width="50" Margin="5"
+                        Command="{Binding Command}"
+                        CommandParameter="cancel" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

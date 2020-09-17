@@ -82,6 +82,7 @@
     <Compile Include="Models\GradientModel.cs" />
     <Compile Include="Models\GradientPackModel.cs" />
     <Compile Include="Models\JsonFlamesModel.cs" />
+    <Compile Include="Models\PostModel.cs" />
     <Compile Include="Models\ZipFlamesModel.cs" />
     <Compile Include="RenderMachine\Models\IteratorModel.cs" />
     <Compile Include="RenderMachine\Models\LogDisplayModel.cs" />

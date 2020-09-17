@@ -698,7 +698,6 @@ namespace FlameSystems.ViewModels
             {
                 case GradientMode.Edit:
                     _gradientModel = dc.GradientModel;
-                    //amhere
                     SetTransformationColorMode(_flameColorMode);
                     break;
                 case GradientMode.Select:

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,19 +11,28 @@ using FlameBase.Enums;
 using FlameBase.Helpers;
 using FlameBase.Models;
 using FlameBase.RenderMachine;
+using FlameBase.RenderMachine.Models;
 using FlameSystems.Infrastructure;
 using FlameSystems.Infrastructure.ActionFire;
+using FlameSystems.Infrastructure.Providers;
 using FlameSystems.Infrastructure.ValueBind;
 
 namespace FlameSystems.ViewModels
 {
     internal class PostFlameViewModel : Notifier
     {
+        private readonly PostModel _postModel = new PostModel();
+
         private ColorPickProvider _currentColorPickProvider;
+        private GradientPickProvider _currentGradientPickProvider;
+
         private BitmapSource _currentImg;
         private LoaderSaverProvider _currentLoaderSaverProvider;
+
         private string _currentMultiCommand;
         private int _currentSelectedColorIndex = -1;
+        private LogDisplayModel _displayModel;
+
 
         public PostFlameViewModel()
         {
@@ -34,6 +42,13 @@ namespace FlameSystems.ViewModels
             CommandSetGradient = new RelayCommand(SetGradientHandler);
             RadioColor = true;
             GradientVisibility = Visibility.Collapsed;
+        }
+
+        private void SelectColorForGradient(Color color)
+        {
+            _currentSelectedColorIndex = -2;
+            _currentColorPickProvider = new ColorPickProvider(ColorPickProviderCallback, color);
+            _currentColorPickProvider.Exec();
         }
 
         #region events
@@ -46,14 +61,16 @@ namespace FlameSystems.ViewModels
             if (RadioColor)
             {
                 var color = _currentLoaderSaverProvider.Flame.FunctionColors[_currentSelectedColorIndex];
-                Debug.WriteLine($"{_currentSelectedColorIndex} {color}");
-                _currentColorPickProvider = new ColorPickProvider(ColorPickerProviderCallback, color);
+                _currentColorPickProvider = new ColorPickProvider(ColorPickProviderCallback, color);
+                _currentColorPickProvider.Exec();
             }
 
-            if (RadioGradient)
+            else if (RadioGradient)
             {
                 var color = _currentLoaderSaverProvider.Flame.GradientPack.Values[_currentSelectedColorIndex];
-                //_gradientPickProvider = new GradientPickProvider()
+                _currentGradientPickProvider =
+                    new GradientPickProvider(GradientPickProviderCallback, _postModel.GradientModel, color);
+                _currentGradientPickProvider.Exec();
             }
         }
 
@@ -61,41 +78,13 @@ namespace FlameSystems.ViewModels
 
         #region set ui
 
-        private async void ShowRender(FlameModel flameModel)
-        {
-            if (flameModel == null) return;
-            GetGradientModel(flameModel, out var gradientModel, out var gradientValues);
-
-
-            await Task.Run(() =>
-            {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    ImageSource = null;
-                    ImageTopContent = StaticClasses.GetSpinner();
-                });
-                // Thread.Sleep(100);
-            });
-
-            await Task.Run(() =>
-            {
-                _currentImg = RenderMachine.GetImage(
-                    flameModel.FunctionColors.ToArray(), gradientValues,
-                    gradientModel);
-                ImageSource = _currentImg;
-                ImageTopContent = null;
-                Application.Current.Dispatcher.Invoke(() => { SetUi(flameModel, gradientModel, gradientValues); });
-            });
-        }
-
-        private void SetUi(FlameModel flameModel, GradientModel gradientModel, double[] gradientValues)
+        private void SetUi()
         {
             var brushBorder = (Brush) Application.Current.Resources["BrushBorder"];
-            if (gradientModel == null)
+            if (RadioGradient == false)
             {
-                RadioColor = true;
                 ClearRectangles();
-                foreach (var color in flameModel.FunctionColors)
+                foreach (var color in _postModel.TransformColors)
                 {
                     var rectangle = new Rectangle
                     {
@@ -110,16 +99,15 @@ namespace FlameSystems.ViewModels
             else
             {
                 ColorRectangles.Clear();
-                RadioGradient = true;
-                GradientFill = new LinearGradientBrush(gradientModel.GetGradientStopCollection());
-                foreach (var gradientValue in gradientValues)
+                GradientFill = new LinearGradientBrush(_postModel.GradientModel.GetGradientStopCollection());
+                foreach (var gradientValue in _postModel.GradientValues)
                 {
                     var color = gradientValue;
                     var rectangle = new Rectangle
                     {
                         Width = 30,
                         Height = 28,
-                        Fill = new SolidColorBrush(gradientModel.GetFromPosition(color)),
+                        Fill = new SolidColorBrush(_postModel.GradientModel.GetFromPosition(color)),
                         Stroke = brushBorder,
                         Margin = new Thickness(3)
                     };
@@ -128,24 +116,21 @@ namespace FlameSystems.ViewModels
                 }
             }
 
-            BackColor = new SolidColorBrush(flameModel.BackColor);
+            BackColor = new SolidColorBrush(_postModel.BackColor);
         }
 
         private void SetColor(Color color)
         {
-            _currentLoaderSaverProvider.Flame.FunctionColors[_currentSelectedColorIndex] = color;
-            ShowRender(_currentLoaderSaverProvider);
+            _postModel.TransformColors[_currentSelectedColorIndex] = color;
             _currentSelectedColorIndex = -1;
         }
 
         private void SetBackColor(Color color)
         {
-            _currentLoaderSaverProvider.Flame.BackColor = color;
-            RenderMachine.Display.BackColor = color;
-            ShowRender(_currentLoaderSaverProvider);
+            _postModel.BackColor = color;
+            _displayModel.BackColor = color;
             _currentSelectedColorIndex = -1;
         }
-
 
         private void ClearRectangles()
         {
@@ -153,11 +138,47 @@ namespace FlameSystems.ViewModels
             ColorRectangles.Clear();
         }
 
-        private void ShowRender(LoaderSaverProvider loaderSaverProvider)
+        private void InitPost()
         {
-            if (!loaderSaverProvider.Result) return;
-            var flameModel = loaderSaverProvider.Flame;
-            ShowRender(flameModel);
+            if (!_currentLoaderSaverProvider.Result) return;
+
+            var flameModel = _currentLoaderSaverProvider.Flame;
+            GetGradientModel(flameModel, out var gradientModel, out var gradientValues);
+            if (gradientModel != null)
+            {
+                _postModel.GradientModel = gradientModel;
+                _postModel.GradientValues = gradientValues;
+                RadioGradient = true;
+            }
+
+            _postModel.BackColor = flameModel.BackColor;
+            _postModel.TransformColors = flameModel.FunctionColors.ToArray();
+            _postModel.DisplayArray = _currentLoaderSaverProvider.DisplayArray;
+            _displayModel = new LogDisplayModel(_postModel.DisplayArray, _postModel.BackColor);
+        }
+
+        private async void ShowRender()
+        {
+            await Task.Run(() =>
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    ImageSource = null;
+                    ImageTopContent = StaticClasses.GetSpinner();
+                });
+            });
+
+            await Task.Run(() =>
+            {
+                if (RadioColor) _currentImg = _displayModel.GetBitmapForRender(_postModel.TransformColors);
+
+                if (RadioGradient)
+                    _currentImg = _displayModel.GetBitmapForRender(_postModel.GradientValues, _postModel.GradientModel);
+
+                ImageSource = _currentImg;
+                ImageTopContent = null;
+                Application.Current.Dispatcher.Invoke(SetUi);
+            });
         }
 
         private static void GetGradientModel(FlameModel flameModel, out GradientModel gradientModel,
@@ -178,7 +199,7 @@ namespace FlameSystems.ViewModels
         private void BackColorHandler(object obj)
         {
             var color = BackColor.Color;
-            _currentColorPickProvider = new ColorPickProvider(ColorPickerProviderCallback, color);
+            _currentColorPickProvider = new ColorPickProvider(ColorPickProviderCallback, color);
         }
 
         private void RadioCheckedHandler(object obj)
@@ -190,6 +211,9 @@ namespace FlameSystems.ViewModels
 
         private void SetGradientHandler(object obj)
         {
+            _currentGradientPickProvider =
+                new GradientPickProvider(GradientPickProviderCallback, _postModel.GradientModel);
+            _currentGradientPickProvider.Exec();
         }
 
         private void MultiCommandHandler(object obj)
@@ -206,6 +230,7 @@ namespace FlameSystems.ViewModels
                 case "loadRender":
                     _currentLoaderSaverProvider =
                         new LoaderSaverProvider(FileViewType.LoadRender, LoaderSaverProviderCallback);
+                    _currentLoaderSaverProvider.Exec();
                     return;
                 case "saveRender":
                     return;
@@ -220,64 +245,136 @@ namespace FlameSystems.ViewModels
         private async void SaveImage()
         {
             if (_currentImg == null) return;
-
             TopContent = StaticClasses.GetSpinner();
-
             await Task.Run(() =>
             {
-                var now = DateTime.Now;
-                var filename =
-                    $"{Directories.Images}\\{_currentLoaderSaverProvider.FlameName}_{now.Year}{now.Month:00}{now.Day:00}-{(int) now.TimeOfDay.TotalSeconds}.png";
+                var filename = GetImageName(_currentLoaderSaverProvider.FlameName);
                 ImageHelper.SaveImage(filename, _currentImg);
             });
             TopContent = null;
+        }
+
+        private static string GetImageName(string flameName)
+        {
+            var now = DateTime.Now;
+            return
+                $"{Directories.Images}\\{flameName}_{now.Year}{now.Month:00}{now.Day:00}-{(int) now.TimeOfDay.TotalSeconds}.png";
         }
 
         #endregion
 
         #region providers
 
-        private void LoaderSaverProviderCallback(string command, string message, Control control)
+        private void LoaderSaverProviderCallback(ProviderEnums.CallbackType callbackType, string message)
         {
-            if (command == "spinner")
+            switch (callbackType)
             {
-                Application.Current.Dispatcher.Invoke(() => { TopContent = StaticClasses.GetSpinner(message); });
-                return;
-            }
+                case ProviderEnums.CallbackType.ShowControl:
+                    TopContent = _currentLoaderSaverProvider.ShowControl;
+                    return;
+                case ProviderEnums.CallbackType.ShowSpinner:
+                    Application.Current.Dispatcher.Invoke(() => { TopContent = StaticClasses.GetSpinner(message); });
+                    return;
+                case ProviderEnums.CallbackType.End:
+                    switch (_currentMultiCommand)
+                    {
+                        case "loadRender":
+                            InitPost();
+                            ShowRender();
+                            break;
+                    }
 
-            TopContent = control;
-            if (control != null) return;
+                    _currentMultiCommand = string.Empty;
+                    ActionFire.Invoke("MAIN_WINDOW_VIEWMODEL-SET_BOTTOM_STRING",
+                        _currentLoaderSaverProvider.ResultString);
 
-
-            switch (_currentMultiCommand)
-            {
-                case "loadRender":
-                    ShowRender(_currentLoaderSaverProvider);
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(callbackType), callbackType, null);
             }
-
-            _currentMultiCommand = string.Empty;
-            ActionFire.Invoke("MAIN_WINDOW_VIEWMODEL-SET_BOTTOM_STRING", _currentLoaderSaverProvider.ResultString);
         }
 
-        private void ColorPickerProviderCallback(string command, string message, Control control)
+        private void ColorPickProviderCallback(ProviderEnums.CallbackType callbackType, string message)
         {
-            switch (command)
+            switch (callbackType)
             {
-                case "picker-view":
-                    TopContent = control;
-                    break;
-                case "end":
+                case ProviderEnums.CallbackType.ShowControl:
+                    TopContent = _currentColorPickProvider.ShowControl;
+                    return;
+                case ProviderEnums.CallbackType.ShowSpinner:
+                    TopContent = StaticClasses.GetSpinner(message);
+                    return;
+                case ProviderEnums.CallbackType.End:
                     TopContent = null;
-                    if (!_currentColorPickProvider.Result) break;
+                    if (!_currentColorPickProvider.Result)
+                    {
+                        _currentColorPickProvider = null;
+                        return;
+                    }
 
                     if (_currentSelectedColorIndex == -1)
                         SetBackColor(_currentColorPickProvider.ResultColor);
+                    else if (_currentSelectedColorIndex == -2)
+                    {
+                        var resultColor = _currentColorPickProvider.ResultColor;
+                        _postModel.GradientModel.ChangeColor(1, resultColor);
+                        _currentColorPickProvider = null;
+                        _currentGradientPickProvider =
+                            new GradientPickProvider(GradientPickProviderCallback, _postModel.GradientModel);
+                        _currentGradientPickProvider.Exec();
+                    }
                     else
                         SetColor(_currentColorPickProvider.ResultColor);
+
                     _currentColorPickProvider = null;
+                    ShowRender();
+                    return;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(callbackType), callbackType, null);
+            }
+        }
+
+        private void GradientPickProviderCallback(ProviderEnums.CallbackType callbackType, string message)
+        {
+            switch (callbackType)
+            {
+                case ProviderEnums.CallbackType.ShowControl:
+                    if (string.IsNullOrWhiteSpace(message))
+                    {
+                        TopContent = _currentGradientPickProvider.ShowControl;
+                        break;
+                    }
+
+                    TopContent = null;
+                    var color = (Color) ColorConverter.ConvertFromString("#FFDFD991");
+                    SelectColorForGradient(color);
 
                     break;
+                case ProviderEnums.CallbackType.ShowSpinner:
+                    TopContent = StaticClasses.GetSpinner(message);
+                    break;
+                case ProviderEnums.CallbackType.End:
+                    TopContent = null;
+                    if (!_currentGradientPickProvider.Result) return;
+                    switch (_currentGradientPickProvider.PickerType)
+                    {
+                        case GradientPickProvider.GradientPickerType.Gradient:
+                            _postModel.GradientModel = _currentGradientPickProvider.ResultGradientModel;
+                            break;
+                        case GradientPickProvider.GradientPickerType.Position:
+                            _postModel.GradientValues[_currentSelectedColorIndex] =
+                                _currentGradientPickProvider.ResultGradientPosition;
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+
+                    _currentGradientPickProvider = null;
+                    _currentSelectedColorIndex = -1;
+                    ShowRender();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(callbackType), callbackType, null);
             }
         }
 
