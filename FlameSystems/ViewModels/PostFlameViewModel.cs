@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -161,6 +162,8 @@ namespace FlameSystems.ViewModels
 
         private async void ShowRender()
         {
+            Debug.WriteLine($"SHOW_RENDER");
+            if (_displayModel == null) return;
             await Task.Run(() =>
             {
                 Application.Current.Dispatcher.Invoke(() =>
@@ -301,13 +304,15 @@ namespace FlameSystems.ViewModels
                     Application.Current.Dispatcher.Invoke(() => { TopContent = StaticClasses.GetSpinner(message); });
                     return;
                 case ProviderCallbackType.End:
-                    switch (_currentMultiCommand)
-                    {
-                        case "loadRender":
-                            InitPost();
-                            ShowRender();
-                            break;
-                    }
+                    // TopContent = null;
+                    if (_currentLoaderSaverProvider.Result)
+                        switch (_currentMultiCommand)
+                        {
+                            case "loadRender":
+                                InitPost();
+                                ShowRender();
+                                break;
+                        }
 
                     _currentMultiCommand = string.Empty;
                     ActionFire.Invoke("MAIN_WINDOW_VIEWMODEL-SET_BOTTOM_STRING",
