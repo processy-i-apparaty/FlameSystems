@@ -107,7 +107,8 @@ namespace FlameBase.RenderMachine
                     throw new ArgumentOutOfRangeException();
             }
 
-            Density.Estimation(Display, 0, 9, .4, out var di);
+            //TODO: Density estimation point
+           // Density.Estimation(Display, 0, 9, .4, out var di);
 
 
             var path =
@@ -116,8 +117,8 @@ namespace FlameBase.RenderMachine
             switch (colorMode)
             {
                 case FlameColorMode.Color:
-                    // img = Display.GetBitmapForRender(_transformationColors);
-                    img = di.GetBitmapForRender(_transformationColors);
+                    img = Display.GetBitmapForRender(_transformationColors);
+                    // img = di.GetBitmapForRender(_transformationColors);
                     break;
                 case FlameColorMode.Gradient:
                     img = Display.GetBitmapForRender(_transformationGradientValues, _gradModel);
