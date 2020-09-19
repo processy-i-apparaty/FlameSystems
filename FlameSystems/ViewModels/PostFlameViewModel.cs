@@ -205,6 +205,7 @@ namespace FlameSystems.ViewModels
         {
             var color = BackColor.Color;
             _currentColorPickProvider = new ColorPickProvider(ColorPickProviderCallback, color);
+            _currentColorPickProvider.Exec();
         }
 
         private void RadioCheckedHandler(object obj)

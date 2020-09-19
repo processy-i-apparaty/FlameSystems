@@ -12,6 +12,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Resources/Styles/ResourceRadioButton.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Resources/Styles/ResourceScrollBar.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Resources/Styles/ResourceShapes.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Resources/Styles/ResourceCheckBox.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

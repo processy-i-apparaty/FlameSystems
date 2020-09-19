@@ -4,6 +4,12 @@ namespace FlameSystems.Infrastructure.ValueBind
 {
     internal class ValueBindAttribute : Attribute
     {
+
+        public ValueBindAttribute(object initialObject)
+        {
+            InitialObject = initialObject;
+        }
+
         public ValueBindAttribute(double initialDouble)
         {
             InitialDouble = initialDouble;
@@ -54,10 +60,11 @@ namespace FlameSystems.Infrastructure.ValueBind
         public double InitialDouble { get; } = double.NaN;
         public string InitialString { get; }
         public bool Looped { get; }
+        public object InitialObject { get; set; }
 
         public override string ToString()
         {
-            return $"InitialDouble: {InitialDouble}, InitialInt: {InitialInt}, InitialString: {InitialString}";
+            return $"InitialDouble: {InitialDouble}, InitialInt: {InitialInt}, InitialString: {InitialString},  InitialObject: {InitialObject}";
         }
     }
 }

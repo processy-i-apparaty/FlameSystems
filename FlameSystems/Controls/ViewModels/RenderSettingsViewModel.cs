@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Input;
 using FlameBase.RenderMachine.Models;
 using FlameSystems.Infrastructure;
@@ -18,14 +19,25 @@ namespace FlameSystems.Controls.ViewModels
 
         public void Set(RenderSettingsModel renderSettings, Action callback)
         {
+            BindStorage.SetActionFor("RenderByQuality", ActionRenderByQuality);
+
             _renderSettings = renderSettings;
             ShotsPerIteration = _renderSettings.ShotsPerIteration * 0.001;
             Iterations = _renderSettings.Iterations * 0.001;
             RenderPerIterations = _renderSettings.RenderPerIterations;
             RenderColorMode = new RenderColorModeModel();
             RenderColorMode.SetMode(_renderSettings.RenderColorMode);
+            Quality = renderSettings.Quality;
+            if (renderSettings.RenderByQuality)
+            {
+                RenderByQuality = true;
+            }
             _callback = callback;
+
+
+            
         }
+
 
         private void CommandHandler(object obj)
         {
@@ -37,6 +49,8 @@ namespace FlameSystems.Controls.ViewModels
                     _renderSettings.Iterations = (int) (Iterations * 1000.0);
                     _renderSettings.RenderPerIterations = RenderPerIterations;
                     _renderSettings.RenderColorMode = RenderColorMode.Mode;
+                    _renderSettings.RenderByQuality = RenderByQuality;
+                    _renderSettings.Quality = Quality;
                     _callback();
                     break;
                 case "cancel":
@@ -46,6 +60,23 @@ namespace FlameSystems.Controls.ViewModels
             }
         }
 
+
+        private void ActionRenderByQuality(string arg1, object arg2)
+        {
+            var val = (bool) arg2;
+            if (val)
+            {
+                VisibilityQuality = Visibility.Visible;
+                VisibilityIterations = Visibility.Collapsed;
+            }
+            else
+            {
+                VisibilityQuality = Visibility.Collapsed;
+                VisibilityIterations = Visibility.Visible;
+            }
+
+            
+        }
 
         #region bindings
 
@@ -76,6 +107,34 @@ namespace FlameSystems.Controls.ViewModels
 
         [ValueBind]
         public RenderColorModeModel RenderColorMode
+        {
+            get => Get();
+            set => Set(value);
+        }
+
+        [ValueBind]
+        public bool RenderByQuality
+        {
+            get => Get();
+            set => Set(value);
+        }
+
+        [ValueBind(Visibility.Collapsed)]
+        public Visibility VisibilityQuality
+        {
+            get => Get();
+            set => Set(value);
+        }
+
+        [ValueBind(10.0)]
+        public double Quality
+        {
+            get => Get();
+            set => Set(value);
+        }
+
+        [ValueBind(Visibility.Visible)]
+        public Visibility VisibilityIterations
         {
             get => Get();
             set => Set(value);

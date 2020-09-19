@@ -85,6 +85,7 @@
     <Compile Include="RenderMachine\Models\RenderActionsModel.cs" />
     <Compile Include="RenderMachine\Models\RenderColorModeModel.cs" />
     <Compile Include="RenderMachine\Models\RenderPackModel.cs" />
+    <Compile Include="RenderMachine\Models\RenderSequenceModel.cs" />
     <Compile Include="RenderMachine\Models\RenderSettingsModel.cs" />
     <Compile Include="Models\TransformModel.cs" />
     <Compile Include="Models\VariationFactoryModel.cs" />

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -17,6 +18,7 @@ namespace FlameBase.RenderMachine.Models
     {
         private static readonly Random Rand = new Random();
         private readonly uint[,,] _display;
+        private CancellationTokenSource _tokenSource;
 
         public LogDisplayModel(int width, int height, int colorCount, Color backColor)
         {
@@ -34,6 +36,7 @@ namespace FlameBase.RenderMachine.Models
             ColorCount = array.GetLength(2);
             _display = CopyArray(array);
             GetMaxShots();
+            BackColor = backColor;
         }
 
         public Color BackColor { get; set; }
@@ -75,6 +78,10 @@ namespace FlameBase.RenderMachine.Models
             return labs;
         }
 
+        public void CancelParallel()
+        {
+            _tokenSource?.Token.ThrowIfCancellationRequested();
+        }
 
         private Hsb GetColorModeGradient(uint x, uint y, IReadOnlyList<double> gradientValues, GradientModel gradModel)
         {
@@ -200,6 +207,8 @@ namespace FlameBase.RenderMachine.Models
 
         public BitmapSource GetBitmapForRender(Color[] funColors, bool fast = false)
         {
+            CancelParallel();
+
             Debug.WriteLine("GetBitmapForRender");
             var rect = new Int32Rect(0, 0, Width, Height);
             var img = new WriteableBitmap(Width, Height, 96, 96, PixelFormats.Bgr32, null);
@@ -234,118 +243,132 @@ namespace FlameBase.RenderMachine.Models
             var strides = new int[length];
             for (var i = 0; i < length; i++) strides[i] = stride;
 
+            _tokenSource = new CancellationTokenSource();
+
             var parallelOptions = new ParallelOptions
-                {MaxDegreeOfParallelism = Environment.ProcessorCount};
+                {MaxDegreeOfParallelism = Environment.ProcessorCount, CancellationToken = _tokenSource.Token};
 
             var gamma = 1.0 / 1.5;
-
-            Parallel.For(0, length, parallelOptions, i =>
+            try
             {
-                var iLabCm = labsCm.ToArray();
-                var contrast = Contrast;
-                var renderColorMode = RenderColorMode;
-                var max = Max;
-
-                var d = dic[i];
-                var f = fast;
-
-                for (var y = (uint) d[1]; y < d[1] + d[3]; y++)
-                for (var x = (uint) d[0]; x < d[0] + d[2]; x++)
+                Parallel.For(0, length, parallelOptions, i =>
                 {
-                    var shots = CountShots(x, y);
+                    var iLabCm = labsCm.ToArray();
+                    var contrast = Contrast;
+                    var renderColorMode = RenderColorMode;
+                    var max = Max;
 
-                    long n;
-                    if (shots == 0)
+                    var d = dic[i];
+                    var f = fast;
+
+                    for (var y = (uint) d[1]; y < d[1] + d[3]; y++)
+                    for (var x = (uint) d[0]; x < d[0] + d[2]; x++)
                     {
+                        var shots = CountShots(x, y);
+
+                        long n;
+                        if (shots == 0)
+                        {
+                            n = y * strides[i] + x * 4;
+                            pixels[n] = BackColor.B;
+                            pixels[n + 1] = BackColor.G;
+                            pixels[n + 2] = BackColor.R;
+                            pixels[n + 3] = 255;
+                            continue;
+                        }
+
+                        //TODO: GetBitmapForRender mix colors
+                        // var cCmRgb = GetColorCm(x, y, funColors);
+
+                        var colorLab = GetColorModeColor(x, y, iLabCm);
+                        var colorCm = colorLab.ToRgb();
+                        var cCmRgb = Color.FromRgb((byte) colorCm.R, (byte) colorCm.G, (byte) colorCm.B);
+
+
+                        var log = 1.0;
+
+
+                        switch (renderColorMode)
+                        {
+                            case RenderColorModeModel.RenderColorMode.Hsb:
+                                if (!f)
+                                    log = Math.Log(1.0 + shots, max);
+                                cCmRgb = Blend(cCmRgb, BackColor, log);
+                                break;
+                            case RenderColorModeModel.RenderColorMode.Lab:
+                                if (!f)
+                                {
+                                    log = Math.Pow(Math.Log(1.0 + shots, max), gamma);
+                                }
+
+                                cCmRgb = BlendLab(colorLab, backColorLab, log, contrast);
+                                break;
+                            case RenderColorModeModel.RenderColorMode.LogGamma:
+                                if (!f)
+                                {
+                                    //alpha[x][y] := log(frequency_avg[x][y]) / log(frequency_max);
+                                    //frequency_max is the maximal number of iterations that hit a cell in the histogram.
+                                    //final_pixel_color[x][y] := color_avg[x][y] * alpha[x][y] ^ (1 / gamma); //gamma is a value greater than 1.
+
+                                    var alpha = Math.Log(shots) / logMax;
+                                    log = Math.Pow(alpha, gamma);
+                                    //log = 1.0 - Math.Pow(Math.Log(shots) / shots, gamma);
+                                }
+
+                                cCmRgb = Blend(cCmRgb, BackColor, log);
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+
+
+                        // log = Math.Log(shots) / shots;
+                        // log = Math.Pow(log, gamma);
+
+
+                        var r = cCmRgb.R;
+                        var g = cCmRgb.G;
+                        var b = cCmRgb.B;
+
+                        // var colorCm = GetColorCm(x, y, iLabCm);
+
+                        // if (!f)
+                        // {
+                        //     var log = Math.Log(1.0 + shots, Max) * contrast;
+                        //     colorCm.L = log;
+                        // }
+                        // var cCmRgb = colorCm.ToRgb();
+
+                        // var colorHsb = colorCm.To<Hsb>();
+                        // if (!f)
+                        // {
+                        // var log = = Math.Log(1.0 + shots, Max);
+                        // colorHsb.B = Math.Log(1.0 + shots, Max);
+                        // }
+                        // var cCmRgb = colorHsb.ToRgb();
+
+                        // var r = (byte) Math.Round(cCmRgb.R);
+                        // var g = (byte) Math.Round(cCmRgb.G);
+                        // var b = (byte) Math.Round(cCmRgb.B);
+
                         n = y * strides[i] + x * 4;
-                        pixels[n] = BackColor.B;
-                        pixels[n + 1] = BackColor.G;
-                        pixels[n + 2] = BackColor.R;
+                        pixels[n] = b;
+                        pixels[n + 1] = g;
+                        pixels[n + 2] = r;
                         pixels[n + 3] = 255;
-                        continue;
                     }
-
-                    //TODO: GetBitmapForRender mix colors
-                    // var cCmRgb = GetColorCm(x, y, funColors);
-
-                    var colorLab = GetColorModeColor(x, y, iLabCm);
-                    var colorCm = colorLab.ToRgb();
-                    var cCmRgb = Color.FromRgb((byte) colorCm.R, (byte) colorCm.G, (byte) colorCm.B);
-
-
-                    var log = 1.0;
-
-
-                    switch (renderColorMode)
-                    {
-                        case RenderColorModeModel.RenderColorMode.Hsb:
-                            if (!f)
-                                log = Math.Log(1.0 + shots, max);
-                            cCmRgb = Blend(cCmRgb, BackColor, log);
-                            break;
-                        case RenderColorModeModel.RenderColorMode.Lab:
-                            if (!f)
-                            {
-                                log = Math.Pow(Math.Log(1.0 + shots, max), gamma);
-                            }
-
-                            cCmRgb = BlendLab(colorLab, backColorLab, log, contrast);
-                            break;
-                        case RenderColorModeModel.RenderColorMode.LogGamma:
-                            if (!f)
-                            {
-                                //alpha[x][y] := log(frequency_avg[x][y]) / log(frequency_max);
-                                //frequency_max is the maximal number of iterations that hit a cell in the histogram.
-                                //final_pixel_color[x][y] := color_avg[x][y] * alpha[x][y] ^ (1 / gamma); //gamma is a value greater than 1.
-
-                                var alpha = Math.Log(shots) / logMax;
-                                log = Math.Pow(alpha, gamma);
-                                //log = 1.0 - Math.Pow(Math.Log(shots) / shots, gamma);
-                            }
-
-                            cCmRgb = Blend(cCmRgb, BackColor, log);
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
-
-
-                    // log = Math.Log(shots) / shots;
-                    // log = Math.Pow(log, gamma);
-
-
-                    var r = cCmRgb.R;
-                    var g = cCmRgb.G;
-                    var b = cCmRgb.B;
-
-                    // var colorCm = GetColorCm(x, y, iLabCm);
-
-                    // if (!f)
-                    // {
-                    //     var log = Math.Log(1.0 + shots, Max) * contrast;
-                    //     colorCm.L = log;
-                    // }
-                    // var cCmRgb = colorCm.ToRgb();
-
-                    // var colorHsb = colorCm.To<Hsb>();
-                    // if (!f)
-                    // {
-                    // var log = = Math.Log(1.0 + shots, Max);
-                    // colorHsb.B = Math.Log(1.0 + shots, Max);
-                    // }
-                    // var cCmRgb = colorHsb.ToRgb();
-
-                    // var r = (byte) Math.Round(cCmRgb.R);
-                    // var g = (byte) Math.Round(cCmRgb.G);
-                    // var b = (byte) Math.Round(cCmRgb.B);
-
-                    n = y * strides[i] + x * 4;
-                    pixels[n] = b;
-                    pixels[n + 1] = g;
-                    pixels[n + 2] = r;
-                    pixels[n + 3] = 255;
-                }
-            });
+                });
+            }
+            catch (OperationCanceledException)
+            {
+                Debug.WriteLine("\tPARALLEL CANCELED.");
+                return img;
+            }
+            finally
+            {
+                _tokenSource?.Dispose();
+                _tokenSource = null;
+            }
 
             Debug.WriteLine("\tPARALLEL END.");
 
@@ -639,6 +662,7 @@ namespace FlameBase.RenderMachine.Models
                     }
                 }
             }
+
             return sum / count;
         }
     }

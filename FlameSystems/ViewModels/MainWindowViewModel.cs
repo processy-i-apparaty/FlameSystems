@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Windows.Controls;
+using System.Windows.Input;
+using FlameBase.RenderMachine;
 using FlameSystems.Infrastructure;
 using FlameSystems.Infrastructure.ActionFire;
 using FlameSystems.Infrastructure.ValueBind;
@@ -13,6 +15,9 @@ namespace FlameSystems.ViewModels
 
         public MainWindowViewModel()
         {
+            CommandClosingWindow = new RelayCommand(HandlerWindowClosing);
+
+
             var thisType = GetType();
             ActionFire.AddOrReplace("MAIN_WINDOW_VIEWMODEL-SET_VERSION",
                 new Action<int, int, int>(ActionSetVersionString), thisType);
@@ -24,6 +29,11 @@ namespace FlameSystems.ViewModels
                 new Action<string, object>(ActionSetWindowContentByParams), thisType);
 
             WindowContent = new CreateFlameView();
+        }
+
+        private void HandlerWindowClosing(object obj)
+        {
+            RenderMachine.RenderStop();
         }
 
         #region bindings
@@ -48,6 +58,8 @@ namespace FlameSystems.ViewModels
             get => Get();
             set => Set(value);
         }
+
+        public ICommand CommandClosingWindow { get; }
 
         #endregion
 

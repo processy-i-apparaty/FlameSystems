@@ -69,6 +69,11 @@ namespace FlameSystems.Infrastructure.ValueBind
             {
                 _value = (T) (object) valueBindAttribute.InitialBool;
             }
+            else if (valueBindAttribute.InitialObject != null)
+            {
+                var obj = valueBindAttribute.InitialObject;
+                if (_value.GetType() == obj.GetType()) _value = (T) obj;
+            }
         }
 
         public void Randomize()
