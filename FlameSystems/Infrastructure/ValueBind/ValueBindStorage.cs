@@ -40,6 +40,11 @@ namespace FlameSystems.Infrastructure.ValueBind
             return _valueBinds.ContainsKey(name) ? _valueBinds[name].Value : default;
         }
 
+        public Type Type(string name)
+        {
+            return _valueBinds.ContainsKey(name) ? _valueBinds[name].ValueType : null;
+        }
+
         public void Remove(string name)
         {
             if (!TryGetBind(name, out var bind)) return;
@@ -50,7 +55,12 @@ namespace FlameSystems.Infrastructure.ValueBind
         {
             if (!TryGetBind(name, out var bind)) return;
             if (bind.ValueType == typeof(T)) bind.Value = value;
-            
+        }
+
+        public void Set<T>(string name, T value, Type t)
+        {
+            if (!TryGetBind(name, out var bind)) return;
+            if (bind.ValueType == t) bind.Value = value;
         }
 
         public void SetActionFor(string name, Action<string, object> action)

@@ -9,5 +9,6 @@ namespace FlameSystems.Controls.Views
         {
             DataContex = new TransformViewModel();
         }
+
     }
 }

@@ -28,7 +28,8 @@ namespace FlameSystems.ViewModels
             ActionFire.AddOrReplace("MAIN_WINDOW_VIEWMODEL-SET_WINDOW_CONTENT_BY_PARAMS",
                 new Action<string, object>(ActionSetWindowContentByParams), thisType);
 
-            WindowContent = new CreateFlameView();
+            //WindowContent = new CreateFlameView();
+            WindowContent = new FalamePanelsView();
         }
 
         private void HandlerWindowClosing(object obj)

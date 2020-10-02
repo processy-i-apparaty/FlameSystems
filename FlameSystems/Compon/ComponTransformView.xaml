@@ -1,0 +1,331 @@
+﻿<UserControl x:Class="FlameSystems.Compon.ComponTransformView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FlameSystems.Compon"
+             xmlns:base="clr-namespace:FlameSystems.Compon.Base"
+             xmlns:views="clr-namespace:FlameSystems.Controls.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <local:ComponTransformViewModel/>
+    </UserControl.DataContext>
+     <Border
+        BorderBrush="{StaticResource BrushBorder}"
+        BorderThickness="0 0 0 1"
+        HorizontalAlignment="Stretch">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="20" />
+            </Grid.ColumnDefinitions>
+            <Button
+                Grid.Row="0"
+                Grid.Column="1"
+                Style="{StaticResource StyleButtonFlatUi}"
+                Content="✕"
+                FontSize="10"
+                Command="{Binding Command}"
+                CommandParameter="remove" />
+
+            <Button
+                Grid.Row="1"
+                Grid.Column="1"
+                Style="{StaticResource StyleButtonFlatUi}"
+                Height="20"
+                Content="R"
+                VerticalAlignment="Bottom"
+                FontSize="10"
+                Command="{Binding Command}"
+                CommandParameter="randomize" />
+
+            <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0"
+                        HorizontalAlignment="Center">
+                <StackPanel
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Margin="0 0 0 2">
+                    <StackPanel Orientation="Vertical" Margin="3 0">
+                        <TextBlock
+                            Text="shift x"
+                            Style="{StaticResource FontBrassMonoText}" />
+                        <views:NumericUpDown
+                            Width="60"
+                            DecimalPlaces="2"
+                            ChangeLarge="1"
+                            ChangeNormal="0.1"
+                            ChangeSmall="0.01"
+                            ChangeTiny="0.001"
+                            Minimum="-2"
+                            Maximum="2"
+                            Value="{Binding ShiftX, Mode=TwoWay}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Margin="3 0">
+                        <TextBlock
+                            Text="shift y"
+                            Style="{StaticResource FontBrassMonoText}" />
+                        <views:NumericUpDown
+                            Width="60"
+                            DecimalPlaces="2"
+                            ChangeLarge="1"
+                            ChangeNormal="0.1"
+                            ChangeSmall="0.01"
+                            ChangeTiny="0.001"
+                            Minimum="-2"
+                            Maximum="2"
+                            Value="{Binding ShiftY, Mode=TwoWay}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Margin="3 0">
+                        <TextBlock
+                            Text="angle"
+                            Style="{StaticResource FontBrassMonoText}" />
+                        <views:NumericUpDown
+                            Width="60"
+                            DecimalPlaces="1"
+                            Minimum="-1"
+                            Maximum="361"
+                            Value="{Binding Angle, Mode=TwoWay}" />
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Margin="0 0 0 2">
+                    <StackPanel Orientation="Vertical" Margin="3 0">
+                        <TextBlock
+                            Text="scale x"
+                            Style="{StaticResource FontBrassMonoText}" />
+                        <views:NumericUpDown
+                            Width="60"
+                            DecimalPlaces="2"
+                            ChangeLarge="1"
+                            ChangeNormal="0.1"
+                            ChangeSmall="0.01"
+                            ChangeTiny="0.001"
+                            Minimum="-2"
+                            Maximum="2"
+                            Value="{Binding ScaleX, Mode=TwoWay}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Margin="3 0">
+                        <TextBlock
+                            Text="scale y"
+                            Style="{StaticResource FontBrassMonoText}" />
+                        <views:NumericUpDown
+                            Width="60"
+                            DecimalPlaces="2"
+                            ChangeLarge="1"
+                            ChangeNormal="0.1"
+                            ChangeSmall="0.01"
+                            ChangeTiny="0.001"
+                            Minimum="-2"
+                            Maximum="2"
+                            Value="{Binding ScaleY, Mode=TwoWay}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Margin="3 0">
+                        <TextBlock
+                            Text="color"
+                            Style="{StaticResource FontBrassMonoText}" />
+                        <Button
+                            Width="60"
+                            Height="16"
+                            Style="{StaticResource StyleButtonFlatUiBorder}"
+                            Background="{Binding ColorBrush}"
+                            Command="{Binding Command}"
+                            CommandParameter="selectColor" />
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Margin="0 0 0 2">
+                    <StackPanel Orientation="Vertical" Margin="3 0">
+                        <TextBlock
+                            Text="shear x"
+                            Style="{StaticResource FontBrassMonoText}" />
+                        <views:NumericUpDown
+                            Width="60"
+                            DecimalPlaces="2"
+                            ChangeLarge="1"
+                            ChangeNormal="0.1"
+                            ChangeSmall="0.01"
+                            ChangeTiny="0.001"
+                            Minimum="-2"
+                            Maximum="2"
+                            Value="{Binding ShearX, Mode=TwoWay}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Margin="3 0">
+                        <TextBlock
+                            Text="shear y"
+                            Style="{StaticResource FontBrassMonoText}" />
+                        <views:NumericUpDown
+                            Width="60"
+                            DecimalPlaces="2"
+                            ChangeLarge="1"
+                            ChangeNormal="0.1"
+                            ChangeSmall="0.01"
+                            ChangeTiny="0.001"
+                            Minimum="-2"
+                            Maximum="2"
+                            Value="{Binding ShearY, Mode=TwoWay}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Margin="3 0">
+                        <TextBlock
+                            Text="chance"
+                            Style="{StaticResource FontBrassMonoText}" />
+                        <views:NumericUpDown
+                            Width="60"
+                            DecimalPlaces="2"
+                            ChangeLarge="1"
+                            ChangeNormal="0.1"
+                            ChangeSmall="0.01"
+                            ChangeTiny="0.001"
+                            Minimum="0.01"
+                            Maximum="1"
+                            Value="{Binding Probability, Mode=TwoWay}" />
+                    </StackPanel>
+
+                </StackPanel>
+                <StackPanel
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center">
+                    <TextBlock Style="{StaticResource FontBrassMonoText}"
+                               FontSize="10" Margin="5 5"
+                               Text="{Binding Coefficients}" />
+                </StackPanel>
+                <StackPanel
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Margin="0 0 0 2">
+
+                    <StackPanel Orientation="Vertical" Margin="3 0">
+                        <TextBlock
+                            Text="variation"
+                            HorizontalAlignment="Left"
+                            Style="{StaticResource FontBrassMonoText}" />
+                        <ComboBox
+                            Margin="0 1 0 0"
+                            FontFamily="{StaticResource FamilyBrassMono}"
+                            Height="20"
+                            Width="150"
+                            ItemsSource="{Binding Variations}"
+                            SelectedItem="{Binding VariationSelected}"
+                            IsEnabled="{Binding IsVariationSelectEnabled}" />
+                        <StackPanel
+                            Visibility="{Binding WeightVisibility}"
+                            Orientation="Horizontal" HorizontalAlignment="Right" Margin="2">
+                            <TextBlock Text="weight"
+                                       Style="{StaticResource FontBrassMonoText}"
+                                       VerticalAlignment="Center"
+                                       Margin="5 0" />
+                            <views:NumericUpDown
+                                Width="60"
+                                DecimalPlaces="3"
+                                ChangeLarge="1"
+                                ChangeNormal="0.1"
+                                ChangeSmall="0.01"
+                                ChangeTiny="0.001"
+                                Minimum="-8"
+                                Maximum="8"
+                                HorizontalAlignment="Right"
+                                Value="{Binding Weight, Mode=TwoWay}" />
+                        </StackPanel>
+
+                        <TextBlock Text="variation parameters"
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource FontBrassMonoText}"
+                                   Margin="0 5 5 0"
+                                   Visibility="{Binding Parameter1Visibility}" />
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Right"
+                                    Margin="5 5 2 2"
+                                    Visibility="{Binding Parameter1Visibility}">
+                            <TextBlock Text="{Binding Parameter1Name}"
+                                       Style="{StaticResource FontBrassMonoText}"
+                                       HorizontalAlignment="Left"
+                                       Margin="5 0" />
+                            <views:NumericUpDown
+                                Width="60"
+                                DecimalPlaces="3"
+                                ChangeLarge="1"
+                                ChangeNormal="0.1"
+                                ChangeSmall="0.01"
+                                ChangeTiny="0.001"
+                                Minimum="-10"
+                                Maximum="10"
+                                HorizontalAlignment="Right"
+                                Value="{Binding Parameter1, Mode=TwoWay}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Right"
+                                    Margin="2"
+                                    Visibility="{Binding Parameter2Visibility}">
+                            <TextBlock Text="{Binding Parameter2Name}"
+                                       Style="{StaticResource FontBrassMonoText}"
+                                       HorizontalAlignment="Left"
+                                       Margin="5 0" />
+                            <views:NumericUpDown
+                                Width="60"
+                                DecimalPlaces="3"
+                                ChangeLarge="1"
+                                ChangeNormal="0.1"
+                                ChangeSmall="0.01"
+                                ChangeTiny="0.001"
+                                Minimum="-10"
+                                Maximum="10"
+                                HorizontalAlignment="Right"
+                                Value="{Binding Parameter2, Mode=TwoWay}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Right"
+                                    Margin="2"
+                                    Visibility="{Binding Parameter3Visibility}">
+                            <TextBlock Text="{Binding Parameter3Name}"
+                                       Style="{StaticResource FontBrassMonoText}"
+                                       HorizontalAlignment="Left"
+                                       Margin="5 0" />
+                            <views:NumericUpDown
+                                Width="60"
+                                DecimalPlaces="3"
+                                ChangeLarge="1"
+                                ChangeNormal="0.1"
+                                ChangeSmall="0.01"
+                                ChangeTiny="0.001"
+                                Minimum="-10"
+                                Maximum="10"
+                                HorizontalAlignment="Right"
+                                Value="{Binding Parameter3, Mode=TwoWay}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Right"
+                                    Margin="2"
+                                    Visibility="{Binding Parameter4Visibility}">
+                            <TextBlock Text="{Binding Parameter4Name}"
+                                       Style="{StaticResource FontBrassMonoText}"
+                                       HorizontalAlignment="Left"
+                                       Margin="5 0" />
+                            <views:NumericUpDown
+                                Width="60"
+                                DecimalPlaces="3"
+                                ChangeLarge="1"
+                                ChangeNormal="0.1"
+                                ChangeSmall="0.01"
+                                ChangeTiny="0.001"
+                                Minimum="-10"
+                                Maximum="10"
+                                HorizontalAlignment="Right"
+                                Value="{Binding Parameter4, Mode=TwoWay}" />
+                        </StackPanel>
+
+                    </StackPanel>
+                </StackPanel>
+
+            </StackPanel>
+
+        </Grid>
+    </Border>
+</UserControl>
