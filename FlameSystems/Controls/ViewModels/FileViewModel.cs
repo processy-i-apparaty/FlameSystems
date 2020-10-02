@@ -178,7 +178,7 @@ namespace FlameSystems.Controls.ViewModels
                     PreviewBorder2 = new Thickness(0);
                     FlamePreview = null;
                     FlameInfo = null;
-                    RenderMachine.RenderStop();
+                    RenderMachine.MainRenderStop();
                     break;
             }
         }
@@ -217,13 +217,13 @@ namespace FlameSystems.Controls.ViewModels
                     break;
                 case "save":
                     if (!CheckIsValid(FileName)) break;
-                    RenderMachine.RenderStop();
+                    RenderMachine.MainRenderStop();
                     _resultAction(true, _viewType, jsonPath);
                     break;
                 case "load":
                     if (!CheckIsValid(FileName)) break;
                     if (!CheckExist(jsonPath)) break;
-                    RenderMachine.RenderStop();
+                    RenderMachine.MainRenderStop();
                     _resultAction(true, _viewType, jsonPath);
                     break;
             }

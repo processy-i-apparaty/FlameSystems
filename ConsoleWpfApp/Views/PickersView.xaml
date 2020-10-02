@@ -5,14 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:ConsoleWpfApp.ViewModels"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:views="clr-namespace:ConsoleWpfApp.Pickers.Views"
         mc:Ignorable="d"
-        Title="PickersView" Height="450" Width="800" WindowStartupLocation="CenterScreen"
+        Title="PickersView" Height="650.304" Width="800" WindowStartupLocation="CenterScreen"
         Background="#FF111111">
     <Window.DataContext>
         <viewModels:PickersViewModel />
     </Window.DataContext>
     <Grid>
         <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <views:CurvePickerView Width="300" Height="300" Margin="10"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <TextBlock Style="{StaticResource FontBrassMono}" Text="Color" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 <Rectangle Width="80" Height="80" Margin="5"

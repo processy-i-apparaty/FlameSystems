@@ -7,7 +7,7 @@ using FlameSystems.Infrastructure.ValueBind;
 
 namespace FlameSystems.Infrastructure
 {
-    internal abstract class Notifier : INotifyPropertyChanged
+    public abstract class Notifier : INotifyPropertyChanged
     {
         protected ValueBindStorage BindStorage;
 

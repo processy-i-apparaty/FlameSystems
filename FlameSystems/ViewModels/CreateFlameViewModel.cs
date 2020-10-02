@@ -28,11 +28,12 @@ namespace FlameSystems.ViewModels
 {
     internal class CreateFlameViewModel : Notifier
     {
+        //todo: RefactorS
         private readonly string[] _bindParameters1 =
             {"ShiftX", "ShiftY", "Zoom", "Rotation", "Symmetry", "ImageWidth", "ImageHeight", "BackColor"};
 
         private readonly RenderSettingsModel _renderSettings = new RenderSettingsModel();
-        private string _colorPikMode = "transform";
+
         private FlameColorMode _flameColorMode;
         private string _flameName;
         private GradientModel _gradientModel;
@@ -42,6 +43,7 @@ namespace FlameSystems.ViewModels
         public CreateFlameViewModel()
         {
             InitBindings();
+            InitCommands();
             InitActions();
             InitDirectories();
             InitStrings();
@@ -49,56 +51,37 @@ namespace FlameSystems.ViewModels
             ActRenderSetState(RenderMachine.StateRenderEnded);
         }
 
-        #region methods
-
-        private void SetColorModeForAllTransforms(FlameColorMode flameColorMode)
-        {
-            GradientModel gm = null;
-            if (_gradientModel == null) _gradientModel = new GradientModel(Colors.Gray, Colors.Gray);
-            if (flameColorMode == FlameColorMode.Gradient) gm = _gradientModel;
-
-            foreach (var transformView in Transforms)
-            {
-                var dc = (TransformViewModel) transformView.DataContext;
-                dc.GradientModel = gm;
-                dc.FlameColorMode = flameColorMode;
-            }
-        }
-
-        #endregion
-
         #region init methods
 
         private void InitBindings()
         {
-            MultiCommand = new RelayCommand(MultiCommandHandler);
-            CommandColorRadioChecked = new RelayCommand(ColorRadioCheckedHandler);
-            CommandEditGradient = new RelayCommand(EditGradientHandler);
             Transforms = new ObservableCollection<TransformView>();
             RadioColor = true;
             BackColor = Brushes.Black;
         }
+
+        private void InitCommands()
+        {
+            MultiCommand = new RelayCommand(HandlerMain);
+            CommandColorRadioChecked = new RelayCommand(ColorRadioCheckedHandler);
+            CommandEditGradient = new RelayCommand(EditGradientHandler);
+            CommandPanelIsEnabledChanged = new RelayCommand(HandlerPanelIsEnabledChanged);
+        }
+
 
         private void InitActions()
         {
             var thisType = GetType();
             ActionFire.AddOrReplace("CREATE_FLAME_VIEWMODEL-TRANSFORM_REMOVE", new Action<int>(ActionTransformRemove),
                 thisType);
-            ActionFire.AddOrReplace("CREATE_FLAME_VIEWMODEL-CALL_RENDER", new Action<string>(ActionCallRender),
+            ActionFire.AddOrReplace("CREATE_FLAME_VIEWMODEL-CALL_RENDER", new Action<string>(MainActionCallRender),
                 thisType);
 
             ActionFire.AddOrReplace("CREATE_FLAME_VIEWMODEL-TRANSFORM_PICK_COLOR",
                 new Action<TransformViewModel>(ActionTransformPickColor), thisType);
-            // ActionFire.AddOrReplace("CREATE_FLAME_VIEWMODEL-TRANSFORM_PICK_COLOR_CALLBACK",
-            // new Action<bool, Color>(ActionTransformPickColorCallback), thisType);
 
             ActionFire.AddOrReplace("CREATE_FLAME_VIEWMODEL-TRANSFORM_PICK_GRADIENT_COLOR",
                 new Action<TransformViewModel>(ActionTransformPickGradientColor), thisType);
-            // ActionFire.AddOrReplace("CREATE_FLAME_VIEWMODEL-TRANSFORM_PICK_GRADIENT_CALLBACK",
-            //     new Action<bool>(ActionTransformPickGradientCallback), thisType);
-
-            // ActionFire.AddOrReplace("CREATE_FLAME_VIEWMODEL-PICK_GRADIENT", new Action<Color>(ActionPickGradient),
-            // thisType);
 
             _renderActionsPack = new RenderActionsModel(ActRenderSetImage, ActRenderSetMessage, ActRenderSetState);
         }
@@ -106,6 +89,24 @@ namespace FlameSystems.ViewModels
         #endregion
 
         #region command handlers
+
+        private void HandlerPanelIsEnabledChanged(object obj)
+        {
+            //todo: isEnabledChanged
+            switch (((Panel) obj).Name)
+            {
+                case "Panel0":
+                    break;
+                case "Panel1":
+                    break;
+                case "Panel2":
+                    break;
+                case "Panel3":
+                    break;
+                case "Panel4":
+                    break;
+            }
+        }
 
         private void ColorRadioCheckedHandler(object obj)
         {
@@ -126,42 +127,49 @@ namespace FlameSystems.ViewModels
             SetColorModeForAllTransforms(_flameColorMode);
         }
 
-        private void MultiCommandHandler(object obj)
+        #endregion
+
+        #region main
+
+        private void HandlerMain(object obj)
         {
             switch ((string) obj)
             {
                 case "new":
-                    New();
+                    MainNew();
                     break;
                 case "load":
-                    LoadFlame();
+                    MainLoadFlame();
                     break;
                 case "save":
-                    SaveFlame();
+                    MainSaveFlame();
                     break;
                 case "loadRender":
-                    LoadRender();
+                    MainLoadRender();
                     break;
                 case "saveRender":
-                    SaveRender();
+                    MainSaveRender();
                     break;
                 case "startRender":
-                    ActionCallRender("render");
+                    MainActionCallRender("render");
                     break;
                 case "stopRender":
-                    RenderMachine.RenderStop();
+                    RenderMachine.MainRenderStop();
                     break;
                 case "continueRender":
-                    ActionCallRender("continue");
+                    MainActionCallRender("continue");
                     break;
                 case "renderSettings":
-                    RenderSettings();
+                    MainRenderSettings();
                     break;
                 case "addTransform":
-                    AddTransform();
+                    MainAddTransform();
+                    break;
+                case "addFinal":
+                    MainAddFinal();
                     break;
                 case "back color":
-                    SelectBackColor();
+                    MainSelectBackColor();
                     break;
                 case "toPostPro":
                     ActionFire.Invoke("MAIN_WINDOW_VIEWMODEL-SET_WINDOW_CONTENT_BY_PARAMS", "PostFlame", null);
@@ -169,11 +177,8 @@ namespace FlameSystems.ViewModels
             }
         }
 
-        private void SelectBackColor()
+        private void MainSelectBackColor()
         {
-            // _colorPikMode = "back color";
-            // _colorPicker = new ColorPickerView(BackColor.Color);
-            // TopContent = _colorPicker;
             //TODO: SelectBackColor
             _uiPickMode = UiPickMode.BackColor;
             _colorPickProvider = new ColorPickProvider(CallbackColorPickProvider, BackColor.Color);
@@ -181,38 +186,30 @@ namespace FlameSystems.ViewModels
         }
 
 
-        private void CreateFileDialog(FileViewType fileViewType)
-        {
-            var dialog = new FileView();
-            var vm = (FileViewModel) dialog.DataContext;
-            vm.Set(fileViewType, ActDialogResult);
-            TopContent = dialog;
-        }
-
-        private void SaveFlame()
+        private void MainSaveFlame()
         {
             CreateFileDialog(FileViewType.SaveFlame);
         }
 
-        private void LoadFlame()
+        private void MainLoadFlame()
         {
             CreateFileDialog(FileViewType.LoadFlame);
         }
 
-        private void SaveRender()
+        private void MainSaveRender()
         {
             CreateFileDialog(FileViewType.SaveRender);
         }
 
-        private void LoadRender()
+        private void MainLoadRender()
         {
             CreateFileDialog(FileViewType.LoadRender);
         }
 
 
-        private async void New()
+        private async void MainNew()
         {
-            RenderMachine.RenderStop();
+            RenderMachine.MainRenderStop();
             await Task.Run(() =>
             {
                 while (RenderMachine.IsRendering) Thread.Sleep(10);
@@ -225,7 +222,7 @@ namespace FlameSystems.ViewModels
         }
 
 
-        private void RenderSettings()
+        private void MainRenderSettings()
         {
             var uRenderSettingsView = new RenderSettingsView();
             var vm = (RenderSettingsViewModel) uRenderSettingsView.DataContext;
@@ -233,7 +230,14 @@ namespace FlameSystems.ViewModels
             TopContent = uRenderSettingsView;
         }
 
-        private int AddTransform(bool act = true)
+        private int MainAddFinal(bool act = true)
+        {
+            //todo MainAddFinal
+            return 0;
+        }
+
+
+        private int MainAddTransform(bool act = true)
         {
             var utv = new TransformView();
             var dc = (TransformViewModel) utv.DataContext;
@@ -259,6 +263,8 @@ namespace FlameSystems.ViewModels
 
         #endregion
 
+        #region bindings
+
         #region bindings commands
 
         public ICommand CommandColorRadioChecked { get; set; }
@@ -270,6 +276,15 @@ namespace FlameSystems.ViewModels
         #region bindings other
 
         public ObservableCollection<TransformView> Transforms { get; set; }
+
+
+        [ValueBind(true)]
+        public bool PanelIsEnabled
+        {
+            get => Get();
+            set => Set(value);
+        }
+
 
         [ValueBind]
         public BitmapSource ImageSource
@@ -369,6 +384,7 @@ namespace FlameSystems.ViewModels
 
         #region bindings buttons isEnabled
 
+        //todo: is enabled
         [ValueBind]
         public bool IsEnabledNew
         {
@@ -446,9 +462,54 @@ namespace FlameSystems.ViewModels
             set => Set(value);
         }
 
+        public ICommand CommandPanelIsEnabledChanged { get; set; }
+
+        #endregion
+
         #endregion
 
         #region Actions
+
+        private void ActRenderSetState(string obj, bool saveImage = true)
+        {
+            switch (obj)
+            {
+                case RenderMachine.StateRenderStarted:
+                    IsEnabledNew = false;
+                    IsEnabledLoad = false;
+                    IsEnabledSave = false;
+                    IsEnabledLoadRender = false;
+                    IsEnabledSaveRender = false;
+                    IsEnabledContinueRender = false;
+                    IsEnabledStartRender = false;
+                    IsEnabledRenderSettings = false;
+                    IsEnabledStopRender = true;
+                    IsEnabledAddTransform = false;
+                    FreezeControls(true);
+                    break;
+                case RenderMachine.StateRenderEnded:
+                    IsEnabledNew = true;
+                    IsEnabledLoad = true;
+                    IsEnabledSave = Transforms.Count > 0;
+                    IsEnabledLoadRender = true;
+                    IsEnabledSaveRender = RenderMachine.HasRender;
+                    IsEnabledContinueRender = RenderMachine.HasRender;
+                    IsEnabledStartRender = Transforms.Count > 0;
+                    IsEnabledRenderSettings = true;
+                    IsEnabledStopRender = false;
+                    FreezeControls(false);
+                    IsEnabledAddTransform = true;
+
+                    if (RenderMachine.HasRender && saveImage)
+                    {
+                        Debug.WriteLine("Saving Rendered Image");
+                        RenderMachine.SaveImage(Directories.Images, "img", _flameColorMode);
+                        Debug.WriteLine("Saving Rendered Image end.");
+                    }
+
+                    break;
+            }
+        }
 
         private void ActionRenderSettingsCallback()
         {
@@ -457,10 +518,6 @@ namespace FlameSystems.ViewModels
 
         private void ActionTransformPickColor(TransformViewModel model)
         {
-            // _colorPikMode = "transform";
-            // _colorPicker = new ColorPickerView(model.ColorBrush.Color);
-            // TopContent = _colorPicker;
-
             //TODO: ActionTransformPickColor
             _uiPickMode = UiPickMode.TransformColor;
             _transformId = model.Id;
@@ -469,7 +526,7 @@ namespace FlameSystems.ViewModels
         }
 
 
-        private void ActionCallRender(string renderType)
+        private void MainActionCallRender(string renderType)
         {
             if (Transforms.Count < 1) return;
             //            Debug.WriteLine($"[ActCallRender] {renderType}");
@@ -545,7 +602,7 @@ namespace FlameSystems.ViewModels
         private void Act(string name, object obj)
         {
             ActRenderSetState(RenderMachine.StateRenderEnded);
-            ActionCallRender("draft");
+            MainActionCallRender("draft");
         }
 
         private void ActionTransformRemove(int id)
@@ -557,7 +614,7 @@ namespace FlameSystems.ViewModels
 
             ActRenderSetState(RenderMachine.StateRenderEnded);
 
-            if (Transforms.Count > 0) ActionCallRender("draft");
+            if (Transforms.Count > 0) MainActionCallRender("draft");
         }
 
         private void ActRenderSetMessage(string message)
@@ -587,12 +644,12 @@ namespace FlameSystems.ViewModels
                     if (model == null) return;
                     SetEnvironmentFromFlameModel(model);
                     _flameName = Path.GetFileNameWithoutExtension(path);
-                    RenderMachine.RenderStop();
+                    RenderMachine.MainRenderStop();
                     ActRenderSetState(RenderMachine.StateRenderEnded);
-                    ActionCallRender("draft");
+                    MainActionCallRender("draft");
                     break;
                 case FileViewType.SaveFlame:
-                    RenderMachine.RenderStop();
+                    RenderMachine.MainRenderStop();
 
                     flameModelJson = GetFlameModelJson();
                     File.WriteAllText(path, flameModelJson);
@@ -619,7 +676,7 @@ namespace FlameSystems.ViewModels
                     var flameModel = JsonFlamesModel.GetFlameModel(json);
                     SetEnvironmentFromFlameModel(flameModel);
                     _flameName = Path.GetFileNameWithoutExtension(path);
-                    RenderMachine.RenderStop();
+                    RenderMachine.MainRenderStop();
                     ActRenderSetState(RenderMachine.StateRenderEnded);
 
                     RenderMachine.LoadDisplay(display, flameModel.BackColor);
@@ -709,6 +766,29 @@ namespace FlameSystems.ViewModels
 
         #region methods
 
+        private void SetColorModeForAllTransforms(FlameColorMode flameColorMode)
+        {
+            GradientModel gm = null;
+            if (_gradientModel == null) _gradientModel = new GradientModel(Colors.Gray, Colors.Gray);
+            if (flameColorMode == FlameColorMode.Gradient) gm = _gradientModel;
+
+            foreach (var transformView in Transforms)
+            {
+                var dc = (TransformViewModel) transformView.DataContext;
+                dc.GradientModel = gm;
+                dc.FlameColorMode = flameColorMode;
+            }
+        }
+
+
+        private void CreateFileDialog(FileViewType fileViewType)
+        {
+            var dialog = new FileView();
+            var vm = (FileViewModel) dialog.DataContext;
+            vm.Set(fileViewType, ActDialogResult);
+            TopContent = dialog;
+        }
+
         private void SetTransformationColorMode(FlameColorMode flameColorMode)
         {
             GradientModel gm = null;
@@ -723,14 +803,6 @@ namespace FlameSystems.ViewModels
             }
         }
 
-        // private void ActionPickGradient(Color color)
-        // {
-        //     if (TopContent.GetType() != typeof(GradientPickerView)) return;
-        //     _colorPikMode = "gradient";
-        //     _colorPicker = new ColorPickerView(color);
-        //     TopContent = _colorPicker;
-        // }
-
         private static void InitDirectories()
         {
             var directories = Directories.GetAll;
@@ -739,47 +811,6 @@ namespace FlameSystems.ViewModels
                     Directory.CreateDirectory(directory);
         }
 
-
-        private void ActRenderSetState(string obj, bool saveImage = true)
-        {
-            switch (obj)
-            {
-                case RenderMachine.StateRenderStarted:
-                    IsEnabledNew = false;
-                    IsEnabledLoad = false;
-                    IsEnabledSave = false;
-                    IsEnabledLoadRender = false;
-                    IsEnabledSaveRender = false;
-                    IsEnabledContinueRender = false;
-                    IsEnabledStartRender = false;
-                    IsEnabledRenderSettings = false;
-                    IsEnabledStopRender = true;
-                    IsEnabledAddTransform = false;
-                    FreezeControls(true);
-                    break;
-                case RenderMachine.StateRenderEnded:
-                    IsEnabledNew = true;
-                    IsEnabledLoad = true;
-                    IsEnabledSave = Transforms.Count > 0;
-                    IsEnabledLoadRender = true;
-                    IsEnabledSaveRender = RenderMachine.HasRender;
-                    IsEnabledContinueRender = RenderMachine.HasRender;
-                    IsEnabledStartRender = Transforms.Count > 0;
-                    IsEnabledRenderSettings = true;
-                    IsEnabledStopRender = false;
-                    FreezeControls(false);
-                    IsEnabledAddTransform = true;
-
-                    if (RenderMachine.HasRender && saveImage)
-                    {
-                        Debug.WriteLine("Saving Rendered Image");
-                        RenderMachine.SaveImage(Directories.Images, "img", _flameColorMode);
-                        Debug.WriteLine("Saving Rendered Image end.");
-                    }
-
-                    break;
-            }
-        }
 
         private void InitStrings()
         {
@@ -794,7 +825,7 @@ namespace FlameSystems.ViewModels
             int variationId,
             double[] parameters, double weight = 1.0)
         {
-            var id = AddTransform(false);
+            var id = MainAddTransform(false);
             var model = new TransformModel();
             model.SetFromCoefficients(coefficients, probability, color, colorPosition);
             var utv = (TransformViewModel) Transforms
@@ -886,10 +917,8 @@ namespace FlameSystems.ViewModels
                         }
 
                     if (_gradientPickProvider.Result)
-                    {
                         AfterProvider();
-                        //UpdateUi();
-                    }
+                    //UpdateUi();
 
                     _gradientPickProvider = null;
                     break;
@@ -930,7 +959,7 @@ namespace FlameSystems.ViewModels
                     BackColor = new SolidColorBrush(_providerColor);
                     break;
                 case UiPickMode.TransformColor:
-                    transformViewModel = (TransformViewModel)Transforms
+                    transformViewModel = (TransformViewModel) Transforms
                         .FirstOrDefault(x => ((TransformViewModel) x.DataContext).Id == _transformId)
                         ?.DataContext;
                     if (transformViewModel == null) return;
@@ -1008,7 +1037,6 @@ namespace FlameSystems.ViewModels
         //             throw new ArgumentOutOfRangeException();
         //     }
         // }
-
 
         #endregion
     }

@@ -2,7 +2,7 @@
 
 namespace FlameSystems.Infrastructure.ValueBind
 {
-    internal class ValueBindAttribute : Attribute
+    public class ValueBindAttribute : Attribute
     {
 
         public ValueBindAttribute(object initialObject)

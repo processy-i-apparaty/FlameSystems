@@ -6,13 +6,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 using FlameBase.Enums;
 using FlameBase.Models;
+using FlameSystems.Controls.Views;
 using FlameSystems.Infrastructure;
 using FlameSystems.Infrastructure.ActionFire;
 using FlameSystems.Infrastructure.ValueBind;
 
 namespace FlameSystems.Controls.ViewModels
 {
-    internal class TransformViewModel : Notifier
+    internal class TransformViewModel : Notifier, ITransformViewModel
     {
         private readonly string[] _propParameters =
             {"Weight", "Parameter1", "Parameter2", "Parameter3", "Parameter4"};

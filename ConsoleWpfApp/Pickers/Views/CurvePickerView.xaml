@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="ConsoleWpfApp.Pickers.Views.CurvePickerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:ConsoleWpfApp.Pickers.ViewModels"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <viewModels:CurvePickerViewModel />
+    </UserControl.DataContext>
+    <Border BorderBrush="{StaticResource BrushBorder}" BorderThickness="1">
+    <Grid x:Name="Grid" Background="{StaticResource BrushBackground}">
+        <i:Interaction.Triggers>
+            <i:EventTrigger EventName="SizeChanged">
+                <i:InvokeCommandAction Command="{Binding CommandGridSizeChanged}"
+                                       CommandParameter="{Binding ElementName=Grid}" />
+            </i:EventTrigger>
+
+            <i:EventTrigger EventName="Loaded">
+                <i:InvokeCommandAction Command="{Binding CommandLoaded}"
+                                       CommandParameter="{Binding ElementName=Grid}" />
+            </i:EventTrigger>
+        </i:Interaction.Triggers>
+        <Canvas x:Name="CanvasLayer1">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Loaded">
+                    <i:InvokeCommandAction Command="{Binding CommandLoaded}"
+                                           CommandParameter="{Binding ElementName= CanvasLayer1}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Canvas>
+        <Canvas x:Name="CanvasLayer2">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Loaded">
+                    <i:InvokeCommandAction Command="{Binding CommandLoaded}"
+                                           CommandParameter="{Binding ElementName= CanvasLayer2}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Canvas>
+    </Grid>
+    </Border>
+</UserControl>

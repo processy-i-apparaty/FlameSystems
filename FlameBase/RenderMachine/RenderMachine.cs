@@ -16,6 +16,7 @@ using Matrix = FlameBase.FlameMath.Matrix;
 
 namespace FlameBase.RenderMachine
 {
+    //todo: render machine break
     public static class RenderMachine
     {
         public const string StateRenderEnded = "RENDER_ENDED";
@@ -38,7 +39,7 @@ namespace FlameBase.RenderMachine
 
         public static bool RenderStopTotal { get; private set; }
 
-        public static void RenderStop(bool total = false)
+        public static void MainRenderStop(bool total = false)
         {
             RenderStopTotal = total;
             _sourceRender?.Token.ThrowIfCancellationRequested();

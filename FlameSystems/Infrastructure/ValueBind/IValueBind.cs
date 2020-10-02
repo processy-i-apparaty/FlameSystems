@@ -2,7 +2,7 @@
 
 namespace FlameSystems.Infrastructure.ValueBind
 {
-    internal interface IValueBind
+    public interface IValueBind
     {
         Type ValueType { get; }
         string Name { get; }

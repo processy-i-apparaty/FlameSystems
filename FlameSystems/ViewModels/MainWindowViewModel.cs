@@ -33,7 +33,7 @@ namespace FlameSystems.ViewModels
 
         private void HandlerWindowClosing(object obj)
         {
-            RenderMachine.RenderStop();
+            RenderMachine.MainRenderStop();
         }
 
         #region bindings

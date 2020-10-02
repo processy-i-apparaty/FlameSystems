@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace FlameSystems.Infrastructure.ValueBind
 {
-    internal class ValueBindStorage
+    public class ValueBindStorage
     {
         private readonly Action<string> _notifyAction;
 

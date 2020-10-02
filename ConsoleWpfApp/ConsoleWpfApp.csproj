@@ -86,7 +86,11 @@
     <Compile Include="Pickers\Models\GradientModel.cs" />
     <Compile Include="Pickers\Providers\ColorPickProvider.cs" />
     <Compile Include="Pickers\Providers\GradientPickProvider.cs" />
+    <Compile Include="Pickers\ViewModels\CurvePickerViewModel.cs" />
     <Compile Include="Pickers\ViewModels\GradientPickViewModel.cs" />
+    <Compile Include="Pickers\Views\CurvePickerView.xaml.cs">
+      <DependentUpon>CurvePickerView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pickers\Views\GradientPickView.xaml.cs">
       <DependentUpon>GradientPickView.xaml</DependentUpon>
     </Compile>
@@ -107,6 +111,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Pickers\Views\ColorPickView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pickers\Views\CurvePickerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

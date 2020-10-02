@@ -86,9 +86,11 @@
     <Compile Include="Controls\Pickers\Views\GradientPickView.xaml.cs">
       <DependentUpon>GradientPickView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ViewModels\FinalTransformViewModel.cs" />
     <Compile Include="Controls\ViewModels\RenderSettingsViewModel.cs" />
     <Compile Include="Controls\ViewModels\SpinnerViewModel.cs" />
     <Compile Include="Controls\ViewModels\TransformPostColorViewModel.cs" />
+    <Compile Include="Controls\Views\ITransformViewModel.cs" />
     <Compile Include="Controls\Views\RenderSettingsView.xaml.cs">
       <DependentUpon>RenderSettingsView.xaml</DependentUpon>
     </Compile>
