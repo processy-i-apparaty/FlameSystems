@@ -12,7 +12,7 @@ namespace FlameBase.Models
             NullValueHandling = NullValueHandling.Ignore
         };
 
-        public static FlameModel GetFlameModel(string jsonString)
+        public static FlameModel GetFlameModelFromString(string jsonString)
         {
             return JsonConvert.DeserializeObject<FlameModel>(jsonString, JsonSerializerSettings);
         }
@@ -26,15 +26,26 @@ namespace FlameBase.Models
         public static string GetFlameModelJson(TransformModel[] transformations, VariationModel[] variations,
             ViewSettingsModel viewSettings, GradientModel gradModel)
         {
+            var flameModel = FlameModelFromObjects(transformations, variations, viewSettings, gradModel);
+            return JsonConvert.SerializeObject(flameModel, Formatting.Indented, JsonSerializerSettings);
+        }
+
+        private static FlameModel FlameModelFromObjects(IReadOnlyList<TransformModel> transformations,
+            IReadOnlyList<VariationModel> variations,
+            ViewSettingsModel viewSettings, GradientModel gradModel)
+        {
             var coefficients = new List<double[]>();
             var variationIds = new List<int>();
             var parameters = new List<double[]>();
             var colors = new List<Color>();
             var colorPositions = new List<double>();
             var weights = new List<double>();
+            var isFinal = new List<bool>();
 
-            for (var i = 0; i < transformations.Length; i++)
+            for (var i = 0; i < transformations.Count; i++)
             {
+                //todo isFinal
+                isFinal.Add(transformations[i].IsFinal);
                 coefficients.Add(new[]
                 {
                     transformations[i].A,
@@ -83,7 +94,8 @@ namespace FlameBase.Models
                 Parameters = parameters,
                 VariationIds = variationIds,
                 FunctionColors = colors,
-                BackColor = viewSettings.BackColor
+                BackColor = viewSettings.BackColor,
+                IsFinal = isFinal
             };
             if (gradModel != null)
             {
@@ -91,7 +103,7 @@ namespace FlameBase.Models
                 flameModel.FunctionColorPositions = colorPositions;
             }
 
-            return JsonConvert.SerializeObject(flameModel, Formatting.Indented, JsonSerializerSettings);
+            return flameModel;
         }
     }
 }

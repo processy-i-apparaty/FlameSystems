@@ -49,7 +49,13 @@ namespace FlameBase.RenderMachine.Models
         {
             var length = transformations.Count;
             var probabilities = new double[length];
-            for (var i = 0; i < length; i++) probabilities[i] = transformations[i].Probability;
+            for (var i = 0; i < length; i++)
+            {
+                if (transformations[i].IsFinal)
+                    probabilities[i] = 0.0;
+                else
+                    probabilities[i] = transformations[i].Probability;
+            }
             return probabilities;
         }
     }

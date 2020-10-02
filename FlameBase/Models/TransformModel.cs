@@ -11,7 +11,7 @@ namespace FlameBase.Models
         private readonly double[] _coefficients = new double[6];
         private readonly double[] _values = new double[7];
 
-        public bool SetFromValues(double[] values, double probability, Color color, double colorPosition)
+        public bool SetFromValues(double[] values, double probability, Color color, double colorPosition, bool isFinal)
         {
             if (values.Length != _values.Length) return false;
             for (var i = 0; i < _values.Length; i++) _values[i] = values[i];
@@ -19,10 +19,13 @@ namespace FlameBase.Models
             Color = color;
             ColorPosition = colorPosition;
             CountCoefficients();
+            IsFinal = isFinal;
             return true;
         }
 
-        public bool SetFromCoefficients(double[] coefficients, double probability, Color color, double colorPosition)
+        public bool SetFromCoefficients(double[] coefficients, double probability, Color color, bool isFinal,
+            double colorPosition 
+        )
         {
             if (coefficients.Length < _coefficients.Length) return false;
             for (var i = 0; i < _coefficients.Length; i++) _coefficients[i] = coefficients[i];
@@ -33,13 +36,15 @@ namespace FlameBase.Models
             if (values == null) return false;
             for (var i = 0; i < _values.Length - 1; i++) _values[i] = values[i];
             AngleRadians = values[values.Length - 1];
+            //todo: isFinal
+            IsFinal = isFinal;
             return true;
         }
 
         public TransformModel Copy()
         {
             var copy = new TransformModel();
-            copy.SetFromValues(_values, Probability, Color, ColorPosition);
+            copy.SetFromValues(_values, Probability, Color, ColorPosition, IsFinal);
             return copy;
         }
 
@@ -238,6 +243,8 @@ namespace FlameBase.Models
 
         public Brush Brush => new SolidColorBrush(Color);
         public double ColorPosition { get; set; } = .5;
+
+        public bool IsFinal { get; set; } = false;
 
         #endregion
 

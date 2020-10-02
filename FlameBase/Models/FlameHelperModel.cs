@@ -32,8 +32,9 @@ namespace FlameBase.Models
                 var t = new TransformModel();
                 var colorPosition = .5;
                 if (hasGradient) colorPosition = model.FunctionColorPositions[i];
+                var mif = model.IsFinal;
                 t.SetFromCoefficients(model.Coefficients[i], model.Coefficients[i][6], model.FunctionColors[i],
-                    colorPosition);
+                    mif.Count != 0 && model.IsFinal[i], colorPosition);
                 transformations[i] = t;
             }
 

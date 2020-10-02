@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using FlameBase.Models;
 
@@ -48,6 +50,7 @@ namespace FlameBase.RenderMachine.Models
             _currentPoint[0] = random.NextDouble() * 2.0 - 1.0;
             _currentPoint[1] = random.NextDouble() * 2.0 - 1.0;
 
+
             PreIterate();
         }
 
@@ -62,8 +65,14 @@ namespace FlameBase.RenderMachine.Models
             var length = Length;
             if (length <= 0) return;
 
+            var final =  _transforms.SingleOrDefault(transform => transform.IsFinal);
+            var index = _transforms.ToList().IndexOf(final);
+
             for (var i = 0; i < length; i++)
             {
+                var pointX = i * 2;
+                var pointY = pointX + 1;
+
                 var r = ColorIds[i];
                 var f = _transforms[r];
                 var v = _variations[r];
@@ -79,8 +88,18 @@ namespace FlameBase.RenderMachine.Models
                 _currentPoint[0] = p2.X;
                 _currentPoint[1] = p2.Y;
 
-                Points[i * 2] = p2.X;
-                Points[i * 2 + 1] = p2.Y;
+                
+                if (final != null)
+                {
+                    dx = final.A * p2.X + final.B * p2.Y + final.E;
+                    dy = final.C * p2.X + final.D * p2.Y + final.F;
+                    p2 = _variations[index].Fun(new Point(dx, dy));
+                    _currentPoint[0] = p2.X;
+                    _currentPoint[1] = p2.Y;
+                }
+
+                Points[pointX] = p2.X;
+                Points[pointY] = p2.Y;
             }
         }
 
@@ -100,6 +119,7 @@ namespace FlameBase.RenderMachine.Models
                 variations[i] = variationModels[i].Copy();
                 variations[i].Init();
             }
+
             return variations;
         }
 

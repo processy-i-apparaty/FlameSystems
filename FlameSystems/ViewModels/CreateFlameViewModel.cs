@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -19,6 +20,7 @@ using FlameSystems.Controls.Pickers.Enums;
 using FlameSystems.Controls.Pickers.Providers;
 using FlameSystems.Controls.ViewModels;
 using FlameSystems.Controls.Views;
+using FlameSystems.Controls.Views.Trans;
 using FlameSystems.Enums;
 using FlameSystems.Infrastructure;
 using FlameSystems.Infrastructure.ActionFire;
@@ -28,7 +30,7 @@ namespace FlameSystems.ViewModels
 {
     internal class CreateFlameViewModel : Notifier
     {
-        //todo: RefactorS
+        //todo: refactor Create Flame ViewModel
         private readonly string[] _bindParameters1 =
             {"ShiftX", "ShiftY", "Zoom", "Rotation", "Symmetry", "ImageWidth", "ImageHeight", "BackColor"};
 
@@ -55,7 +57,8 @@ namespace FlameSystems.ViewModels
 
         private void InitBindings()
         {
-            Transforms = new ObservableCollection<TransformView>();
+            //Transforms = new ObservableCollection<TransformView>();
+            Transforms = new ObservableCollection<IView>();
             RadioColor = true;
             BackColor = Brushes.Black;
         }
@@ -78,10 +81,10 @@ namespace FlameSystems.ViewModels
                 thisType);
 
             ActionFire.AddOrReplace("CREATE_FLAME_VIEWMODEL-TRANSFORM_PICK_COLOR",
-                new Action<TransformViewModel>(ActionTransformPickColor), thisType);
+                new Action<int, Color>(ActionTransformPickColor), thisType);
 
             ActionFire.AddOrReplace("CREATE_FLAME_VIEWMODEL-TRANSFORM_PICK_GRADIENT_COLOR",
-                new Action<TransformViewModel>(ActionTransformPickGradientColor), thisType);
+                new Action<int, double>(ActionTransformPickGradientColor), thisType);
 
             _renderActionsPack = new RenderActionsModel(ActRenderSetImage, ActRenderSetMessage, ActRenderSetState);
         }
@@ -92,7 +95,7 @@ namespace FlameSystems.ViewModels
 
         private void HandlerPanelIsEnabledChanged(object obj)
         {
-            //todo: isEnabledChanged
+            //todo: handler Panel Is Enabled Changed
             switch (((Panel) obj).Name)
             {
                 case "Panel0":
@@ -179,7 +182,6 @@ namespace FlameSystems.ViewModels
 
         private void MainSelectBackColor()
         {
-            //TODO: SelectBackColor
             _uiPickMode = UiPickMode.BackColor;
             _colorPickProvider = new ColorPickProvider(CallbackColorPickProvider, BackColor.Color);
             _colorPickProvider.Exec();
@@ -232,15 +234,35 @@ namespace FlameSystems.ViewModels
 
         private int MainAddFinal(bool act = true)
         {
-            //todo MainAddFinal
-            return 0;
+            //todo main. add final transform
+            var utv = new FinalView();
+            var dc = utv.DataContex;
+            var id = dc.Id = GiveIdModel.Get;
+
+            switch (_flameColorMode)
+            {
+                case FlameColorMode.Color:
+                    dc.GradientModel = null;
+                    break;
+                case FlameColorMode.Gradient:
+                    dc.GradientModel = _gradientModel;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            dc.FlameColorMode = _flameColorMode;
+            Transforms.Add(utv);
+            if (act) Act("AddTransformation", id);
+            return id;
         }
 
 
         private int MainAddTransform(bool act = true)
         {
+            //var utv = new TransformView();
             var utv = new TransformView();
-            var dc = (TransformViewModel) utv.DataContext;
+            var dc = utv.DataContex;
             var id = dc.Id = GiveIdModel.Get;
 
             switch (_flameColorMode)
@@ -275,7 +297,9 @@ namespace FlameSystems.ViewModels
 
         #region bindings other
 
-        public ObservableCollection<TransformView> Transforms { get; set; }
+        //public ObservableCollection<TransformView> Transforms { get; set; }
+
+        public ObservableCollection<IView> Transforms { get; set; }
 
 
         [ValueBind(true)]
@@ -384,7 +408,7 @@ namespace FlameSystems.ViewModels
 
         #region bindings buttons isEnabled
 
-        //todo: is enabled
+        //todo: bindings buttons isEnabled
         [ValueBind]
         public bool IsEnabledNew
         {
@@ -516,12 +540,11 @@ namespace FlameSystems.ViewModels
             TopContent = null;
         }
 
-        private void ActionTransformPickColor(TransformViewModel model)
+        private void ActionTransformPickColor(int id, Color color)
         {
-            //TODO: ActionTransformPickColor
             _uiPickMode = UiPickMode.TransformColor;
-            _transformId = model.Id;
-            _colorPickProvider = new ColorPickProvider(CallbackColorPickProvider, model.ColorBrush.Color);
+            _transformId = id;
+            _colorPickProvider = new ColorPickProvider(CallbackColorPickProvider, color);
             _colorPickProvider.Exec();
         }
 
@@ -571,7 +594,8 @@ namespace FlameSystems.ViewModels
             {
                 foreach (var transformationView in Transforms)
                 {
-                    var vm = (TransformViewModel) transformationView.DataContext;
+                    //var vm = (TransformViewModel) transformationView.DataContext;
+                    var vm = transformationView.DataContex;
                     vm.Freeze(state);
                 }
             });
@@ -590,7 +614,8 @@ namespace FlameSystems.ViewModels
             transforms = new TransformModel[Transforms.Count];
             for (var i = 0; i < Transforms.Count; i++)
             {
-                var dataContext = (TransformViewModel) Transforms[i].DataContext;
+                //var dataContext = (TransformViewModel) Transforms[i].DataContext;
+                var dataContext = Transforms[i].DataContex;
                 variations[i] = dataContext.GetVariation;
                 transforms[i] = dataContext.GetTransform;
             }
@@ -607,8 +632,11 @@ namespace FlameSystems.ViewModels
 
         private void ActionTransformRemove(int id)
         {
+            // var transformation =
+            //     Transforms.FirstOrDefault(x => ((TransformViewModel) x.DataContext).Id == id);
             var transformation =
-                Transforms.FirstOrDefault(x => ((TransformViewModel) x.DataContext).Id == id);
+                Transforms.FirstOrDefault(x => x.DataContex.Id == id);
+
             if (transformation == null) return;
             Transforms.Remove(transformation);
 
@@ -640,7 +668,7 @@ namespace FlameSystems.ViewModels
                 case FileViewType.LoadFlame:
                     if (!File.Exists(path)) return;
                     flameModelJson = File.ReadAllText(path);
-                    var model = JsonFlamesModel.GetFlameModel(flameModelJson);
+                    var model = JsonFlamesModel.GetFlameModelFromString(flameModelJson);
                     if (model == null) return;
                     SetEnvironmentFromFlameModel(model);
                     _flameName = Path.GetFileNameWithoutExtension(path);
@@ -673,7 +701,7 @@ namespace FlameSystems.ViewModels
                     ZipFlamesModel.DecompressToDirectory(path, tempDir);
                     var display = (uint[,,]) BinaryFlamesModel.LoadObject($"{tempDir}\\logDisplay.bin");
                     var json = File.ReadAllText($"{tempDir}\\flame.txt");
-                    var flameModel = JsonFlamesModel.GetFlameModel(json);
+                    var flameModel = JsonFlamesModel.GetFlameModelFromString(json);
                     SetEnvironmentFromFlameModel(flameModel);
                     _flameName = Path.GetFileNameWithoutExtension(path);
                     RenderMachine.MainRenderStop();
@@ -701,6 +729,7 @@ namespace FlameSystems.ViewModels
 
         private void SetEnvironmentFromFlameModel(FlameModel flameModel)
         {
+            //todo: isFinal
             if (flameModel == null) return;
             Transforms.Clear();
             RadioColor = true;
@@ -730,8 +759,10 @@ namespace FlameSystems.ViewModels
 
         private string GetFlameModelJson()
         {
+            //todo final
             GetDataForRender(out var transforms, out var variations, out var viewSettings, out var gradientModel);
-            return JsonFlamesModel.GetFlameModelJson(transforms, variations, viewSettings, gradientModel);
+            var json = JsonFlamesModel.GetFlameModelJson(transforms, variations, viewSettings, gradientModel);
+            return json;
         }
 
 
@@ -739,24 +770,17 @@ namespace FlameSystems.ViewModels
 
         private void EditGradientHandler(object obj)
         {
-            //            _gradView = new GradientPickerView(_gradientModel);
-            //          TopContent = _gradView;
-            //TODO: EditGradientHandler
             _uiPickMode = UiPickMode.EditGradient;
             _gradientPickProvider = new GradientPickProvider(CallbackGradientPickProvider, _gradientModel);
             _gradientPickProvider.Exec();
         }
 
-        private void ActionTransformPickGradientColor(TransformViewModel model)
+        private void ActionTransformPickGradientColor(int id, double colorPosition)
         {
-            // _gradView = new GradientPickerView(_gradientModel, model.ColorPosition);
-            // TopContent = _gradView;
-
-            //TODO: ActionTransformPickGradientColor
             _uiPickMode = UiPickMode.GradientColor;
-            _transformId = model.Id;
+            _transformId = id;
             _gradientPickProvider =
-                new GradientPickProvider(CallbackGradientPickProvider, _gradientModel, model.ColorPosition);
+                new GradientPickProvider(CallbackGradientPickProvider, _gradientModel, colorPosition);
             _gradientPickProvider.Exec();
         }
 
@@ -774,7 +798,8 @@ namespace FlameSystems.ViewModels
 
             foreach (var transformView in Transforms)
             {
-                var dc = (TransformViewModel) transformView.DataContext;
+                // var dc = (TransformViewModel) transformView.DataContext;
+                var dc = transformView.DataContex;
                 dc.GradientModel = gm;
                 dc.FlameColorMode = flameColorMode;
             }
@@ -797,7 +822,8 @@ namespace FlameSystems.ViewModels
 
             foreach (var uTransformationView in Transforms)
             {
-                var dc = (TransformViewModel) uTransformationView.DataContext;
+                //var dc = (TransformViewModel) uTransformationView.DataContext;
+                var dc = uTransformationView.DataContex;
                 dc.GradientModel = gm;
                 dc.FlameColorMode = flameColorMode;
             }
@@ -823,18 +849,35 @@ namespace FlameSystems.ViewModels
 
         private void LoadCoefficients(double[] coefficients, double probability, Color color, double colorPosition,
             int variationId,
-            double[] parameters, double weight = 1.0)
+            double[] parameters, bool modelIsFinal, double weight = 1.0)
         {
             var id = MainAddTransform(false);
-            var model = new TransformModel();
-            model.SetFromCoefficients(coefficients, probability, color, colorPosition);
-            var utv = (TransformViewModel) Transforms
-                .FirstOrDefault(x => ((TransformViewModel) x.DataContext).Id == id)
-                ?.DataContext;
+            TransformModel model = new TransformModel();
+           TransformViewModelBase tf = new TransformViewModel();
+           
+            if (modelIsFinal)
+            {
+                //todo: isFinal
+                tf = new TransformFinalViewModel();
+            }
+
+
+            
+            model.SetFromCoefficients(coefficients, probability, color, modelIsFinal, colorPosition);
+
+
+            var utv = Transforms
+                .FirstOrDefault(x => x.DataContex.Id == id)
+                ?.DataContex;
+
             if (utv == null) return;
+
+            utv.IsFinal = modelIsFinal;
+
             utv.GradientModel = _gradientModel;
             utv.SetTransformation(model);
             utv.SetVariation(variationId, parameters, weight);
+            
         }
 
         private void InitFromModel(FlameModel model)
@@ -862,7 +905,13 @@ namespace FlameSystems.ViewModels
                 if (hasGradient)
                     colorPosition = model.FunctionColorPositions[i];
 
-                LoadCoefficients(c, probability, color, colorPosition, variationId, parameters, weight);
+                //todo: isFinal
+                if(model.IsFinal.Count==0)
+                    LoadCoefficients(c, probability, color, colorPosition, variationId, parameters, false,
+                        weight);
+                else
+                LoadCoefficients(c, probability, color, colorPosition, variationId, parameters, model.IsFinal[i],
+                    weight);
             }
 
             LoadViewSettings(model);
@@ -952,91 +1001,42 @@ namespace FlameSystems.ViewModels
 
         private void AfterProvider()
         {
-            TransformViewModel transformViewModel;
+            TransformViewModelBase transformTransformViewModel;
             switch (_uiPickMode)
             {
                 case UiPickMode.BackColor:
                     BackColor = new SolidColorBrush(_providerColor);
                     break;
                 case UiPickMode.TransformColor:
-                    transformViewModel = (TransformViewModel) Transforms
-                        .FirstOrDefault(x => ((TransformViewModel) x.DataContext).Id == _transformId)
-                        ?.DataContext;
-                    if (transformViewModel == null) return;
-                    transformViewModel.FColor = _providerColor;
+                    // transformViewModel = (TransformViewModel) Transforms
+                    //     .FirstOrDefault(x => ((TransformViewModel) x.DataContext).Id == _transformId)
+                    //     ?.DataContext;
+                    transformTransformViewModel = Transforms
+                        .FirstOrDefault(x => x.DataContex.Id == _transformId)
+                        ?.DataContex;
+
+                    if (transformTransformViewModel == null) return;
+                    transformTransformViewModel.FColor = _providerColor;
                     break;
                 case UiPickMode.EditGradient:
                     _gradientModel = _providerGradientModel.Copy();
                     SetTransformationColorMode(_flameColorMode);
                     break;
                 case UiPickMode.GradientColor:
-                    transformViewModel = (TransformViewModel) Transforms.FirstOrDefault(x =>
-                            ((TransformViewModel) x.DataContext).Id == _transformId)
-                        ?.DataContext;
-                    if (transformViewModel != null) transformViewModel.ColorPosition = _providerGradientValue;
+                    transformTransformViewModel = Transforms.FirstOrDefault(x =>
+                            x.DataContex.Id == _transformId)
+                        ?.DataContex;
+                    // transformViewModel = (TransformViewModel) Transforms.FirstOrDefault(x =>
+                    //         ((TransformViewModel) x.DataContext).Id == _transformId)
+                    //     ?.DataContext;
+
+                    if (transformTransformViewModel != null)
+                        transformTransformViewModel.ColorPosition = _providerGradientValue;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
-
-
-        // private void ActionTransformPickColorCallback(bool result, Color color)
-        // {
-        //     _colorPicker.DataContext = null;
-        //     _colorPicker = null;
-        //     TopContent = null;
-        //
-        //     switch (_colorPikMode)
-        //     {
-        //         case "transform":
-        //             if (!result) return;
-        //             var t = (TransformViewModel) Transforms
-        //                 .FirstOrDefault(x => ((TransformViewModel) x.DataContext).Id == _transformId)
-        //                 ?.DataContext;
-        //             if (t == null) return;
-        //             t.FColor = color;
-        //             break;
-        //         case "gradient":
-        //             if (result)
-        //             {
-        //                 TopContent = _gradView;
-        //                 ActionFire.Invoke("GRADIENT_PICKER_VIEWMODEL-CALLBACK", color);
-        //             }
-        //             else
-        //             {
-        //                 TopContent = _gradView;
-        //             }
-        //
-        //             break;
-        //         case "back color":
-        //             if (!result) return;
-        //             BackColor = new SolidColorBrush(color);
-        //             break;
-        //     }
-        // }
-
-        // private void ActionTransformPickGradientCallback(bool isOk)
-        // {
-        //     TopContent = null;
-        //     if (!isOk) return;
-        //     var dc = (GradientPickerViewModel) _gradView.DataContext;
-        //     switch (dc.GradientMode)
-        //     {
-        //         case GradientMode.Edit:
-        //             _gradientModel = dc.GradientModel;
-        //             SetTransformationColorMode(_flameColorMode);
-        //             break;
-        //         case GradientMode.Select:
-        //             var t = (TransformViewModel) Transforms.FirstOrDefault(x =>
-        //                     ((TransformViewModel) x.DataContext).Id == _transformId)
-        //                 ?.DataContext;
-        //             if (t != null) t.ColorPosition = dc.GetColorPosition();
-        //             break;
-        //         default:
-        //             throw new ArgumentOutOfRangeException();
-        //     }
-        // }
 
         #endregion
     }

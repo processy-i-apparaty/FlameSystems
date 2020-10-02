@@ -277,7 +277,7 @@ namespace FlameBase.RenderMachine.Models
                             continue;
                         }
 
-                        //TODO: GetBitmapForRender mix colors
+                        //todo: mix colors here
                         // var cCmRgb = GetColorCm(x, y, funColors);
 
                         var colorLab = GetColorModeColor(x, y, iLabCm);
@@ -550,7 +550,6 @@ namespace FlameBase.RenderMachine.Models
         //     var mix = new Lab();
         //
         //
-        //     //TODO: GetColorCm mix back
         //     if (total == 0) return backColorLab;
         //
         //     var coefficient = new double[length];

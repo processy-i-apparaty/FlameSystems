@@ -16,7 +16,7 @@ using Matrix = FlameBase.FlameMath.Matrix;
 
 namespace FlameBase.RenderMachine
 {
-    //todo: render machine break
+    //todo: render machine breaks
     public static class RenderMachine
     {
         public const string StateRenderEnded = "RENDER_ENDED";
@@ -116,7 +116,7 @@ namespace FlameBase.RenderMachine
                     throw new ArgumentOutOfRangeException();
             }
 
-            //TODO: Density estimation point
+            //todo: density estimation point
             // Density.Estimation(Display, 0, 9, .4, out var di);
 
 

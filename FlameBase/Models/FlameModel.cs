@@ -20,5 +20,6 @@ namespace FlameBase.Models
         public List<double> FunctionColorPositions { get; set; }
         public GradientPackModel GradientPack { get; set; }
         public Color BackColor { get; set; } = Colors.Black;
+        public List<bool> IsFinal { get; set; } = new List<bool>();
     }
 }

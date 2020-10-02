@@ -137,7 +137,7 @@ namespace FlameSystems.Controls.Providers
 
                 DisplayArray = (uint[,,]) BinaryFlamesModel.LoadObject($"{tempDir}\\logDisplay.bin");
                 var json = File.ReadAllText($"{tempDir}\\flame.txt");
-                Flame = JsonFlamesModel.GetFlameModel(json);
+                Flame = JsonFlamesModel.GetFlameModelFromString(json);
                 // RenderMachine.LoadDisplay(Display, Flame.BackColor);
 
                 RemoveTempDir();
@@ -205,7 +205,7 @@ namespace FlameSystems.Controls.Providers
                 _providerCallback.Invoke(ProviderCallbackType.ShowControl, $"loading flame {FlameName}...");
 
                 var flameModelJson = File.ReadAllText(ResultPath);
-                Flame = JsonFlamesModel.GetFlameModel(flameModelJson);
+                Flame = JsonFlamesModel.GetFlameModelFromString(flameModelJson);
 
                 if (Flame == null)
                 {

@@ -248,7 +248,7 @@ namespace FlameSystems.Controls.ViewModels
             FlameModel model;
             try
             {
-                model = JsonFlamesModel.GetFlameModel(jsonString);
+                model = JsonFlamesModel.GetFlameModelFromString(jsonString);
                 if (model == null) return;
             }
             catch (Exception)
@@ -265,6 +265,8 @@ namespace FlameSystems.Controls.ViewModels
             var variations = FlameHelperModel.GetVariationsFromFlameModel(model);
             var transformations = FlameHelperModel.GetTransformationsFromFlameModel(model);
             var renderSettings = new RenderSettingsModel(50, 10);
+
+            
 
             GradientModel gradModel = null;
             var colorMode = FlameColorMode.Color;
