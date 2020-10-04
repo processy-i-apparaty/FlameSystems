@@ -6,7 +6,7 @@
         xmlns:viewModels="clr-namespace:FlameSystems.ViewModels"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
-        Title="MainWindowView" Height="450" MinHeight="300" Width="1000" MinWidth="800"
+        Title="Flame Systems" Height="450" MinHeight="300" Width="1000" MinWidth="800"
         Background="{StaticResource BrushBackground}">
     <Window.DataContext>
         <viewModels:MainWindowViewModel/>
