@@ -163,6 +163,8 @@ namespace FlameSystems.Compon
 
         public string[] Variations { get; }
 
+
+
         [ValueBind(0.0, -2.0, 2.0)]
         public double ShiftX
         {
@@ -340,7 +342,6 @@ namespace FlameSystems.Compon
             get => Get();
             set => Set(value);
         }
-
 
         [ValueBind]
         public string VariationSelected

@@ -151,7 +151,8 @@
                 </StackPanel>
                 <Border BorderBrush="{StaticResource BrushBorder}"
                         BorderThickness="1"
-                        Margin="3">
+                        Margin="3"
+                        Visibility="Collapsed">
                     <ContentControl Height="200" />
                 </Border>
 

@@ -58,7 +58,8 @@ namespace FlameSystems.Controls.Views.Trans
 
         public virtual bool IsFinal { get; set; }
 
-
+        public abstract void SetFromCoefficients(double[] coefficients, double probability, Color color,
+            bool modelIsFinal, double colorPosition);
 
 
         #region public
@@ -150,6 +151,13 @@ namespace FlameSystems.Controls.Views.Trans
             }
         }
 
+        [ValueBind]
+        public string Text
+        {
+            get => Get();
+            set => Set(value);
+        }
+
         public string[] Variations { get; }
 
         [ValueBind(0.0, -2.0, 2.0)]
@@ -210,7 +218,7 @@ namespace FlameSystems.Controls.Views.Trans
 
 
         [ValueBind(Visibility.Visible)]
-        public virtual Visibility ColorVisibility
+        public virtual Visibility VisibilityColorSelector
         {
             get => Get();
             set => Set(value);
@@ -577,9 +585,5 @@ namespace FlameSystems.Controls.Views.Trans
         }
 
         #endregion
-
-        public abstract void SetFromCoefficients(double[] coefficients, double probability, Color color, bool modelIsFinal, double colorPosition);
-
-
     }
 }

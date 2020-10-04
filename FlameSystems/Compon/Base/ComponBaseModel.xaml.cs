@@ -1,4 +1,6 @@
-﻿namespace FlameSystems.Compon.Base
+﻿using System.Windows.Controls;
+
+namespace FlameSystems.Compon.Base
 {
     /// <summary>
     ///     Interaction logic for ComponBase.xaml
@@ -10,10 +12,17 @@
             InitializeComponent();
         }
 
+
         public IComponentViewModel ViewModel
         {
             get => (IComponentViewModel) DataContext;
             set => DataContext = value;
+        }
+
+        public ContentControl ComtempControl
+        {
+            get => ComponContent;
+            set => ComponContent = value;
         }
     }
 }

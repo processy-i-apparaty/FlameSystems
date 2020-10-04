@@ -42,9 +42,13 @@ namespace FlameBase.RenderMachine
         public static void MainRenderStop(bool total = false)
         {
             RenderStopTotal = total;
-            _sourceRender?.Token.ThrowIfCancellationRequested();
-            _sourceDrawIntermediate?.Token.ThrowIfCancellationRequested();
-            _sourceParallel?.Token.ThrowIfCancellationRequested();
+            _sourceRender?.Cancel();
+            // _sourceRender?.Token.ThrowIfCancellationRequested();
+
+            _sourceDrawIntermediate?.Cancel();
+            // _sourceDrawIntermediate?.Token.ThrowIfCancellationRequested();
+            _sourceParallel?.Cancel();
+            // _sourceParallel?.Token.ThrowIfCancellationRequested();
             _renderId++;
             RenderStopTotal = false;
         }
@@ -54,15 +58,18 @@ namespace FlameBase.RenderMachine
         {
             var renderId = ++_renderId;
 
-            _sourceParallel?.Token.ThrowIfCancellationRequested();
-            _sourceDrawIntermediate?.Token.ThrowIfCancellationRequested();
+            _sourceParallel?.Cancel();
+            // _sourceParallel?.Token.ThrowIfCancellationRequested();
+            _sourceDrawIntermediate?.Cancel();
+            // _sourceDrawIntermediate?.Token.ThrowIfCancellationRequested();
 
 
             if (_sourceRender != null)
             {
-                // _sourceRender.Cancel(true);
-                _sourceRender.Token.ThrowIfCancellationRequested();
+                _sourceRender.Cancel(true);
+                // _sourceRender.Token.ThrowIfCancellationRequested();
                 await WaitForRenderEnd(TimeSpan.FromSeconds(10));
+
                 _sourceRender = new CancellationTokenSource();
             }
             else
@@ -278,7 +285,16 @@ namespace FlameBase.RenderMachine
 
             IsRendering = true;
 
-            _sourceParallel?.Token.ThrowIfCancellationRequested();
+            try
+            {
+                _sourceParallel?.Token.ThrowIfCancellationRequested();
+            }
+            catch (OperationCanceledException)
+            {
+                EndRender(rsm.Display, rsm.TotalIterations, stopwatch.Elapsed, rsm.RenderActionsPack,
+                    $"render interrupted (RenderValidity) {rsm.RenderId}", rsm.DraftMode, rsm.RenderId);
+                return false;
+            }
 
             lock (LockObj)
             {
@@ -296,28 +312,37 @@ namespace FlameBase.RenderMachine
 
                     iterator.Iterate(rsm.TotalPointsPerCore);
 
-                    for (var i = 0; i < rsm.TotalPointsPerCore; i++)
+                    try
                     {
-                        var p = i * 2;
-                        var pX = iterator.Points[p];
-                        var pY = iterator.Points[p + 1];
-
-                        var colorId = iterator.ColorIds[i];
-
-                        for (var s = 0; s < rsm.Symmetry; s++)
+                        for (var i = 0; i < rsm.TotalPointsPerCore; i++)
                         {
-                            Trigonometry.TranslatePoint(pX, pY, rsm.TranslationArray, cx, cy, out var tpX,
-                                out var tpY);
-                            if (Trigonometry.InRange(tpX, tpY, rsm.ImageSize))
+                            var p = i * 2;
+                            var pX = iterator.Points[p];
+                            var pY = iterator.Points[p + 1];
+
+                            var colorId = iterator.ColorIds[i];
+
+                            for (var s = 0; s < rsm.Symmetry; s++)
                             {
-                                rsm.Display.Shot((uint) tpX, (uint) tpY, colorId);
-                                if (countShots)
-                                    shotsParallel[core]++;
+                                Trigonometry.TranslatePoint(pX, pY, rsm.TranslationArray, cx, cy, out var tpX,
+                                    out var tpY);
+                                if (Trigonometry.InRange(tpX, tpY, rsm.ImageSize))
+                                {
+                                    rsm.Display.Shot((uint) tpX, (uint) tpY, colorId);
+                                    if (countShots)
+                                        shotsParallel[core]++;
+                                }
+
+                                if (s < rsm.Symmetry - 1)
+                                    Trigonometry.RotatePoint(ref pX, ref pY, rsm.SectorCos, rsm.SectorSin);
                             }
 
-                            if (s < rsm.Symmetry - 1)
-                                Trigonometry.RotatePoint(ref pX, ref pY, rsm.SectorCos, rsm.SectorSin);
+                            parallelOptions.CancellationToken.ThrowIfCancellationRequested();
                         }
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        return;
                     }
                 });
             }
@@ -513,7 +538,7 @@ namespace FlameBase.RenderMachine
             var ips = rsm.Iteration / elapsedSeconds;
             var timeIpsString = ips.ToString("0.000");
             var timeElapsedString = stopwatch.Elapsed.ToString(@"hh\:mm\:ss");
-            var timeLeftString = TimeSpan.FromSeconds(totalTime-elapsedSeconds).ToString(@"hh\:mm\:ss");
+            var timeLeftString = TimeSpan.FromSeconds(totalTime - elapsedSeconds).ToString(@"hh\:mm\:ss");
             var message =
                 $"[RenderMachine ({rsm.RenderId}) iteration: {rsm.Iteration}; i/s {timeIpsString}; quality: {currentQuality:0.00}/{totalQuality:0.00} elapsed: {timeElapsedString}; time left: {timeLeftString}";
             if (rsm.IsDrawingIntermediate) message += " @";

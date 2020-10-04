@@ -1,12 +1,16 @@
-﻿<UserControl x:Class="FlameSystems.Controls.Views.Trans.TransfView"
+﻿<UserControl x:Class="FlameSystems.Connectors.Base.PanelTransform"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:views="clr-namespace:FlameSystems.Controls.Views"
+             xmlns:base="clr-namespace:FlameSystems.Connectors.Base"
              mc:Ignorable="d" 
-             d:DesignWidth="260">
-     <Border
+             d:DesignHeight="450" d:DesignWidth="260">
+    <UserControl.DataContext>
+        <base:PanelTransformViewModel/>
+    </UserControl.DataContext>
+    <Border 
         BorderBrush="{StaticResource BrushBorder}"
         BorderThickness="0 0 0 1"
         HorizontalAlignment="Stretch">
@@ -19,10 +23,6 @@
                 <ColumnDefinition />
                 <ColumnDefinition Width="20" />
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0"
-                       VerticalAlignment="Center"
-                       Style="{StaticResource FontBrassMonoText}"
-                       Text="{Binding Text}"/>
             <Button
                 Grid.Row="0"
                 Grid.Column="1"
@@ -125,8 +125,7 @@
                             Maximum="2"
                             Value="{Binding ScaleY, Mode=TwoWay}" />
                     </StackPanel>
-                    <StackPanel Orientation="Vertical" Margin="3 0"
-                                Visibility="{Binding VisibilityColorSelector}">
+                    <StackPanel Orientation="Vertical" Margin="3 0">
                         <TextBlock
                             Text="color"
                             Style="{StaticResource FontBrassMonoText}" />

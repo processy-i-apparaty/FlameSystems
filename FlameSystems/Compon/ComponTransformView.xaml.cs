@@ -1,4 +1,5 @@
-﻿using FlameSystems.Compon.Base;
+﻿using System.Windows.Controls;
+using FlameSystems.Compon.Base;
 
 namespace FlameSystems.Compon
 {
@@ -17,5 +18,7 @@ namespace FlameSystems.Compon
             get => (IComponentViewModel) DataContext;
             set => DataContext = value;
         }
+
+        public ContentControl ComtempControl { get; set; }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using ColorMine.ColorSpaces;
 using FlameBase.RenderMachine;
 using FlameSystems.Infrastructure;
 using FlameSystems.Infrastructure.ActionFire;
@@ -28,8 +30,17 @@ namespace FlameSystems.ViewModels
             ActionFire.AddOrReplace("MAIN_WINDOW_VIEWMODEL-SET_WINDOW_CONTENT_BY_PARAMS",
                 new Action<string, object>(ActionSetWindowContentByParams), thisType);
 
-            //WindowContent = new CreateFlameView();
-            WindowContent = new FalamePanelsView();
+            WindowContent = new CreateFlameView();
+            // var v = new BaseValue("PanelModel", typeof(PanelModel), new PanelModel());
+            // var c = new ConnectorPanelTransforms(new List<IValue> {v}, new List<IAction>(), new PanelTranforms());
+            // WindowContent = (Control) c.ControlV;
+            // var model = c.GetVal("PanelModel");
+            // var obj = (PanelModel) model.ObjectOf;
+            //
+
+            // WindowContent = new FalamePanelsView();
+
+
         }
 
         private void HandlerWindowClosing(object obj)

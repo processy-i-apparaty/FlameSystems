@@ -68,11 +68,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Compon\Base\ComponHelper.cs" />
     <Compile Include="Compon\Base\ComponModel.cs" />
-    <Compile Include="Compon\Base\ComponBase.xaml.cs">
-      <DependentUpon>ComponBase.xaml</DependentUpon>
+    <Compile Include="Compon\Base\ComponBaseModel.xaml.cs">
+      <DependentUpon>ComponBaseModel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Compon\Base\ComponBaseViewModel.cs" />
+    <Compile Include="Compon\ComponTransformModel.cs" />
+    <Compile Include="Compon\ComponTransformPanel.cs" />
+    <Compile Include="Compon\ComponTransformParameter.cs" />
     <Compile Include="Compon\ComponTransformViewModel.cs" />
     <Compile Include="Compon\Base\IComponentView.cs" />
     <Compile Include="Compon\Base\IComponentViewModel.cs" />
@@ -80,6 +84,18 @@
     <Compile Include="Compon\ComponTransformView.xaml.cs">
       <DependentUpon>ComponTransformView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Connectors\Base\BaseAction.cs" />
+    <Compile Include="Connectors\Base\BaseValue.cs" />
+    <Compile Include="Connectors\Base\ConnectorPanelTransforms.cs" />
+    <Compile Include="Connectors\Base\PanelModel.cs" />
+    <Compile Include="Connectors\Base\PanelTranforms.xaml.cs">
+      <DependentUpon>PanelTranforms.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Connectors\Base\PanelTransform.xaml.cs">
+      <DependentUpon>PanelTransform.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Connectors\Base\PanelTransformViewModel.cs" />
+    <Compile Include="Connectors\IConnector.cs" />
     <Compile Include="Controls\Pickers\Enums\ColorPickerMode.cs" />
     <Compile Include="Controls\Pickers\Enums\GradientCallbackType.cs" />
     <Compile Include="Controls\Pickers\Enums\GradientMode.cs" />
@@ -132,6 +148,7 @@
     <Compile Include="Infrastructure\ValueBind\ValueBind.cs" />
     <Compile Include="Infrastructure\ValueBind\ValueBindAttribute.cs" />
     <Compile Include="Infrastructure\ValueBind\ValueBindStorage.cs" />
+    <Compile Include="Connectors\Base\PanelTransformsViewModel.cs" />
     <Compile Include="ViewModels\CreateFlameViewModel.cs" />
     <Compile Include="ViewModels\FalamePanelsViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
@@ -197,11 +214,19 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Compon\Base\ComponBase.xaml">
+    <Page Include="Compon\Base\ComponBaseModel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Compon\ComponTransformView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Connectors\Base\PanelTranforms.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Connectors\Base\PanelTransform.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

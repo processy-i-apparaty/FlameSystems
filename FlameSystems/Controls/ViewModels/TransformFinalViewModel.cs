@@ -28,7 +28,7 @@ namespace FlameSystems.Controls.ViewModels
         }
 
         [ValueBind(Visibility.Collapsed)]
-        public override Visibility ColorVisibility
+        public override Visibility VisibilityColorSelector
         {
             get => Get();
             set => Set(value);

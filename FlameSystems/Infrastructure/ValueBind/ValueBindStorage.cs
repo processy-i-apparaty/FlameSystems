@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using FlameSystems.Connectors;
+using FlameSystems.Connectors.Base;
 
 namespace FlameSystems.Infrastructure.ValueBind
 {
@@ -8,6 +10,7 @@ namespace FlameSystems.Infrastructure.ValueBind
         private readonly Action<string> _notifyAction;
 
         private readonly Dictionary<string, IValueBind> _valueBinds = new Dictionary<string, IValueBind>();
+        private readonly Dictionary<string, IAction> _actionBinds = new Dictionary<string, IAction>();
 
         public ValueBindStorage(Action<string> notifyAction)
         {
@@ -35,6 +38,64 @@ namespace FlameSystems.Infrastructure.ValueBind
             _valueBinds.Add(name, v);
         }
 
+
+        public void SetAction(IAction action)
+        {
+            try
+            {
+                var nam = action.NameOf;
+                if (!_actionBinds.ContainsKey(nam))
+                {
+                    var act = _actionBinds[nam];
+                    _actionBinds.Add(nam, act);
+                }
+            }
+            catch (Exception)
+            {
+                //
+            }
+        }
+
+        public IAction GetAction(string name)
+        {
+            try
+            {
+                if (_actionBinds.ContainsKey(name))
+                {
+                    var action = _actionBinds[name];
+                    var arguments = action.ListArguments;
+                    return action;
+                }
+
+                return new BaseAction();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return new BaseAction();
+            }
+        }
+
+        public IValue GetValue(string name)
+        {
+            try
+            {
+                if (_valueBinds.ContainsKey(name))
+                {
+                    var obj = _valueBinds[name];
+                    var typ = obj.ValueType;
+                    return new BaseValue(name, typ, obj.Value);
+                }
+
+                return new BaseValue();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return new BaseValue();
+            }
+        }
+
         public object Get(string name)
         {
             return _valueBinds.ContainsKey(name) ? _valueBinds[name].Value : default;
@@ -57,6 +118,13 @@ namespace FlameSystems.Infrastructure.ValueBind
             if (bind.ValueType == typeof(T)) bind.Value = value;
         }
 
+        public void SetIValue(IValue value)
+        {
+            if (!TryGetBind(value.NameOf, out var bind)) return;
+            if (bind.ValueType == value.TypeOf) bind.Value = value.ObjectOf;
+        }
+
+        //value deprecated
         public void Set<T>(string name, T value, Type t)
         {
             if (!TryGetBind(name, out var bind)) return;
@@ -79,6 +147,11 @@ namespace FlameSystems.Infrastructure.ValueBind
         public void SetActionFor(Action<string, object> action, params string[] names)
         {
             foreach (var name in names) SetActionFor(name, action);
+        }
+
+        public void SetActionAll(Action<string, object> action)
+        {
+            foreach (var name in _valueBinds.Keys) SetActionFor(name, action);
         }
 
         public void TurnNotifierFor(string name, bool state)

@@ -4,21 +4,72 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:FlameSystems.ViewModels"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.DataContext>
         <viewModels:FalamePanelsViewModel />
     </UserControl.DataContext>
-    <Grid>
+    <Grid Background="AntiqueWhite">
         <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
             <RowDefinition Height="50" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="1">
+        <Button Content="PUSH" Style="{StaticResource StyleButtonFlatUi2}"
+                Command="{Binding CommandPush}"/>
+        <ContentControl Grid.Row="1" x:Name="ComponentPanel1" >
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Loaded">
+                    <i:InvokeCommandAction
+                        Command="{Binding CommandLoaded}"
+                        CommandParameter="{Binding ElementName=ComponentPanel1}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+
+        </ContentControl>
+        <Grid Grid.Row="2" Background="YellowGreen">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="250" />
             </Grid.ColumnDefinitions>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <ContentControl Grid.Row="0" Grid.Column="0" x:Name="ComponentPanel2">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Loaded">
+                            <i:InvokeCommandAction
+                                Command="{Binding CommandLoaded}"
+                                CommandParameter="{Binding ElementName=ComponentPanel2}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ContentControl>
+                <ContentControl Grid.Row="1" Grid.Column="0" x:Name="ComponentDisplay">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Loaded">
+                            <i:InvokeCommandAction
+                                Command="{Binding CommandLoaded}"
+                                CommandParameter="{Binding ElementName=ComponentDisplay}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+
+                </ContentControl>
+            </Grid>
+            <ContentControl Grid.Column="1" x:Name="ComponentTransforms">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Loaded">
+                        <i:InvokeCommandAction
+                            Command="{Binding CommandLoaded}"
+                            CommandParameter="{Binding ElementName=ComponentTransforms}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+
+            </ContentControl>
         </Grid>
+
+
     </Grid>
 </UserControl>

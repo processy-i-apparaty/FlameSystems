@@ -7,7 +7,10 @@ namespace FlameSystems.Controls.Views
     {
         public TransformView()
         {
-            DataContex = new TransformViewModel();
+            var viewModel = new TransformViewModel();
+            
+            DataContex = viewModel;
+
         }
 
     }
