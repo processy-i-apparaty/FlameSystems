@@ -363,7 +363,7 @@ namespace FlameSystems.ViewModels
             set => Set(value);
         }
 
-        [ValueBind(1.0, 0.001, 10.0)]
+        [ValueBind(1.0, 0.0001, 100.0)]
         public double Zoom
         {
             get => Get();
