@@ -403,7 +403,7 @@
             Grid.Column="0">
             <Image Source="{Binding ImageSource}" />
         </Border>
-        <StackPanel
+        <Grid
             x:Name="Panel4"
             IsEnabled="{Binding PanelIsEnabled}"
             Grid.Row="0"
@@ -419,6 +419,6 @@
             </i:Interaction.Triggers>
             <ContentControl
                 Content="{Binding TopContent}" />
-        </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

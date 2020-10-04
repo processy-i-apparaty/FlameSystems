@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "ConsoleApp\Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleWpfApp", "ConsoleWpfApp\ConsoleWpfApp.csproj", "{5696E810-82F6-4A25-B2DA-E60F71C15F83}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Temporary", "Temporary", "{6B39D61E-A243-423E-879B-2453C8DB65D6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{849FC519-AA73-4A94-84E3-F63CDD3ABBD3} = {6B39D61E-A243-423E-879B-2453C8DB65D6}
+		{5696E810-82F6-4A25-B2DA-E60F71C15F83} = {6B39D61E-A243-423E-879B-2453C8DB65D6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB243B36-4DC1-44A0-89C6-BF39BADEF188}
