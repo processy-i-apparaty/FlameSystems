@@ -298,7 +298,8 @@ namespace FlameBase.RenderMachine.Models
                             case RenderColorModeModel.RenderColorMode.Lab:
                                 if (!f)
                                 {
-                                    log = Math.Pow(Math.Log(1.0 + shots, max), gamma);
+                                    //log = Math.Pow(Math.Log(1.0 + shots, max), gamma);
+                                    log = Math.Log(1.0 + shots, max);
                                 }
 
                                 cCmRgb = BlendLab(colorLab, backColorLab, log, contrast);
@@ -382,14 +383,22 @@ namespace FlameBase.RenderMachine.Models
 
         private static Color BlendLab(ILab color, ILab backColor, double log, double contrast)
         {
-            var logInv = 1.0 - log;
+            // var logInv = 1.0 - log;
+
+            // var b = new Lab
+            // {
+            //     A = color.A * log + backColor.A * logInv,
+            //     B = color.B * log + backColor.B * logInv,
+            //     L = color.L * log + backColor.L * logInv
+            // }.ToRgb();
 
             var b = new Lab
             {
-                A = color.A * log + backColor.A * logInv,
-                B = color.B * log + backColor.B * logInv,
-                L = color.L * log + backColor.L * logInv
+                A = (color.A + backColor.A) * .5,
+                B = (color.B + backColor.B) * .5,
+                L = color.L * log 
             }.ToRgb();
+
 
             return Color.FromRgb((byte) b.R, (byte) b.G, (byte) b.B);
         }
