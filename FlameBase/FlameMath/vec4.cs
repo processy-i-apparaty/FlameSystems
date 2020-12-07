@@ -1,112 +1,112 @@
 namespace FlameBase.FlameMath
 {
-    public class vec4
+    public class Vec4
     {
-        public double x;
-        public double y;
-        public double z;
-        public double w;
-        public double r;
-        public double g;
-        public double b;
-        public double a;
-
-        public void copyColor( double r,  double b,  double g,  double a)
+        public Vec4(double n)
         {
-            this.r = r;
-            this.g = g;
-            this.b = b;
-            this.a = a;
+            X = n;
+            Y = n;
+            Z = n;
+            CopyColor(W = n, n, n, n);
         }
 
-        public vec4( double n)
+        public Vec4(double x, double y, double z, double w)
         {
-            this.x = n;
-            this.y = n;
-            this.z = n;
-            this.copyColor(this.w = n, n, n, n);
+            CopyColor(X = x, Y = y, Z = z, W = w);
         }
 
-        public vec4( double x,  double y,  double z,  double w)
+        public Vec4(Vec2 vec2, double z, double w)
         {
-            this.copyColor(this.x = x, this.y = y, this.z = z, this.w = w);
+            X = vec2.X;
+            Y = vec2.Y;
+            Z = z;
+            W = w;
+            CopyColor(vec2.X, vec2.Y, z, w);
         }
 
-        public vec4( vec2 vec2,  double z,  double w)
+        public Vec4(Vec2 vec2, Vec2 vec3)
         {
-            this.x = vec2.x;
-            this.y = vec2.y;
-            this.z = z;
-            this.w = w;
-            this.copyColor(vec2.x, vec2.y, z, w);
+            X = vec2.X;
+            Y = vec2.Y;
+            Z = vec3.X;
+            W = vec3.Y;
+            CopyColor(vec2.X, vec2.Y, vec3.X, vec3.Y);
         }
 
-        public vec4( vec2 vec2,  vec2 vec3)
+        public Vec4(Vec3 vec3, double w)
         {
-            this.x = vec2.x;
-            this.y = vec2.y;
-            this.z = vec3.x;
-            this.w = vec3.y;
-            this.copyColor(vec2.x, vec2.y, vec3.x, vec3.y);
+            X = vec3.X;
+            Y = vec3.Y;
+            Z = vec3.Z;
+            W = w;
+            CopyColor(vec3.X, vec3.Y, vec3.Z, w);
         }
 
-        public vec4( vec3 vec3,  double w)
+        public double X { get; set; }
+        public double Y { get; set; }
+        public double Z { get; set; }
+        public double W { get; set; }
+        public double R { get; set; }
+        public double G { get; set; }
+        public double B { get; set; }
+        public double A { get; set; }
+
+        public void CopyColor(double r, double b, double g, double a)
         {
-            this.x = vec3.x;
-            this.y = vec3.y;
-            this.z = vec3.z;
-            this.w = w;
-            this.copyColor(vec3.x, vec3.y, vec3.z, w);
+            R = r;
+            G = g;
+            B = b;
+            A = a;
         }
 
-        public vec4 plus( double n)
+        public Vec4 Plus(double n)
         {
-            return new vec4(this.x + n, this.y + n, this.z + n, this.w + n);
+            return new Vec4(X + n, Y + n, Z + n, W + n);
         }
 
-        public vec4 plus( vec4 vec4)
+        public Vec4 Plus(Vec4 vec4)
         {
-            return new vec4(this.x + vec4.x, this.y + vec4.y, this.z + vec4.z, this.w + vec4.w);
+            return new Vec4(X + vec4.X, Y + vec4.Y, Z + vec4.Z, W + vec4.W);
         }
 
-        public vec4 add( double n)
+        public Vec4 Add(double n)
         {
-            return new vec4(this.x + n, this.y + n, this.z + n, this.w + n);
+            return new Vec4(X + n, Y + n, Z + n, W + n);
         }
 
-        public vec4 add( vec4 vec4)
+        public Vec4 Add(Vec4 vec4)
         {
-            return new vec4(this.x + vec4.x, this.y + vec4.y, this.z + vec4.z, this.w + vec4.w);
+            return new Vec4(X + vec4.X, Y + vec4.Y, Z + vec4.Z, W + vec4.W);
         }
 
-        public vec4 minus( double n)
+        public Vec4 Minus(double n)
         {
-            return new vec4(this.x - n, this.y - n, this.z - n, this.w - n);
+            return new Vec4(X - n, Y - n, Z - n, W - n);
         }
 
-        public vec4 minus( vec4 vec4)
+        public Vec4 Minus(Vec4 vec4)
         {
-            return new vec4(this.x - vec4.x, this.y - vec4.y, this.z - vec4.z, this.w - vec4.w);
+            return new Vec4(X - vec4.X, Y - vec4.Y, Z - vec4.Z, W - vec4.W);
         }
 
-        public vec4 multiply( double n)
+        public Vec4 Multiply(double n)
         {
-            return new vec4(this.x * n, this.y * n, this.z * n, this.w * n);
+            return new Vec4(X * n, Y * n, Z * n, W * n);
         }
 
-        public vec4 multiply( vec4 vec4)
+        public Vec4 Multiply(Vec4 vec4)
         {
-            return new vec4(this.x * vec4.x, this.y * vec4.y, this.z * vec4.z, this.w * vec4.w);
+            return new Vec4(X * vec4.X, Y * vec4.Y, Z * vec4.Z, W * vec4.W);
         }
 
-        public vec4 division( double n)
+        public Vec4 Division(double n)
         {
-            return new vec4(this.x / n, this.y / n, this.z / n, this.w / n);
+            return new Vec4(X / n, Y / n, Z / n, W / n);
         }
 
-        public vec4 division( vec4 vec4)
+        public Vec4 Division(Vec4 vec4)
         {
-            return new vec4(this.x / vec4.x, this.y / vec4.y, this.z / vec4.z, this.w / vec4.w);
+            return new Vec4(X / vec4.X, Y / vec4.Y, Z / vec4.Z, W / vec4.W);
         }
 
         // public vec4 times( mat4 mat4)

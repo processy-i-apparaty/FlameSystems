@@ -36,13 +36,13 @@ namespace Variations.Other
                 y = VariationHelper.Psi - 0.5;
             }
 
-            var abs = G.abs(new vec2(x, y).multiply(_zoom));
+            var abs = G.Abs(new Vec2(x, y).Multiply(_zoom));
             const double n2 = 0.0;
             var size = _size;
-            vec2 abs2;
-            var vec2 = abs2 = G.abs(Rot(0.7853981633975).times(abs));
-            abs2.y -= size;
-            var mix = G.Mix(n2, 1.0, G.smoothstep(0.0, 0.009, vec2.y));
+            Vec2 abs2;
+            var vec2 = abs2 = G.Abs(Rot(0.7853981633975).Times(abs));
+            abs2.Y -= size;
+            var mix = G.Mix(n2, 1.0, G.Smoothstep(0.0, 0.009, vec2.Y));
             if (Math.Abs(_invert) <= VariationHelper.SmallDouble)
             {
                 if (mix < 0.1)
@@ -73,9 +73,9 @@ namespace Variations.Other
             _size = P4;
         }
 
-        public mat2 Rot(double n)
+        public Mat2 Rot(double n)
         {
-            return new mat2(Math.Cos(n), -Math.Sin(n), Math.Sin(n), Math.Cos(n));
+            return new Mat2(Math.Cos(n), -Math.Sin(n), Math.Sin(n), Math.Cos(n));
         }
     }
 }

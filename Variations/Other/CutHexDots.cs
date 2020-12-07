@@ -42,11 +42,11 @@ namespace Variations.Other
                 n3 = 0.0;
             }
 
-            var vec2 = new vec2(x * _zoom, y * _zoom);
-            var vec3 = new vec2(1.0, 1.732);
-            var minus = G.mod(vec2, vec3).multiply(2.0).minus(vec3);
-            var minus2 = G.mod(vec2.plus(vec3.multiply(0.5)), vec3).multiply(2.0).minus(vec3);
-            var n4 = 0.8 * G.Min(G.dot(minus, minus), G.dot(minus2, minus2));
+            var vec2 = new Vec2(x * _zoom, y * _zoom);
+            var vec3 = new Vec2(1.0, 1.732);
+            var minus = G.Mod(vec2, vec3).Multiply(2.0).Minus(vec3);
+            var minus2 = G.Mod(vec2.Plus(vec3.Multiply(0.5)), vec3).Multiply(2.0).Minus(vec3);
+            var n4 = 0.8 * G.Min(G.Dot(minus, minus), G.Dot(minus2, minus2));
             if (Math.Abs(_invert) <=VariationHelper.SmallDouble)
             {
                 if (n4 > _size)

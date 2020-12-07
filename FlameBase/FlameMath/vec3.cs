@@ -1,97 +1,97 @@
 namespace FlameBase.FlameMath
 {
-    public class vec3
+    public class Vec3
     {
-        public double x;
-        public double y;
-        public double z;
-        public double r;
-        public double g;
-        public double b;
-
-        public void copyColor( double r,  double g,  double b)
+        public Vec3(double z)
         {
-            this.r = r;
-            this.g = g;
-            this.b = b;
+            X = z;
+            Y = z;
+            CopyColor(Z = z, z, z);
         }
 
-        public vec3( double z)
+        public Vec3(double x, double y, double z)
         {
-            this.x = z;
-            this.y = z;
-            this.copyColor(this.z = z, z, z);
+            CopyColor(X = x, Y = y, Z = z);
         }
 
-        public vec3( double x,  double y,  double z)
+        public Vec3(Vec3 vec3)
         {
-            this.copyColor(this.x = x, this.y = y, this.z = z);
+            X = vec3.X;
+            Y = vec3.Y;
+            Z = vec3.Z;
+            CopyColor(vec3.X, vec3.Y, vec3.Z);
         }
 
-        public vec3( vec3 vec3)
+        public Vec3(Vec2 vec2, double z)
         {
-            this.x = vec3.x;
-            this.y = vec3.y;
-            this.z = vec3.z;
-            this.copyColor(vec3.x, vec3.y, vec3.z);
+            X = vec2.X;
+            Y = vec2.Y;
+            Z = z;
+            CopyColor(vec2.X, vec2.Y, z);
         }
 
-        public vec3( vec2 vec2,  double z)
+        public double X { get; set; }
+        public double Y { get; set; }
+        public double Z { get; set; }
+        public double R { get; set; }
+        public double G { get; set; }
+        public double B { get; set; }
+
+        public void CopyColor(double r, double g, double b)
         {
-            this.x = vec2.x;
-            this.y = vec2.y;
-            this.z = z;
-            this.copyColor(vec2.x, vec2.y, z);
+            R = r;
+            G = g;
+            B = b;
         }
 
-        public vec3 plus( double n)
+        public Vec3 Plus(double n)
         {
-            return new vec3(this.x + n, this.y + n, this.z + n);
+            return new Vec3(X + n, Y + n, Z + n);
         }
 
-        public vec3 plus( vec3 vec3)
+        public Vec3 Plus(Vec3 vec3)
         {
-            return new vec3(this.x + vec3.x, this.y + vec3.y, this.z + vec3.z);
+            return new Vec3(X + vec3.X, Y + vec3.Y, Z + vec3.Z);
         }
 
-        public vec3 add( double n)
+        public Vec3 Add(double n)
         {
-            return new vec3(this.x + n, this.y + n, this.z + n);
+            return new Vec3(X + n, Y + n, Z + n);
         }
 
-        public vec3 add( vec3 vec3)
+        public Vec3 Add(Vec3 vec3)
         {
-            return new vec3(this.x + vec3.x, this.y + vec3.y, this.z + vec3.z);
+            return new Vec3(X + vec3.X, Y + vec3.Y, Z + vec3.Z);
         }
 
-        public vec3 minus( double n)
+        public Vec3 Minus(double n)
         {
-            return new vec3(this.x - n, this.y - n, this.z - n);
+            return new Vec3(X - n, Y - n, Z - n);
         }
 
-        public vec3 minus( vec3 vec3)
+        public Vec3 Minus(Vec3 vec3)
         {
-            return new vec3(this.x - vec3.x, this.y - vec3.y, this.z - vec3.z);
+            return new Vec3(X - vec3.X, Y - vec3.Y, Z - vec3.Z);
         }
 
-        public vec3 multiply( double n)
+        public Vec3 Multiply(double n)
         {
-            return new vec3(this.x * n, this.y * n, this.z * n);
+            return new Vec3(X * n, Y * n, Z * n);
         }
 
-        public vec3 multiply( vec3 vec3)
+        public Vec3 Multiply(Vec3 vec3)
         {
-            return new vec3(this.x * vec3.x, this.y * vec3.y, this.z * vec3.z);
+            return new Vec3(X * vec3.X, Y * vec3.Y, Z * vec3.Z);
         }
 
-        public vec3 division( double n)
+        public Vec3 Division(double n)
         {
-            return new vec3(this.x / n, this.y / n, this.z / n);
+            return new Vec3(X / n, Y / n, Z / n);
         }
 
-        public vec3 division( vec3 vec3)
+        public Vec3 Division(Vec3 vec3)
         {
-            return new vec3(this.x / vec3.x, this.y / vec3.y, this.z / vec3.z);
+            return new Vec3(X / vec3.X, Y / vec3.Y, Z / vec3.Z);
         }
 
         // public vec3 times( mat3 mat3)

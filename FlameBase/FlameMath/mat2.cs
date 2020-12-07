@@ -1,59 +1,59 @@
 namespace FlameBase.FlameMath
 {
-    public class mat2
+    public class Mat2
     {
-        public double a00;
-        public double a01;
-        public double a10;
-        public double a11;
-
-        public mat2( double a00,  double a2,  double a3,  double a4)
+        public Mat2(double a00, double a2, double a3, double a4)
         {
-            this.a00 = a00;
-            this.a10 = a2;
-            this.a01 = a3;
-            this.a11 = a4;
+            A00 = a00;
+            A10 = a2;
+            A01 = a3;
+            A11 = a4;
         }
 
-        public mat2( vec2 vec2,  vec2 vec3)
+        public Mat2(Vec2 vec2, Vec2 vec3)
         {
-            this.a00 = vec2.x;
-            this.a10 = vec2.y;
-            this.a01 = vec3.x;
-            this.a11 = vec3.y;
+            A00 = vec2.X;
+            A10 = vec2.Y;
+            A01 = vec3.X;
+            A11 = vec3.Y;
         }
 
-        public mat2( vec4 vec4)
+        public Mat2(Vec4 vec4)
         {
-            this.a00 = vec4.x;
-            this.a10 = vec4.y;
-            this.a01 = vec4.z;
-            this.a11 = vec4.w;
+            A00 = vec4.X;
+            A10 = vec4.Y;
+            A01 = vec4.Z;
+            A11 = vec4.W;
         }
 
-        public vec2 times( vec2 vec2)
+        public double A00 { get; }
+        public double A01 { get; }
+        public double A10 { get; }
+        public double A11 { get; }
+
+        public Vec2 Times(Vec2 vec2)
         {
-            return new vec2(this.a00 * vec2.x + this.a01 * vec2.y, this.a10 * vec2.x + this.a11 * vec2.y);
+            return new Vec2(A00 * vec2.X + A01 * vec2.Y, A10 * vec2.X + A11 * vec2.Y);
         }
 
-        public mat2 add( double n)
+        public Mat2 Add(double n)
         {
-            return new mat2(this.a00 + n, this.a10 + n, this.a01 + n, this.a11 + n);
+            return new Mat2(A00 + n, A10 + n, A01 + n, A11 + n);
         }
 
-        public mat2 minus( double n)
+        public Mat2 Minus(double n)
         {
-            return new mat2(this.a00 - n, this.a10 - n, this.a01 - n, this.a11 - n);
+            return new Mat2(A00 - n, A10 - n, A01 - n, A11 - n);
         }
 
-        public mat2 times( double n)
+        public Mat2 Times(double n)
         {
-            return new mat2(this.a00 * n, this.a10 * n, this.a01 * n, this.a11 * n);
+            return new Mat2(A00 * n, A10 * n, A01 * n, A11 * n);
         }
 
-        public mat2 division( double n)
+        public Mat2 Division(double n)
         {
-            return new mat2(this.a00 / n, this.a10 / n, this.a01 / n, this.a11 / n);
+            return new Mat2(A00 / n, A10 / n, A01 / n, A11 / n);
         }
     }
 }

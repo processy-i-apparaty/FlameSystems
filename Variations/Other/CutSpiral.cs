@@ -36,13 +36,13 @@ namespace Variations.Other
                 y = 2.0 * VariationHelper.Psi - 1.0;
             }
 
-            var times = new vec2(x * _zoom, y * _zoom);
+            var times = new Vec2(x * _zoom, y * _zoom);
             var n2 = 0;
             var rot2 = Rot2(_time);
             for (var i = 0; i < 64; ++i)
             {
-                times = rot2.times(times);
-                if (times.y > 1.0) break;
+                times = rot2.Times(times);
+                if (times.Y > 1.0) break;
 
                 n2 ^= 0x1;
             }
@@ -79,9 +79,9 @@ namespace Variations.Other
             _invert = P4;
         }
 
-        public mat2 Rot2(double n)
+        public Mat2 Rot2(double n)
         {
-            return new mat2(1.1 * Math.Sin(n), 1.1 * Math.Cos(n), -1.1 * Math.Cos(n), 1.1 * Math.Sin(n));
+            return new Mat2(1.1 * Math.Sin(n), 1.1 * Math.Cos(n), -1.1 * Math.Cos(n), 1.1 * Math.Sin(n));
         }
     }
 }

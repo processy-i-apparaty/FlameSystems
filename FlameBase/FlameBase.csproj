@@ -58,13 +58,13 @@
     <Compile Include="FlameMath\Algebra.cs" />
     <Compile Include="FlameMath\Complex.cs" />
     <Compile Include="FlameMath\G.cs" />
-    <Compile Include="FlameMath\mat2.cs" />
+    <Compile Include="FlameMath\Mat2.cs" />
     <Compile Include="FlameMath\Matrix.cs" />
     <Compile Include="FlameMath\Trigonometry.cs" />
     <Compile Include="Enums\FlameColorMode.cs" />
-    <Compile Include="FlameMath\vec2.cs" />
-    <Compile Include="FlameMath\vec3.cs" />
-    <Compile Include="FlameMath\vec4.cs" />
+    <Compile Include="FlameMath\Vec2.cs" />
+    <Compile Include="FlameMath\Vec3.cs" />
+    <Compile Include="FlameMath\Vec4.cs" />
     <Compile Include="FlameMath\XorShift.cs" />
     <Compile Include="Helpers\Density.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />

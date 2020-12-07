@@ -36,21 +36,21 @@ namespace Variations.Other
                 y = 2.0 * VariationHelper.Psi - 1.0;
             }
 
-            vec2 vec2;
-            var times = vec2 = new vec2(x * _zoom, y * _zoom);
-            vec2.y += 0.1;
+            Vec2 vec2;
+            var times = vec2 = new Vec2(x * _zoom, y * _zoom);
+            vec2.Y += 0.1;
             var max = n2 - n2;
             for (var i = 0; i < 3; ++i)
             {
-                times = new mat2(-0.5, 0.866, -0.866, -0.5).times(times);
-                var plus = times.plus(new vec2(0.03, -0.577));
+                times = new Mat2(-0.5, 0.866, -0.866, -0.5).Times(times);
+                var plus = times.Plus(new Vec2(0.03, -0.577));
                 var n3 = 3.0 * G.Length(plus);
-                var atan2 = G.atan2(plus.y, plus.x);
-                max = G.max(max,
+                var atan2 = G.Atan2(plus.Y, plus.X);
+                max = G.Max(max,
                     n3 + G.Fract(atan2 / 7.0 + 0.3) < 2.0 ? 0.5 + 0.5 * Math.Sin(atan2 + 6.24 * n3) : 0.0);
             }
 
-            var n4 = G.smoothstep(0.0, 0.1, Math.Abs(max - 0.5)) - G.smoothstep(0.8, 0.9, max);
+            var n4 = G.Smoothstep(0.0, 0.1, Math.Abs(max - 0.5)) - G.Smoothstep(0.8, 0.9, max);
             if (Math.Abs(_invert) <= VariationHelper.SmallDouble)
             {
                 if (n4 > 0.5)

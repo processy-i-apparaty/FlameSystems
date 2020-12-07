@@ -36,7 +36,7 @@ namespace Variations.Other
                 y = 2.0 * VariationHelper.Psi - 1.0;
             }
 
-            var computeSpiral = ComputeSpiral(new vec2(x * _zoom, y * _zoom), _time);
+            var computeSpiral = ComputeSpiral(new Vec2(x * _zoom, y * _zoom), _time);
             if (Math.Abs(_invert) <= VariationHelper.SmallDouble)
             {
                 if (computeSpiral > 0.0)
@@ -68,24 +68,24 @@ namespace Variations.Other
             _invert = P4;
         }
 
-        public mat2 Rotate(double n)
+        public Mat2 Rotate(double n)
         {
-            return new mat2(-Math.Sin(n), Math.Cos(n), Math.Cos(n), Math.Sin(n));
+            return new Mat2(-Math.Sin(n), Math.Cos(n), Math.Cos(n), Math.Sin(n));
         }
 
         private static double Hill(double n, double n2, double n3)
         {
-            return Math.Min(G.step(n - n2 / 2.0, n3), 1.0 - G.step(n + n2 / 2.0, n3));
+            return Math.Min(G.Step(n - n2 / 2.0, n3), 1.0 - G.Step(n + n2 / 2.0, n3));
         }
 
-        private double ComputeSpiral(vec2 vec2, double n)
+        private double ComputeSpiral(Vec2 vec2, double n)
         {
             var n2 = G.Length(vec2) * 50.0;
-            var atan2 = G.atan2(vec2.y, vec2.x);
-            vec2 = Rotate(_time * 7.0).times(vec2);
-            vec2 = vec2.multiply(Math.Sin(atan2 * 15.0));
-            vec2 = Rotate(n2).times(vec2);
-            return G.Mix(1.0, 0.0, Math.Min(G.step(0.0, vec2.x), Hill(0.0, n2 / 25.0, vec2.y)));
+            var atan2 = G.Atan2(vec2.Y, vec2.X);
+            vec2 = Rotate(_time * 7.0).Times(vec2);
+            vec2 = vec2.Multiply(Math.Sin(atan2 * 15.0));
+            vec2 = Rotate(n2).Times(vec2);
+            return G.Mix(1.0, 0.0, Math.Min(G.Step(0.0, vec2.X), Hill(0.0, n2 / 25.0, vec2.Y)));
         }
     }
 }

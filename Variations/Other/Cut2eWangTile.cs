@@ -51,15 +51,15 @@ namespace Variations.Other
                 n5 = 0.5;
             }
 
-            var plus = new vec2(n2 * _zoom, n3 * _zoom).plus(new vec2(_x0, _y0));
-            G.normalize(new vec3(plus, 1.66));
-            var vec2 = new vec2(0.01, 0.0);
+            var plus = new Vec2(n2 * _zoom, n3 * _zoom).Plus(new Vec2(_x0, _y0));
+            G.Normalize(new Vec3(plus, 1.66));
+            var vec2 = new Vec2(0.01, 0.0);
             var map = Map(plus);
             Height(plus);
-            Height(plus.plus(new vec2(vec2.x, vec2.y)));
-            Height(plus.plus(new vec2(vec2.y, vec2.x)));
-            var sqrt = G.sqrt(G.Mix(1.0, 0.0,
-                G.smoothstep(0.0, 0.001, Math.Min(map, Math.Abs(map - 0.1) - 0.1) / _zoom)));
+            Height(plus.Plus(new Vec2(vec2.X, vec2.Y)));
+            Height(plus.Plus(new Vec2(vec2.Y, vec2.X)));
+            var sqrt = G.Sqrt(G.Mix(1.0, 0.0,
+                G.Smoothstep(0.0, 0.001, Math.Min(map, Math.Abs(map - 0.1) - 0.1) / _zoom)));
             // xyzPoint2.doHide = false;
             if (Math.Abs(_invert) <= VariationHelper.SmallDouble)
             {
@@ -105,33 +105,33 @@ namespace Variations.Other
             _y0 = _seed * _randomize.NextDouble();
         }
 
-        private double Tile0(vec2 vec2)
+        private double Tile0(Vec2 vec2)
         {
-            return G.Mix(G.Length(vec2) - _k3, _k2 - G.Length(new vec2(Math.Abs(vec2.x) - 0.5, vec2.y - 0.5)),
-                G.step(Math.Abs(vec2.x), vec2.y));
+            return G.Mix(G.Length(vec2) - _k3, _k2 - G.Length(new Vec2(Math.Abs(vec2.X) - 0.5, vec2.Y - 0.5)),
+                G.Step(Math.Abs(vec2.X), vec2.Y));
         }
 
-        private double Tile1(vec2 vec2)
+        private double Tile1(Vec2 vec2)
         {
-            return Math.Abs(G.Length(vec2.minus(0.5)) - 0.5) - _k * 0.5;
+            return Math.Abs(G.Length(vec2.Minus(0.5)) - 0.5) - _k * 0.5;
         }
 
-        private double Tile2(vec2 vec2)
+        private double Tile2(Vec2 vec2)
         {
-            return Math.Abs(vec2.x) - _k * 0.5;
+            return Math.Abs(vec2.X) - _k * 0.5;
         }
 
-        private double Tile3(vec2 vec2)
+        private double Tile3(Vec2 vec2)
         {
-            return Math.Max(-vec2.x - _k * 0.5, _k2 - G.Length(new vec2(vec2.x - 0.5, Math.Abs(vec2.y) - 0.5)));
+            return Math.Max(-vec2.X - _k * 0.5, _k2 - G.Length(new Vec2(vec2.X - 0.5, Math.Abs(vec2.Y) - 0.5)));
         }
 
-        private double Tile4(vec2 vec2)
+        private double Tile4(Vec2 vec2)
         {
-            return _k2 - G.Length(new vec2(Math.Abs(vec2.x) - 0.5, Math.Abs(vec2.y) - 0.5));
+            return _k2 - G.Length(new Vec2(Math.Abs(vec2.X) - 0.5, Math.Abs(vec2.Y) - 0.5));
         }
 
-        private double Tile(vec2 vec2, int n)
+        private double Tile(Vec2 vec2, int n)
         {
             switch (n)
             {
@@ -145,7 +145,7 @@ namespace Variations.Other
                 }
                 case 2:
                 {
-                    return Tile0(new vec2(vec2.y, vec2.x));
+                    return Tile0(new Vec2(vec2.Y, vec2.X));
                 }
                 case 3:
                 {
@@ -153,7 +153,7 @@ namespace Variations.Other
                 }
                 case 4:
                 {
-                    return Tile0(new vec2(vec2.x, -vec2.y));
+                    return Tile0(new Vec2(vec2.X, -vec2.Y));
                 }
                 case 5:
                 {
@@ -161,7 +161,7 @@ namespace Variations.Other
                 }
                 case 6:
                 {
-                    return Tile1(new vec2(vec2.x, -vec2.y));
+                    return Tile1(new Vec2(vec2.X, -vec2.Y));
                 }
                 case 7:
                 {
@@ -169,31 +169,31 @@ namespace Variations.Other
                 }
                 case 8:
                 {
-                    return Tile0(new vec2(vec2.y, -vec2.x));
+                    return Tile0(new Vec2(vec2.Y, -vec2.X));
                 }
                 case 9:
                 {
-                    return Tile1(new vec2(-vec2.x, vec2.y));
+                    return Tile1(new Vec2(-vec2.X, vec2.Y));
                 }
                 case 10:
                 {
-                    return Tile2(new vec2(vec2.y, vec2.x));
+                    return Tile2(new Vec2(vec2.Y, vec2.X));
                 }
                 case 11:
                 {
-                    return Tile3(new vec2(vec2.y, vec2.x));
+                    return Tile3(new Vec2(vec2.Y, vec2.X));
                 }
                 case 12:
                 {
-                    return Tile1(new vec2(-vec2.x, -vec2.y));
+                    return Tile1(new Vec2(-vec2.X, -vec2.Y));
                 }
                 case 13:
                 {
-                    return Tile3(new vec2(-vec2.x, vec2.y));
+                    return Tile3(new Vec2(-vec2.X, vec2.Y));
                 }
                 case 14:
                 {
-                    return Tile3(new vec2(-vec2.y, vec2.x));
+                    return Tile3(new Vec2(-vec2.Y, vec2.X));
                 }
                 case 15:
                 {
@@ -206,33 +206,33 @@ namespace Variations.Other
             }
         }
 
-        private double Hash(vec2 vec2)
+        private double Hash(Vec2 vec2)
         {
-            var fract = G.Fract(new vec3(vec2.x, vec2.y, vec2.x).multiply(_hashScale1));
-            var plus = fract.plus(G.dot(fract, new vec3(fract.y, fract.z, fract.x).plus(19.19)));
-            return G.Fract((plus.x + plus.y) * plus.z);
+            var fract = G.Fract(new Vec3(vec2.X, vec2.Y, vec2.X).Multiply(_hashScale1));
+            var plus = fract.Plus(G.Dot(fract, new Vec3(fract.Y, fract.Z, fract.X).Plus(19.19)));
+            return G.Fract((plus.X + plus.Y) * plus.Z);
         }
 
-        private double Map(vec2 plus)
+        private double Map(Vec2 plus)
         {
             var n = 0;
-            plus = plus.plus(0.5);
+            plus = plus.Plus(0.5);
             var floor = G.Floor(plus);
             if (Hash(floor) >= 0.5) ++n;
-            if (Hash(floor.multiply(-1.0)) >= 0.5) n += 8;
-            if (Hash(floor.minus(new vec2(0.0, 1.0))) >= 0.5) n += 4;
-            if (Hash(floor.plus(new vec2(1.0, 0.0)).multiply(-1.0)) >= 0.5) n += 2;
-            return Tile(G.Fract(plus).minus(0.5), n);
+            if (Hash(floor.Multiply(-1.0)) >= 0.5) n += 8;
+            if (Hash(floor.Minus(new Vec2(0.0, 1.0))) >= 0.5) n += 4;
+            if (Hash(floor.Plus(new Vec2(1.0, 0.0)).Multiply(-1.0)) >= 0.5) n += 2;
+            return Tile(G.Fract(plus).Minus(0.5), n);
         }
 
-        private vec2 Rotate(vec2 vec2, double n)
+        private Vec2 Rotate(Vec2 vec2, double n)
         {
             var cos = Math.Cos(n);
             var sin = Math.Sin(n);
-            return vec2.times(new mat2(cos, sin, -sin, cos));
+            return vec2.Times(new Mat2(cos, sin, -sin, cos));
         }
 
-        private double Height(vec2 vec2)
+        private double Height(Vec2 vec2)
         {
             var n = Map(vec2) - 0.1;
             return Math.Sqrt(0.01 - Math.Min(n * n, 0.01));

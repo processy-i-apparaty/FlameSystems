@@ -38,14 +38,14 @@ namespace Variations.Other
                 y = 2.0 * VariationHelper.Psi - 1.0;
             }
 
-            var plus = new vec2(x * _zoom * 43.0, y * _zoom * 43.0).plus(new vec2(_x0, _y0));
+            var plus = new Vec2(x * _zoom * 43.0, y * _zoom * 43.0).Plus(new Vec2(_x0, _y0));
             const double n2 = 0.0;
             const double n3 = 1.0;
             var fbm = Fbm(plus);
             double mix;
             if (fbm < 0.4)
             {
-                var n4 = Fbm(new vec2(plus.y, plus.x).plus(new vec2(1.0))) / 2.25;
+                var n4 = Fbm(new Vec2(plus.Y, plus.X).Plus(new Vec2(1.0))) / 2.25;
                 mix = G.Mix(n3, n3, Remap(0.25, 0.38, 0.0, 1.0, fbm - 0.06));
                 if (fbm < n4) mix = n3;
             }
@@ -89,32 +89,32 @@ namespace Variations.Other
             _y0 = seed * _randomize.NextDouble();
         }
 
-        private static double Random(vec2 vec2)
+        private static double Random(Vec2 vec2)
         {
-            return G.Fract(Math.Sin(G.dot(new vec2(vec2.x, vec2.y), new vec2(12.9898, 78.233))) * 43758.5453123);
+            return G.Fract(Math.Sin(G.Dot(new Vec2(vec2.X, vec2.Y), new Vec2(12.9898, 78.233))) * 43758.5453123);
         }
 
-        private double noise(vec2 vec2)
+        private double noise(Vec2 vec2)
         {
             var floor = G.Floor(vec2);
             var fract = G.Fract(vec2);
             var random = Random(floor);
-            var random2 = Random(floor.plus(new vec2(1.0, 0.0)));
-            var random3 = Random(floor.plus(new vec2(0.0, 1.0)));
-            var random4 = Random(floor.plus(new vec2(1.0, 1.0)));
-            var multiply = fract.multiply(fract).multiply(new vec2(3.0).minus(fract.multiply(2.0)));
-            return G.Mix(random, random2, multiply.x) + (random3 - random) * multiply.y * (1.0 - multiply.x) +
-                   (random4 - random2) * multiply.x * multiply.y;
+            var random2 = Random(floor.Plus(new Vec2(1.0, 0.0)));
+            var random3 = Random(floor.Plus(new Vec2(0.0, 1.0)));
+            var random4 = Random(floor.Plus(new Vec2(1.0, 1.0)));
+            var multiply = fract.Multiply(fract).Multiply(new Vec2(3.0).Minus(fract.Multiply(2.0)));
+            return G.Mix(random, random2, multiply.X) + (random3 - random) * multiply.Y * (1.0 - multiply.X) +
+                   (random4 - random2) * multiply.X * multiply.Y;
         }
 
-        private double Fbm(vec2 multiply)
+        private double Fbm(Vec2 multiply)
         {
             var n = 0.0;
             var n2 = 0.5;
             for (var i = 0; i < 6; ++i)
             {
                 n += n2 * noise(multiply);
-                multiply = multiply.multiply(2.0);
+                multiply = multiply.Multiply(2.0);
                 n2 *= 0.5;
             }
 

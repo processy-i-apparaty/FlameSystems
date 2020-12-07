@@ -1,105 +1,89 @@
 namespace FlameBase.FlameMath
 {
-    public class vec2
+    public class Vec2
     {
-        public double x;
-        public double y;
-
-        public vec2(double n)
+        public Vec2(double n)
         {
-            x = n;
-            y = n;
+            X = n;
+            Y = n;
         }
 
-        public vec2(double x, double y)
+        public Vec2(double x, double y)
         {
-            this.x = x;
-            this.y = y;
+            X = x;
+            Y = y;
         }
 
-        public vec2(vec2 vec2)
+        public Vec2(Vec2 vec2)
         {
-            x = vec2.x;
-            y = vec2.y;
+            X = vec2.X;
+            Y = vec2.Y;
         }
 
-        public vec2 plus(double n)
+        public double X { get; set; }
+        public double Y { get; set; }
+
+        public Vec2 Plus(double n)
         {
-            var vec2 = new vec2(0.0);
-            vec2.x = x + n;
-            vec2.y = y + n;
+            var vec2 = new Vec2(0.0) {X = X + n, Y = Y + n};
             return vec2;
         }
 
-        public vec2 plus(vec2 vec2)
+        public Vec2 Plus(Vec2 vec2)
         {
-            var vec3 = new vec2(0.0);
-            vec3.x = x + vec2.x;
-            vec3.y = y + vec2.y;
+            var vec3 = new Vec2(0.0) {X = X + vec2.X, Y = Y + vec2.Y};
             return vec3;
         }
 
-        public vec2 add(double n)
+        public Vec2 Add(double n)
         {
-            var vec2 = new vec2(0.0);
-            vec2.x = x + n;
-            vec2.y = y + n;
+            var vec2 = new Vec2(0.0) {X = X + n, Y = Y + n};
             return vec2;
         }
 
-        public vec2 add(vec2 vec2)
+        public Vec2 Add(Vec2 vec2)
         {
-            var vec3 = new vec2(0.0);
-            vec3.x = x + vec2.x;
-            vec3.y = y + vec2.y;
+            var vec3 = new Vec2(0.0) {X = X + vec2.X, Y = Y + vec2.Y};
             return vec3;
         }
 
-        public vec2 minus(double n)
+        public Vec2 Minus(double n)
         {
-            var vec2 = new vec2(0.0);
-            vec2.x = x - n;
-            vec2.y = y - n;
+            var vec2 = new Vec2(0.0) {X = X - n, Y = Y - n};
             return vec2;
         }
 
-        public vec2 minus(vec2 vec2)
+        public Vec2 Minus(Vec2 vec2)
         {
-            var vec3 = new vec2(0.0);
-            vec3.x = x - vec2.x;
-            vec3.y = y - vec2.y;
+            var vec3 = new Vec2(0.0) {X = X - vec2.X, Y = Y - vec2.Y};
             return vec3;
         }
 
-        public vec2 multiply(double n)
+        public Vec2 Multiply(double n)
         {
-            var vec2 = new vec2(0.0);
-            vec2.x = x * n;
-            vec2.y = y * n;
+            var vec2 = new Vec2(0.0) {X = X * n, Y = Y * n};
             return vec2;
         }
 
-        public vec2 multiply(vec2 vec2)
+        public Vec2 Multiply(Vec2 vec2)
         {
-            var vec3 = new vec2(0.0);
-            vec3.x = x * vec2.x;
-            vec3.y = y * vec2.y;
+            var vec3 = new Vec2(0.0) {X = X * vec2.X, Y = Y * vec2.Y};
             return vec3;
         }
 
-        public vec2 division(double n)
+        public Vec2 Division(double n)
         {
-            return new vec2(x / n, y / n);
+            return new Vec2(X / n, Y / n);
         }
 
-        public vec2 division(vec2 vec2)
+        public Vec2 Division(Vec2 vec2)
         {
-            return new vec2(x / vec2.x, y / vec2.y);
+            return new Vec2(X / vec2.X, Y / vec2.Y);
         }
 
-        public vec2 times(mat2 mat2)
+        public Vec2 Times(Mat2 mat2)
         {
-            return new vec2(mat2.a00 * x + mat2.a10 * y, x * mat2.a01 + y * mat2.a11);
+            return new Vec2(mat2.A00 * X + mat2.A10 * Y, X * mat2.A01 + Y * mat2.A11);
         }
     }
 

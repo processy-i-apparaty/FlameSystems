@@ -42,47 +42,47 @@ namespace Variations.Other
                 n5 = 0.5;
             }
 
-            var multiply = new vec2(n2 * 1.0, n3 * 1.155).multiply(_zoom);
-            var mod = G.mod(multiply.y, 2.0);
+            var multiply = new Vec2(n2 * 1.0, n3 * 1.155).Multiply(_zoom);
+            var mod = G.Mod(multiply.Y, 2.0);
             var vec2 = multiply;
-            vec2.x += G.step(1.0, mod) * 0.5;
-            vec2 fract;
+            vec2.X += G.Step(1.0, mod) * 0.5;
+            Vec2 fract;
             var vec3 = fract = G.Fract(multiply);
-            fract.y /= 1.155;
+            fract.Y /= 1.155;
             var vec4 = vec3;
-            vec4.x -= 0.5775;
+            vec4.X -= 0.5775;
             var vec5 = vec3;
-            vec5.y -= 0.5;
-            vec2 multiply2;
-            var vec6 = multiply2 = new vec2(n2 * 1.0, n3 * 1.155).multiply(_zoom);
-            multiply2.x -= 0.5;
+            vec5.Y -= 0.5;
+            Vec2 multiply2;
+            var vec6 = multiply2 = new Vec2(n2 * 1.0, n3 * 1.155).Multiply(_zoom);
+            multiply2.X -= 0.5;
             var vec7 = vec6;
-            vec7.y -= 0.288675;
-            var mod2 = G.mod(vec6.y, 2.0);
+            vec7.Y -= 0.288675;
+            var mod2 = G.Mod(vec6.Y, 2.0);
             var vec8 = vec6;
-            vec8.x += G.step(1.0, mod2) * 0.5;
-            vec2 fract2;
+            vec8.X += G.Step(1.0, mod2) * 0.5;
+            Vec2 fract2;
             var vec9 = fract2 = G.Fract(vec6);
-            fract2.y /= 1.155;
+            fract2.Y /= 1.155;
             var vec10 = vec9;
-            vec10.x -= 0.5775;
+            vec10.X -= 0.5775;
             var vec11 = vec9;
-            vec11.y -= 0.5;
-            vec2 multiply3;
-            var vec12 = multiply3 = new vec2(n2 * 1.0, n3 * 1.155).multiply(_zoom);
-            ++multiply3.x;
+            vec11.Y -= 0.5;
+            Vec2 multiply3;
+            var vec12 = multiply3 = new Vec2(n2 * 1.0, n3 * 1.155).Multiply(_zoom);
+            ++multiply3.X;
             var vec13 = vec12;
-            vec13.y -= 0.65;
-            var mod3 = G.mod(vec12.y, 2.0);
+            vec13.Y -= 0.65;
+            var mod3 = G.Mod(vec12.Y, 2.0);
             var vec14 = vec12;
-            vec14.x += G.step(1.0, mod3) * 0.5;
-            vec2 fract3;
+            vec14.X += G.Step(1.0, mod3) * 0.5;
+            Vec2 fract3;
             var vec15 = fract3 = G.Fract(vec12);
-            fract3.y /= 1.155;
+            fract3.Y /= 1.155;
             var vec16 = vec15;
-            vec16.x -= 0.5775;
+            vec16.X -= 0.5775;
             var vec17 = vec15;
-            vec17.y -= 0.5;
+            vec17.Y -= 0.5;
             var n6 = CelticShit(vec3) + CelticShit(vec9) + CelticShit(vec15);
             if (Math.Abs(_invert) <= VariationHelper.SmallDouble)
             {
@@ -113,20 +113,20 @@ namespace Variations.Other
             _invert = P3;
         }
 
-        private static double CelticShit(vec2 vec2)
+        private static double CelticShit(Vec2 vec2)
         {
             const double n2 = 0.38;
             const double n3 = 0.45;
             return G.Mix(0.0,
-                Circ(vec2, n3) - Circ(vec2.plus(new vec2(0.5, -0.288675)), n3) -
-                Circ(vec2.plus(new vec2(-0.5, -0.288675)), n3) - Circ(vec2.plus(new vec2(0.0, 0.57735)), n3),
+                Circ(vec2, n3) - Circ(vec2.Plus(new Vec2(0.5, -0.288675)), n3) -
+                Circ(vec2.Plus(new Vec2(-0.5, -0.288675)), n3) - Circ(vec2.Plus(new Vec2(0.0, 0.57735)), n3),
                 Circ(vec2, n2));
         }
 
-        private static double Circ(vec2 vec2, double n)
+        private static double Circ(Vec2 vec2, double n)
         {
             var length = G.Length(vec2);
-            return G.smoothstep(length, length + 0.02, n);
+            return G.Smoothstep(length, length + 0.02, n);
         }
     }
 }

@@ -38,29 +38,29 @@ namespace Variations.Other
             }
 
             var acos = Math.Acos(-1.0);
-            var minus = new vec2(x * _zoom, y * _zoom);
-            var mod = G.mod(_angle * acos / 180.0, acos * 2.0);
-            var n2 = (0.5 + G.abs(Math.Sin(mod * 2.0)) * (Math.Sqrt(2.0) / 2.0 - 0.5)) * 2.0;
+            var minus = new Vec2(x * _zoom, y * _zoom);
+            var mod = G.Mod(_angle * acos / 180.0, acos * 2.0);
+            var n2 = (0.5 + G.Abs(Math.Sin(mod * 2.0)) * (Math.Sqrt(2.0) / 2.0 - 0.5)) * 2.0;
             var b = false;
             if (G.Fract(mod / acos + 0.25) > 0.5)
             {
-                minus = minus.minus(0.5);
+                minus = minus.Minus(0.5);
                 b = true;
             }
 
-            var multiply = minus.multiply(n2);
-            var floor = G.Floor(multiply.division(n2));
-            var times = G.mod(multiply, n2).minus(n2 / 2.0).multiply(G.mod(floor, 2.0).multiply(2.0).minus(1.0))
-                .times(new mat2(Math.Cos(mod), Math.Sin(mod), -Math.Sin(mod), Math.Cos(mod)));
+            var multiply = minus.Multiply(n2);
+            var floor = G.Floor(multiply.Division(n2));
+            var times = G.Mod(multiply, n2).Minus(n2 / 2.0).Multiply(G.Mod(floor, 2.0).Multiply(2.0).Minus(1.0))
+                .Times(new Mat2(Math.Cos(mod), Math.Sin(mod), -Math.Sin(mod), Math.Cos(mod)));
             var n3 = _zoom / 2000.0 * 1.5;
-            var smoothStep = G.smoothstep(-n3, n3, G.max(Math.Abs(times.x), Math.Abs(times.y)) - 0.5);
+            var smoothStep = G.Smoothstep(-n3, n3, G.Max(Math.Abs(times.X), Math.Abs(times.Y)) - 0.5);
             if (b) smoothStep = 1.0 - smoothStep;
 
             if (b && smoothStep < 0.5 &&
-                (Math.Abs(times.x) - Math.Abs(times.y)) * G.sign(G.Fract(mod / acos) - 0.5) > 0.0)
+                (Math.Abs(times.X) - Math.Abs(times.Y)) * G.Sign(G.Fract(mod / acos) - 0.5) > 0.0)
                 smoothStep = 0.4;
 
-            if (!b && smoothStep < 0.5 && G.mod(floor.x + floor.y, 2.0) - 0.5 > 0.0) smoothStep = 0.4;
+            if (!b && smoothStep < 0.5 && G.Mod(floor.X + floor.Y, 2.0) - 0.5 > 0.0) smoothStep = 0.4;
 
 
             if (Math.Abs(_invert) <= VariationHelper.SmallDouble)

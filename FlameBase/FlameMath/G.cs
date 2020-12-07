@@ -4,37 +4,35 @@ namespace FlameBase.FlameMath
 {
     public class G
     {
-        public static vec2 Reflect(vec2 vec2, vec2 vec3)
+        public static Vec2 Reflect(Vec2 vec2, Vec2 vec3)
         {
-            return vec2.minus(vec3.multiply(2.0 * dot(vec2, vec3)));
+            return vec2.Minus(vec3.Multiply(2.0 * Dot(vec2, vec3)));
         }
 
-        public static vec3 Reflect(vec3 vec3, vec3 vec4)
+        public static Vec3 Reflect(Vec3 vec3, Vec3 vec4)
         {
-            return vec3.minus(vec4.multiply(2.0 * dot(vec3, vec4)));
+            return vec3.Minus(vec4.Multiply(2.0 * Dot(vec3, vec4)));
         }
 
-        public static vec2 refract(vec2 vec2, vec2 vec3, double n)
+        public static Vec2 Refract(Vec2 vec2, Vec2 vec3, double n)
         {
-            var vec4 = new vec2(0.0);
-            var a = 1.0 - n * n * (1.0 - dot(vec3, vec2) * dot(vec3, vec2));
-            vec2 minus;
-            if (a < 0.0)
-                minus = new vec2(0.0);
-            else
-                minus = vec2.multiply(n).minus(vec3.multiply(n * dot(vec3, vec2) + Math.Sqrt(a)));
+            var vec4 = new Vec2(0.0);
+            var a = 1.0 - n * n * (1.0 - Dot(vec3, vec2) * Dot(vec3, vec2));
+            var minus = a < 0.0
+                ? new Vec2(0.0)
+                : vec2.Multiply(n).Minus(vec3.Multiply(n * Dot(vec3, vec2) + Math.Sqrt(a)));
             return minus;
         }
 
-        public static vec3 refract(vec3 vec3, vec3 vec4, double n)
+        public static Vec3 Refract(Vec3 vec3, Vec3 vec4, double n)
         {
-            var vec5 = new vec3(0.0);
-            var a = 1.0 - n * n * (1.0 - dot(vec4, vec3) * dot(vec4, vec3));
-            vec3 minus;
+            var vec5 = new Vec3(0.0);
+            var a = 1.0 - n * n * (1.0 - Dot(vec4, vec3) * Dot(vec4, vec3));
+            Vec3 minus;
             if (a < 0.0)
-                minus = new vec3(0.0);
+                minus = new Vec3(0.0);
             else
-                minus = vec3.multiply(n).minus(vec4.multiply(n * dot(vec4, vec3) + Math.Sqrt(a)));
+                minus = vec3.Multiply(n).Minus(vec4.Multiply(n * Dot(vec4, vec3) + Math.Sqrt(a)));
             return minus;
         }
 
@@ -55,12 +53,12 @@ namespace FlameBase.FlameMath
         //     return longBitsToDouble;
         // }
 
-        public static double atan(double n, double n2)
+        public static double Atan(double n, double n2)
         {
             return Math.Atan(n / n2);
         }
 
-        public static double atan2(double a, double n)
+        public static double Atan2(double a, double n)
         {
             var n2 = 0.7853981633974483;
             var n3 = 3.0 * n2;
@@ -73,145 +71,145 @@ namespace FlameBase.FlameMath
             return a < 0.0 ? -n4 : n4;
         }
 
-        public static double sqrt(double a)
+        public static double Sqrt(double a)
         {
             return Math.Sqrt(a);
         }
 
-        public static vec2 sqrt(vec2 vec2)
+        public static Vec2 Sqrt(Vec2 vec2)
         {
-            var vec3 = new vec2(0.0);
-            vec3.x = Math.Sqrt(vec2.x);
-            vec3.y = Math.Sqrt(vec2.y);
+            var vec3 = new Vec2(0.0);
+            vec3.X = Math.Sqrt(vec2.X);
+            vec3.Y = Math.Sqrt(vec2.Y);
             return vec3;
         }
 
-        public static vec3 sqrt(vec3 vec3)
+        public static Vec3 Sqrt(Vec3 vec3)
         {
-            var vec4 = new vec3(0.0);
-            vec4.x = Math.Sqrt(vec3.x);
-            vec4.y = Math.Sqrt(vec3.y);
-            vec4.z = Math.Sqrt(vec3.z);
+            var vec4 = new Vec3(0.0);
+            vec4.X = Math.Sqrt(vec3.X);
+            vec4.Y = Math.Sqrt(vec3.Y);
+            vec4.Z = Math.Sqrt(vec3.Z);
             return vec4;
         }
 
-        public static vec4 sqrt(vec4 vec4)
+        public static Vec4 Sqrt(Vec4 vec4)
         {
-            var vec5 = new vec4(0.0);
-            vec5.x = Math.Sqrt(vec4.x);
-            vec5.y = Math.Sqrt(vec4.y);
-            vec5.z = Math.Sqrt(vec4.z);
-            vec5.w = Math.Sqrt(vec4.w);
+            var vec5 = new Vec4(0.0);
+            vec5.X = Math.Sqrt(vec4.X);
+            vec5.Y = Math.Sqrt(vec4.Y);
+            vec5.Z = Math.Sqrt(vec4.Z);
+            vec5.W = Math.Sqrt(vec4.W);
             return vec5;
         }
 
-        public static double Length(vec2 vec2)
+        public static double Length(Vec2 vec2)
         {
-            return Math.Sqrt(vec2.x * vec2.x + vec2.y * vec2.y);
+            return Math.Sqrt(vec2.X * vec2.X + vec2.Y * vec2.Y);
         }
 
-        public static double Length(vec3 vec3)
+        public static double Length(Vec3 vec3)
         {
-            return Math.Sqrt(vec3.x * vec3.x + vec3.y * vec3.y + vec3.z * vec3.z);
+            return Math.Sqrt(vec3.X * vec3.X + vec3.Y * vec3.Y + vec3.Z * vec3.Z);
         }
 
-        public static double Length(vec4 vec4)
+        public static double Length(Vec4 vec4)
         {
-            return Math.Sqrt(vec4.x * vec4.x + vec4.y * vec4.y + vec4.z * vec4.z + vec4.w * vec4.w);
+            return Math.Sqrt(vec4.X * vec4.X + vec4.Y * vec4.Y + vec4.Z * vec4.Z + vec4.W * vec4.W);
         }
 
-        public static double abs(double n)
+        public static double Abs(double n)
         {
             return n >= 0.0 ? n : -n;
         }
 
-        public static vec2 abs(vec2 vec2)
+        public static Vec2 Abs(Vec2 vec2)
         {
-            var vec3 = new vec2(0.0);
-            vec3.x = vec2.x >= 0.0 ? vec2.x : -vec2.x;
-            vec3.y = vec2.y >= 0.0 ? vec2.y : -vec2.y;
+            var vec3 = new Vec2(0.0);
+            vec3.X = vec2.X >= 0.0 ? vec2.X : -vec2.X;
+            vec3.Y = vec2.Y >= 0.0 ? vec2.Y : -vec2.Y;
             return vec3;
         }
 
-        public static vec3 abs(vec3 vec3)
+        public static Vec3 Abs(Vec3 vec3)
         {
-            return new vec3(vec3.x >= 0.0 ? vec3.x : -vec3.x, vec3.y >= 0.0 ? vec3.y : -vec3.y,
-                vec3.z >= 0.0 ? vec3.z : -vec3.z);
+            return new Vec3(vec3.X >= 0.0 ? vec3.X : -vec3.X, vec3.Y >= 0.0 ? vec3.Y : -vec3.Y,
+                vec3.Z >= 0.0 ? vec3.Z : -vec3.Z);
         }
 
-        public static vec4 abs(vec4 vec4)
+        public static Vec4 Abs(Vec4 vec4)
         {
-            return new vec4(vec4.x >= 0.0 ? vec4.x : -vec4.x, vec4.y >= 0.0 ? vec4.y : -vec4.y,
-                vec4.z >= 0.0 ? vec4.z : -vec4.z, vec4.w >= 0.0 ? vec4.w : -vec4.w);
+            return new Vec4(vec4.X >= 0.0 ? vec4.X : -vec4.X, vec4.Y >= 0.0 ? vec4.Y : -vec4.Y,
+                vec4.Z >= 0.0 ? vec4.Z : -vec4.Z, vec4.W >= 0.0 ? vec4.W : -vec4.W);
         }
 
-        public static double sign(double d)
+        public static double Sign(double d)
         {
             return Math.Sign(d);
         }
 
-        public static vec2 sign(vec2 vec2)
+        public static Vec2 Sign(Vec2 vec2)
         {
-            return new vec2(Math.Sign(vec2.x), Math.Sign(vec2.y));
+            return new Vec2(Math.Sign(vec2.X), Math.Sign(vec2.Y));
         }
 
-        public static vec3 sign(vec3 vec3)
+        public static Vec3 Sign(Vec3 vec3)
         {
-            return new vec3(Math.Sign(vec3.x), Math.Sign(vec3.y), Math.Sign(vec3.z));
+            return new Vec3(Math.Sign(vec3.X), Math.Sign(vec3.Y), Math.Sign(vec3.Z));
         }
 
-        public static double distance(vec2 vec2, vec2 vec3)
+        public static double Distance(Vec2 vec2, Vec2 vec3)
         {
-            var minus = vec2.minus(vec3);
-            return Math.Sqrt(minus.x * minus.x + minus.y * minus.y);
+            var minus = vec2.Minus(vec3);
+            return Math.Sqrt(minus.X * minus.X + minus.Y * minus.Y);
         }
 
-        public static double distance(vec3 vec3, vec3 vec4)
+        public static double Distance(Vec3 vec3, Vec3 vec4)
         {
-            var minus = vec3.minus(vec4);
-            return Math.Sqrt(minus.x * minus.x + minus.y * minus.y + minus.z * minus.z);
+            var minus = vec3.Minus(vec4);
+            return Math.Sqrt(minus.X * minus.X + minus.Y * minus.Y + minus.Z * minus.Z);
         }
 
-        public static double distance(vec4 vec4, vec4 vec5)
+        public static double Distance(Vec4 vec4, Vec4 vec5)
         {
-            vec4 minus = vec4.minus(vec5);
-            return Math.Sqrt(minus.x * minus.x + minus.y * minus.y + minus.z * minus.z + minus.w * minus.w);
+            var minus = vec4.Minus(vec5);
+            return Math.Sqrt(minus.X * minus.X + minus.Y * minus.Y + minus.Z * minus.Z + minus.W * minus.W);
         }
 
-        public static vec2 normalize(vec2 vec2)
+        public static Vec2 Normalize(Vec2 vec2)
         {
-            return new vec2(vec2.x / Length(vec2), vec2.y / Length(vec2));
+            return new Vec2(vec2.X / Length(vec2), vec2.Y / Length(vec2));
         }
 
-        public static vec3 normalize(vec3 vec3)
+        public static Vec3 Normalize(Vec3 vec3)
         {
-            return new vec3(vec3.x / Length(vec3), vec3.y / Length(vec3), vec3.z / Length(vec3));
+            return new Vec3(vec3.X / Length(vec3), vec3.Y / Length(vec3), vec3.Z / Length(vec3));
         }
 
-        public static vec4 normalize(vec4 vec4)
+        public static Vec4 Normalize(Vec4 vec4)
         {
-            return new vec4(vec4.x / Length(vec4), vec4.y / Length(vec4), vec4.z / Length(vec4), vec4.w / Length(vec4));
+            return new Vec4(vec4.X / Length(vec4), vec4.Y / Length(vec4), vec4.Z / Length(vec4), vec4.W / Length(vec4));
         }
 
-        public static double pow(double a, double b)
+        public static double Pow(double a, double b)
         {
             return Math.Pow(a, b);
         }
 
-        public static vec2 pow(vec2 vec2, vec2 vec3)
+        public static Vec2 Pow(Vec2 vec2, Vec2 vec3)
         {
-            return new vec2(Math.Pow(vec2.x, vec3.x), Math.Pow(vec2.y, vec3.y));
+            return new Vec2(Math.Pow(vec2.X, vec3.X), Math.Pow(vec2.Y, vec3.Y));
         }
 
-        public static vec3 pow(vec3 vec3, vec3 vec4)
+        public static Vec3 Pow(Vec3 vec3, Vec3 vec4)
         {
-            return new vec3(Math.Pow(vec3.x, vec4.x), Math.Pow(vec3.y, vec4.y), Math.Pow(vec3.z, vec4.z));
+            return new Vec3(Math.Pow(vec3.X, vec4.X), Math.Pow(vec3.Y, vec4.Y), Math.Pow(vec3.Z, vec4.Z));
         }
 
-        public static vec4 pow(vec4 vec4, vec4 vec5)
+        public static Vec4 Pow(Vec4 vec4, Vec4 vec5)
         {
-            return new vec4(Math.Pow(vec4.x, vec5.x), Math.Pow(vec4.y, vec5.y), Math.Pow(vec4.z, vec5.z),
-                Math.Pow(vec4.w, vec5.w));
+            return new Vec4(Math.Pow(vec4.X, vec5.X), Math.Pow(vec4.Y, vec5.Y), Math.Pow(vec4.Z, vec5.Z),
+                Math.Pow(vec4.W, vec5.W));
         }
 
         public static double Exp(double a)
@@ -219,19 +217,19 @@ namespace FlameBase.FlameMath
             return Math.Exp(a);
         }
 
-        public static vec2 Exp(vec2 vec2)
+        public static Vec2 Exp(Vec2 vec2)
         {
-            return new vec2(Math.Exp(vec2.x), Math.Exp(vec2.y));
+            return new Vec2(Math.Exp(vec2.X), Math.Exp(vec2.Y));
         }
 
-        public static vec3 Exp(vec3 vec3)
+        public static Vec3 Exp(Vec3 vec3)
         {
-            return new vec3(Math.Exp(vec3.x), Math.Exp(vec3.y), Math.Exp(vec3.z));
+            return new Vec3(Math.Exp(vec3.X), Math.Exp(vec3.Y), Math.Exp(vec3.Z));
         }
 
-        public static vec4 Exp(vec4 vec4)
+        public static Vec4 Exp(Vec4 vec4)
         {
-            return new vec4(Math.Exp(vec4.x), Math.Exp(vec4.y), Math.Exp(vec4.z), Math.Exp(vec4.w));
+            return new Vec4(Math.Exp(vec4.X), Math.Exp(vec4.Y), Math.Exp(vec4.Z), Math.Exp(vec4.W));
         }
 
         public static double Clamp(double a, double b, double b2)
@@ -239,21 +237,21 @@ namespace FlameBase.FlameMath
             return Math.Min(Math.Max(a, b), b2);
         }
 
-        public static vec2 Clamp(vec2 vec2, double n, double n2)
+        public static Vec2 Clamp(Vec2 vec2, double n, double n2)
         {
-            return new vec2(Math.Min(Math.Max(vec2.x, n), n2), Math.Min(Math.Max(vec2.y, n), n2));
+            return new Vec2(Math.Min(Math.Max(vec2.X, n), n2), Math.Min(Math.Max(vec2.Y, n), n2));
         }
 
-        public static vec3 Clamp(vec3 vec3, double b, double b2)
+        public static Vec3 Clamp(Vec3 vec3, double b, double b2)
         {
-            return new vec3(Math.Min(Math.Max(vec3.x, b), b2), Math.Min(Math.Max(vec3.y, b), b2),
-                Math.Min(Math.Max(vec3.z, b), b2));
+            return new Vec3(Math.Min(Math.Max(vec3.X, b), b2), Math.Min(Math.Max(vec3.Y, b), b2),
+                Math.Min(Math.Max(vec3.Z, b), b2));
         }
 
-        public static vec4 Clamp(vec4 vec4, double n, double n2)
+        public static Vec4 Clamp(Vec4 vec4, double n, double n2)
         {
-            return new vec4(Math.Min(Math.Max(vec4.x, n), n2), Math.Min(Math.Max(vec4.y, n), n2),
-                Math.Min(Math.Max(vec4.z, n), n2), Math.Min(Math.Max(vec4.w, n), n2));
+            return new Vec4(Math.Min(Math.Max(vec4.X, n), n2), Math.Min(Math.Max(vec4.Y, n), n2),
+                Math.Min(Math.Max(vec4.Z, n), n2), Math.Min(Math.Max(vec4.W, n), n2));
         }
 
         public static double Mix(double n, double n2, double n3)
@@ -261,258 +259,258 @@ namespace FlameBase.FlameMath
             return n * (1.0 - n3) + n2 * n3;
         }
 
-        public static vec2 Mix(vec2 vec2, vec2 vec3, double n)
+        public static Vec2 Mix(Vec2 vec2, Vec2 vec3, double n)
         {
-            var vec4 = new vec2(0.0, 0.0);
-            vec4.x = vec2.x * (1.0 - n) + vec3.x * n;
-            vec4.y = vec2.y * (1.0 - n) + vec3.y * n;
+            var vec4 = new Vec2(0.0, 0.0);
+            vec4.X = vec2.X * (1.0 - n) + vec3.X * n;
+            vec4.Y = vec2.Y * (1.0 - n) + vec3.Y * n;
             return vec4;
         }
 
-        public static vec3 Mix(vec3 vec3, vec3 vec4, double n)
+        public static Vec3 Mix(Vec3 vec3, Vec3 vec4, double n)
         {
-            var vec5 = new vec3(0.0, 0.0, 0.0);
-            vec5.x = vec3.x * (1.0 - n) + vec4.x * n;
-            vec5.y = vec3.y * (1.0 - n) + vec4.y * n;
-            vec5.z = vec3.z * (1.0 - n) + vec4.z * n;
+            var vec5 = new Vec3(0.0, 0.0, 0.0);
+            vec5.X = vec3.X * (1.0 - n) + vec4.X * n;
+            vec5.Y = vec3.Y * (1.0 - n) + vec4.Y * n;
+            vec5.Z = vec3.Z * (1.0 - n) + vec4.Z * n;
             return vec5;
         }
 
-        public static vec4 Mix(vec4 vec4, vec4 vec5, double n)
+        public static Vec4 Mix(Vec4 vec4, Vec4 vec5, double n)
         {
-            return new vec4(vec4.x * (1.0 - n) + vec5.x * n, vec4.y * (1.0 - n) + vec5.y * n,
-                vec4.z * (1.0 - n) + vec5.z * n, vec4.w * (1.0 - n) + vec5.w * n);
+            return new Vec4(vec4.X * (1.0 - n) + vec5.X * n, vec4.Y * (1.0 - n) + vec5.Y * n,
+                vec4.Z * (1.0 - n) + vec5.Z * n, vec4.W * (1.0 - n) + vec5.W * n);
         }
 
-        public static double log2(double a)
+        public static double Log2(double a)
         {
             return Math.Log(a) / Math.Log(2.0);
         }
 
-        public static double smoothstep(double n, double n2, double n3)
+        public static double Smoothstep(double n, double n2, double n3)
         {
-            double clamp = Clamp((n3 - n) / (n2 - n), 0.0, 1.0);
+            var clamp = Clamp((n3 - n) / (n2 - n), 0.0, 1.0);
             return clamp * clamp * (3.0 - 2.0 * clamp);
         }
 
-        public static vec2 smoothstep(double n, double n2, vec2 vec2)
+        public static Vec2 Smoothstep(double n, double n2, Vec2 vec2)
         {
-            var vec3 = new vec2(0.0);
-            vec3.x = smoothstep(n, n2, vec2.x);
-            vec3.y = smoothstep(n, n2, vec2.y);
+            var vec3 = new Vec2(0.0);
+            vec3.X = Smoothstep(n, n2, vec2.X);
+            vec3.Y = Smoothstep(n, n2, vec2.Y);
             return vec3;
         }
 
-        public static vec2 smoothstep(vec2 vec2, vec2 vec3, vec2 vec4)
+        public static Vec2 Smoothstep(Vec2 vec2, Vec2 vec3, Vec2 vec4)
         {
-            var vec5 = new vec2(0.0);
-            vec5.x = smoothstep(vec2.x, vec3.x, vec4.x);
-            vec5.y = smoothstep(vec2.y, vec3.y, vec4.y);
+            var vec5 = new Vec2(0.0);
+            vec5.X = Smoothstep(vec2.X, vec3.X, vec4.X);
+            vec5.Y = Smoothstep(vec2.Y, vec3.Y, vec4.Y);
             return vec5;
         }
 
-        public static vec3 smoothstep(double n, double n2, vec3 vec3)
+        public static Vec3 Smoothstep(double n, double n2, Vec3 vec3)
         {
-            var vec4 = new vec3(0.0);
-            vec4.x = smoothstep(n, n2, vec3.x);
-            vec4.y = smoothstep(n, n2, vec3.y);
-            vec4.z = smoothstep(n, n2, vec3.z);
+            var vec4 = new Vec3(0.0);
+            vec4.X = Smoothstep(n, n2, vec3.X);
+            vec4.Y = Smoothstep(n, n2, vec3.Y);
+            vec4.Z = Smoothstep(n, n2, vec3.Z);
             return vec4;
         }
 
-        public static vec3 smoothstep(vec3 vec3, vec3 vec4, vec3 vec5)
+        public static Vec3 Smoothstep(Vec3 vec3, Vec3 vec4, Vec3 vec5)
         {
-            var vec6 = new vec3(0.0);
-            vec6.x = smoothstep(vec3.x, vec4.x, vec5.x);
-            vec6.y = smoothstep(vec3.y, vec4.y, vec5.y);
-            vec6.z = smoothstep(vec3.z, vec4.z, vec5.z);
+            var vec6 = new Vec3(0.0);
+            vec6.X = Smoothstep(vec3.X, vec4.X, vec5.X);
+            vec6.Y = Smoothstep(vec3.Y, vec4.Y, vec5.Y);
+            vec6.Z = Smoothstep(vec3.Z, vec4.Z, vec5.Z);
             return vec6;
         }
 
-        public static vec4 smoothstep(double n, double n2, vec4 vec4)
+        public static Vec4 Smoothstep(double n, double n2, Vec4 vec4)
         {
-            vec4 vec5 = new vec4(0.0);
-            vec5.x = smoothstep(n, n2, vec4.x);
-            vec5.y = smoothstep(n, n2, vec4.y);
-            vec5.z = smoothstep(n, n2, vec4.z);
-            vec5.w = smoothstep(n, n2, vec4.w);
+            var vec5 = new Vec4(0.0);
+            vec5.X = Smoothstep(n, n2, vec4.X);
+            vec5.Y = Smoothstep(n, n2, vec4.Y);
+            vec5.Z = Smoothstep(n, n2, vec4.Z);
+            vec5.W = Smoothstep(n, n2, vec4.W);
             return vec5;
         }
 
-        public static vec4 smoothstep(vec4 vec4, vec4 vec5, vec4 vec6)
+        public static Vec4 Smoothstep(Vec4 vec4, Vec4 vec5, Vec4 vec6)
         {
-            vec4 vec7 = new vec4(0.0);
-            vec7.x = smoothstep(vec4.x, vec5.x, vec6.x);
-            vec7.y = smoothstep(vec4.y, vec5.y, vec6.y);
-            vec7.z = smoothstep(vec4.z, vec5.z, vec6.z);
-            vec7.w = smoothstep(vec4.w, vec5.w, vec6.w);
+            var vec7 = new Vec4(0.0);
+            vec7.X = Smoothstep(vec4.X, vec5.X, vec6.X);
+            vec7.Y = Smoothstep(vec4.Y, vec5.Y, vec6.Y);
+            vec7.Z = Smoothstep(vec4.Z, vec5.Z, vec6.Z);
+            vec7.W = Smoothstep(vec4.W, vec5.W, vec6.W);
             return vec7;
         }
 
-        public static double dot(double n, double n2)
+        public static double Dot(double n, double n2)
         {
             return n * n2;
         }
 
-        public static double dot(vec2 vec2, vec2 vec3)
+        public static double Dot(Vec2 vec2, Vec2 vec3)
         {
-            return vec2.x * vec3.x + vec2.y * vec3.y;
+            return vec2.X * vec3.X + vec2.Y * vec3.Y;
         }
 
-        public static double dot(vec3 vec3, vec3 vec4)
+        public static double Dot(Vec3 vec3, Vec3 vec4)
         {
-            return vec3.x * vec4.x + vec3.y * vec4.y + vec3.z * vec4.z;
+            return vec3.X * vec4.X + vec3.Y * vec4.Y + vec3.Z * vec4.Z;
         }
 
-        public static double dot(vec4 vec4, vec4 vec5)
+        public static double Dot(Vec4 vec4, Vec4 vec5)
         {
-            return vec4.x * vec5.x + vec4.y * vec5.y + vec4.z * vec5.z + vec4.w * vec5.w;
+            return vec4.X * vec5.X + vec4.Y * vec5.Y + vec4.Z * vec5.Z + vec4.W * vec5.W;
         }
 
-        public static vec3 cross(vec3 vec3, vec3 vec4)
+        public static Vec3 Cross(Vec3 vec3, Vec3 vec4)
         {
-            return new vec3(vec3.y * vec4.z - vec4.y * vec3.z, vec3.z * vec4.x - vec4.z * vec3.x,
-                vec3.x * vec4.y - vec4.x * vec3.y);
+            return new Vec3(vec3.Y * vec4.Z - vec4.Y * vec3.Z, vec3.Z * vec4.X - vec4.Z * vec3.X,
+                vec3.X * vec4.Y - vec4.X * vec3.Y);
         }
 
-        public static double mod(double n, double n2)
+        public static double Mod(double n, double n2)
         {
             return n - n2 * Math.Floor(n / n2);
         }
 
-        public static vec2 mod(vec2 vec2, double n)
+        public static Vec2 Mod(Vec2 vec2, double n)
         {
-            var vec3 = new vec2(0.0);
-            vec3.x = vec2.x - n * Math.Floor(vec2.x / n);
-            vec3.y = vec2.y - n * Math.Floor(vec2.y / n);
+            var vec3 = new Vec2(0.0);
+            vec3.X = vec2.X - n * Math.Floor(vec2.X / n);
+            vec3.Y = vec2.Y - n * Math.Floor(vec2.Y / n);
             return vec3;
         }
 
-        public static vec2 mod(vec2 vec2, vec2 vec3)
+        public static Vec2 Mod(Vec2 vec2, Vec2 vec3)
         {
-            var vec4 = new vec2(0.0);
-            vec4.x = vec2.x - vec3.x * Math.Floor(vec2.x / vec3.x);
-            vec4.y = vec2.y - vec3.y * Math.Floor(vec2.y / vec3.y);
+            var vec4 = new Vec2(0.0);
+            vec4.X = vec2.X - vec3.X * Math.Floor(vec2.X / vec3.X);
+            vec4.Y = vec2.Y - vec3.Y * Math.Floor(vec2.Y / vec3.Y);
             return vec4;
         }
 
-        public static vec3 mod(vec3 vec3, double n)
+        public static Vec3 Mod(Vec3 vec3, double n)
         {
-            var vec4 = new vec3(0.0);
-            vec4.x = vec3.x - n * Math.Floor(vec3.x / n);
-            vec4.y = vec3.y - n * Math.Floor(vec3.y / n);
-            vec4.z = vec3.z - n * Math.Floor(vec3.z / n);
+            var vec4 = new Vec3(0.0);
+            vec4.X = vec3.X - n * Math.Floor(vec3.X / n);
+            vec4.Y = vec3.Y - n * Math.Floor(vec3.Y / n);
+            vec4.Z = vec3.Z - n * Math.Floor(vec3.Z / n);
             return vec4;
         }
 
-        public static vec3 mod(vec3 vec3, vec3 vec4)
+        public static Vec3 Mod(Vec3 vec3, Vec3 vec4)
         {
-            var vec5 = new vec3(0.0);
-            vec5.x = vec3.x - vec4.x * Math.Floor(vec3.x / vec4.x);
-            vec5.y = vec3.y - vec4.y * Math.Floor(vec3.y / vec4.y);
-            vec5.z = vec3.z - vec4.z * Math.Floor(vec3.z / vec4.z);
+            var vec5 = new Vec3(0.0);
+            vec5.X = vec3.X - vec4.X * Math.Floor(vec3.X / vec4.X);
+            vec5.Y = vec3.Y - vec4.Y * Math.Floor(vec3.Y / vec4.Y);
+            vec5.Z = vec3.Z - vec4.Z * Math.Floor(vec3.Z / vec4.Z);
             return vec5;
         }
 
-        public static vec4 mod(vec4 vec4, double n)
+        public static Vec4 Mod(Vec4 vec4, double n)
         {
-            vec4 vec5 = new vec4(0.0);
-            vec5.x = vec4.x - n * Math.Floor(vec4.x / n);
-            vec5.y = vec4.y - n * Math.Floor(vec4.y / n);
-            vec5.z = vec4.z - n * Math.Floor(vec4.z / n);
-            vec5.w = vec4.w - n * Math.Floor(vec4.w / n);
+            var vec5 = new Vec4(0.0);
+            vec5.X = vec4.X - n * Math.Floor(vec4.X / n);
+            vec5.Y = vec4.Y - n * Math.Floor(vec4.Y / n);
+            vec5.Z = vec4.Z - n * Math.Floor(vec4.Z / n);
+            vec5.W = vec4.W - n * Math.Floor(vec4.W / n);
             return vec5;
         }
 
-        public static double step(double n, double n2)
+        public static double Step(double n, double n2)
         {
             if (n2 < n) return 0.0;
             return 1.0;
         }
 
-        public static vec2 step(double n, vec2 vec2)
+        public static Vec2 Step(double n, Vec2 vec2)
         {
-            var vec3 = new vec2(0.0);
-            if (vec2.x < n)
-                vec3.x = 0.0;
+            var vec3 = new Vec2(0.0);
+            if (vec2.X < n)
+                vec3.X = 0.0;
             else
-                vec3.x = 1.0;
-            if (vec2.y < n)
-                vec3.y = 0.0;
+                vec3.X = 1.0;
+            if (vec2.Y < n)
+                vec3.Y = 0.0;
             else
-                vec3.y = 1.0;
+                vec3.Y = 1.0;
             return vec3;
         }
 
-        public static vec2 step(vec2 vec2, vec2 vec3)
+        public static Vec2 Step(Vec2 vec2, Vec2 vec3)
         {
-            var vec4 = new vec2(0.0);
-            if (vec3.x < vec2.x)
-                vec4.x = 0.0;
+            var vec4 = new Vec2(0.0);
+            if (vec3.X < vec2.X)
+                vec4.X = 0.0;
             else
-                vec4.x = 1.0;
-            if (vec3.y < vec2.y)
-                vec4.y = 0.0;
+                vec4.X = 1.0;
+            if (vec3.Y < vec2.Y)
+                vec4.Y = 0.0;
             else
-                vec4.y = 1.0;
+                vec4.Y = 1.0;
             return vec4;
         }
 
-        public static vec3 step(double n, vec3 vec3)
+        public static Vec3 Step(double n, Vec3 vec3)
         {
-            var vec4 = new vec3(0.0);
-            if (vec3.x < n)
-                vec4.x = 0.0;
+            var vec4 = new Vec3(0.0);
+            if (vec3.X < n)
+                vec4.X = 0.0;
             else
-                vec4.x = 1.0;
-            if (vec3.y < n)
-                vec4.y = 0.0;
+                vec4.X = 1.0;
+            if (vec3.Y < n)
+                vec4.Y = 0.0;
             else
-                vec4.y = 1.0;
-            if (vec3.z < n)
-                vec4.z = 0.0;
+                vec4.Y = 1.0;
+            if (vec3.Z < n)
+                vec4.Z = 0.0;
             else
-                vec4.z = 1.0;
+                vec4.Z = 1.0;
             return vec4;
         }
 
-        public static vec3 step(vec3 vec3, vec3 vec4)
+        public static Vec3 Step(Vec3 vec3, Vec3 vec4)
         {
-            var vec5 = new vec3(0.0);
-            if (vec4.x < vec3.x)
-                vec5.x = 0.0;
+            var vec5 = new Vec3(0.0);
+            if (vec4.X < vec3.X)
+                vec5.X = 0.0;
             else
-                vec5.x = 1.0;
-            if (vec4.y < vec3.y)
-                vec5.y = 0.0;
+                vec5.X = 1.0;
+            if (vec4.Y < vec3.Y)
+                vec5.Y = 0.0;
             else
-                vec5.y = 1.0;
-            if (vec4.z < vec3.z)
-                vec5.z = 0.0;
+                vec5.Y = 1.0;
+            if (vec4.Z < vec3.Z)
+                vec5.Z = 0.0;
             else
-                vec5.z = 1.0;
+                vec5.Z = 1.0;
             return vec5;
         }
 
-        public static vec4 step(vec4 vec4, vec4 vec5)
+        public static Vec4 Step(Vec4 vec4, Vec4 vec5)
         {
-            vec4 vec6 = new vec4(0.0);
-            if (vec5.x < vec4.x)
-                vec6.x = 0.0;
+            var vec6 = new Vec4(0.0);
+            if (vec5.X < vec4.X)
+                vec6.X = 0.0;
             else
-                vec6.x = 1.0;
-            if (vec5.y < vec4.y)
-                vec6.y = 0.0;
+                vec6.X = 1.0;
+            if (vec5.Y < vec4.Y)
+                vec6.Y = 0.0;
             else
-                vec6.y = 1.0;
-            if (vec5.z < vec4.z)
-                vec6.z = 0.0;
+                vec6.Y = 1.0;
+            if (vec5.Z < vec4.Z)
+                vec6.Z = 0.0;
             else
-                vec6.z = 1.0;
-            if (vec5.w < vec4.w)
-                vec6.w = 0.0;
+                vec6.Z = 1.0;
+            if (vec5.W < vec4.W)
+                vec6.W = 0.0;
             else
-                vec6.w = 1.0;
+                vec6.W = 1.0;
             return vec6;
         }
 
@@ -521,126 +519,126 @@ namespace FlameBase.FlameMath
             return Math.Floor(a);
         }
 
-        public static vec2 Floor(vec2 vec2)
+        public static Vec2 Floor(Vec2 vec2)
         {
-            var vec3 = new vec2(0.0);
-            vec3.x = Math.Floor(vec2.x);
-            vec3.y = Math.Floor(vec2.y);
+            var vec3 = new Vec2(0.0);
+            vec3.X = Math.Floor(vec2.X);
+            vec3.Y = Math.Floor(vec2.Y);
             return vec3;
         }
 
-        public static vec3 Floor(vec3 vec3)
+        public static Vec3 Floor(Vec3 vec3)
         {
-            var vec4 = new vec3(0.0);
-            vec4.x = Math.Floor(vec3.x);
-            vec4.y = Math.Floor(vec3.y);
-            vec4.z = Math.Floor(vec3.z);
+            var vec4 = new Vec3(0.0);
+            vec4.X = Math.Floor(vec3.X);
+            vec4.Y = Math.Floor(vec3.Y);
+            vec4.Z = Math.Floor(vec3.Z);
             return vec4;
         }
 
-        public static vec4 Floor(vec4 vec4)
+        public static Vec4 Floor(Vec4 vec4)
         {
-            vec4 vec5 = new vec4(0.0);
-            vec5.x = Math.Floor(vec4.x);
-            vec5.y = Math.Floor(vec4.y);
-            vec5.z = Math.Floor(vec4.z);
-            vec5.w = Math.Floor(vec4.w);
+            var vec5 = new Vec4(0.0);
+            vec5.X = Math.Floor(vec4.X);
+            vec5.Y = Math.Floor(vec4.Y);
+            vec5.Z = Math.Floor(vec4.Z);
+            vec5.W = Math.Floor(vec4.W);
             return vec5;
         }
 
-        public static double trunc(double n)
+        public static double Trunc(double n)
         {
             return (int) n;
         }
 
-        public static vec2 trunc(vec2 vec2)
+        public static Vec2 Trunc(Vec2 vec2)
         {
-            var vec3 = new vec2(0.0);
-            vec3.x = trunc(vec2.x);
-            vec3.y = trunc(vec2.y);
+            var vec3 = new Vec2(0.0);
+            vec3.X = Trunc(vec2.X);
+            vec3.Y = Trunc(vec2.Y);
             return vec3;
         }
 
-        public static vec3 trunc(vec3 vec3)
+        public static Vec3 Trunc(Vec3 vec3)
         {
-            var vec4 = new vec3(0.0);
-            vec4.x = trunc(vec3.x);
-            vec4.y = trunc(vec3.y);
-            vec4.z = trunc(vec3.z);
+            var vec4 = new Vec3(0.0);
+            vec4.X = Trunc(vec3.X);
+            vec4.Y = Trunc(vec3.Y);
+            vec4.Z = Trunc(vec3.Z);
             return vec4;
         }
 
-        public static vec4 trunc(vec4 vec4)
+        public static Vec4 Trunc(Vec4 vec4)
         {
-            vec4 vec5 = new vec4(0.0);
-            vec5.x = trunc(vec4.x);
-            vec5.y = trunc(vec4.y);
-            vec5.z = trunc(vec4.z);
-            vec5.w = trunc(vec4.w);
+            var vec5 = new Vec4(0.0);
+            vec5.X = Trunc(vec4.X);
+            vec5.Y = Trunc(vec4.Y);
+            vec5.Z = Trunc(vec4.Z);
+            vec5.W = Trunc(vec4.W);
             return vec5;
         }
 
-        public static double round(double a)
+        public static double Round(double a)
         {
             return Math.Round(a);
         }
 
-        public static vec2 round(vec2 vec2)
+        public static Vec2 Round(Vec2 vec2)
         {
-            var vec3 = new vec2(0.0);
-            vec3.x = round(vec2.x);
-            vec3.y = round(vec2.y);
+            var vec3 = new Vec2(0.0);
+            vec3.X = Round(vec2.X);
+            vec3.Y = Round(vec2.Y);
             return vec3;
         }
 
-        public static vec3 round(vec3 vec3)
+        public static Vec3 Round(Vec3 vec3)
         {
-            var vec4 = new vec3(0.0);
-            vec4.x = round(vec3.x);
-            vec4.y = round(vec3.y);
-            vec4.z = round(vec3.z);
+            var vec4 = new Vec3(0.0);
+            vec4.X = Round(vec3.X);
+            vec4.Y = Round(vec3.Y);
+            vec4.Z = Round(vec3.Z);
             return vec4;
         }
 
-        public static vec4 round(vec4 vec4)
+        public static Vec4 Round(Vec4 vec4)
         {
-            vec4 vec5 = new vec4(0.0);
-            vec5.x = round(vec4.x);
-            vec5.y = round(vec4.y);
-            vec5.z = round(vec4.z);
-            vec5.w = round(vec4.w);
+            var vec5 = new Vec4(0.0);
+            vec5.X = Round(vec4.X);
+            vec5.Y = Round(vec4.Y);
+            vec5.Z = Round(vec4.Z);
+            vec5.W = Round(vec4.W);
             return vec5;
         }
 
-        public static double ceil(double a)
+        public static double Ceil(double a)
         {
             return Math.Ceiling(a);
         }
 
-        public static vec2 ceil(vec2 vec2)
+        public static Vec2 Ceil(Vec2 vec2)
         {
-            var vec3 = new vec2(0.0);
-            vec3.x = ceil(vec2.x);
-            vec3.y = ceil(vec2.y);
+            var vec3 = new Vec2(0.0);
+            vec3.X = Ceil(vec2.X);
+            vec3.Y = Ceil(vec2.Y);
             return vec3;
         }
 
-        public static vec3 ceil(vec3 vec3)
+        public static Vec3 Ceil(Vec3 vec3)
         {
-            var vec4 = new vec3(0.0);
-            vec4.x = ceil(vec3.x);
-            vec4.y = ceil(vec3.y);
-            vec4.z = ceil(vec3.z);
+            var vec4 = new Vec3(0.0);
+            vec4.X = Ceil(vec3.X);
+            vec4.Y = Ceil(vec3.Y);
+            vec4.Z = Ceil(vec3.Z);
             return vec4;
         }
 
-        public static vec4 ceil(vec4 vec4)
+        public static Vec4 Ceil(Vec4 vec4)
         {
-            vec4 vec5 = new vec4(0.0);
-            vec5.x = ceil(vec4.x);
-            vec5.y = ceil(vec4.y);
-            vec5.z = ceil(vec4.z);
-            vec5.w = ceil(vec4.w);
+            var vec5 = new Vec4(0.0);
+            vec5.X = Ceil(vec4.X);
+            vec5.Y = Ceil(vec4.Y);
+            vec5.Z = Ceil(vec4.Z);
+            vec5.W = Ceil(vec4.W);
             return vec5;
         }
 
@@ -649,20 +647,20 @@ namespace FlameBase.FlameMath
             return a - Math.Floor(a);
         }
 
-        public static vec2 Fract(vec2 vec2)
+        public static Vec2 Fract(Vec2 vec2)
         {
-            return new vec2(vec2.x - Math.Floor(vec2.x), vec2.y - Math.Floor(vec2.y));
+            return new Vec2(vec2.X - Math.Floor(vec2.X), vec2.Y - Math.Floor(vec2.Y));
         }
 
-        public static vec3 Fract(vec3 vec3)
+        public static Vec3 Fract(Vec3 vec3)
         {
-            return new vec3(vec3.x - Math.Floor(vec3.x), vec3.y - Math.Floor(vec3.y), vec3.z - Math.Floor(vec3.z));
+            return new Vec3(vec3.X - Math.Floor(vec3.X), vec3.Y - Math.Floor(vec3.Y), vec3.Z - Math.Floor(vec3.Z));
         }
 
-        public static vec4 Fract(vec4 vec4)
+        public static Vec4 Fract(Vec4 vec4)
         {
-            return new vec4(vec4.x - Math.Floor(vec4.x), vec4.y - Math.Floor(vec4.y), vec4.z - Math.Floor(vec4.z),
-                vec4.w - Math.Floor(vec4.w));
+            return new Vec4(vec4.X - Math.Floor(vec4.X), vec4.Y - Math.Floor(vec4.Y), vec4.Z - Math.Floor(vec4.Z),
+                vec4.W - Math.Floor(vec4.W));
         }
 
         public static double Min(double n, double n2)
@@ -670,192 +668,192 @@ namespace FlameBase.FlameMath
             return n2 < n ? n2 : n;
         }
 
-        public static vec2 Min(vec2 vec2, vec2 vec3)
+        public static Vec2 Min(Vec2 vec2, Vec2 vec3)
         {
-            var vec4 = new vec2(0.0);
-            vec4.x = vec3.x < vec2.x ? vec3.x : vec2.x;
-            vec4.y = vec3.y < vec2.y ? vec3.y : vec2.y;
+            var vec4 = new Vec2(0.0);
+            vec4.X = vec3.X < vec2.X ? vec3.X : vec2.X;
+            vec4.Y = vec3.Y < vec2.Y ? vec3.Y : vec2.Y;
             return vec4;
         }
 
-        public static vec3 Min(vec3 vec3, vec3 vec4)
+        public static Vec3 Min(Vec3 vec3, Vec3 vec4)
         {
-            var vec5 = new vec3(0.0);
-            vec5.x = vec4.x < vec3.x ? vec4.x : vec3.x;
-            vec5.y = vec4.y < vec3.y ? vec4.y : vec3.y;
-            vec5.z = vec4.z < vec3.z ? vec4.z : vec3.z;
+            var vec5 = new Vec3(0.0);
+            vec5.X = vec4.X < vec3.X ? vec4.X : vec3.X;
+            vec5.Y = vec4.Y < vec3.Y ? vec4.Y : vec3.Y;
+            vec5.Z = vec4.Z < vec3.Z ? vec4.Z : vec3.Z;
             return vec5;
         }
 
-        public static vec4 Min(vec4 vec4, vec4 vec5)
+        public static Vec4 Min(Vec4 vec4, Vec4 vec5)
         {
-            vec4 vec6 = new vec4(0.0);
-            vec6.x = vec5.x < vec4.x ? vec5.x : vec4.x;
-            vec6.y = vec5.y < vec4.y ? vec5.y : vec4.y;
-            vec6.z = vec5.z < vec4.z ? vec5.z : vec4.z;
-            vec6.w = vec5.w < vec4.w ? vec5.w : vec4.w;
+            var vec6 = new Vec4(0.0);
+            vec6.X = vec5.X < vec4.X ? vec5.X : vec4.X;
+            vec6.Y = vec5.Y < vec4.Y ? vec5.Y : vec4.Y;
+            vec6.Z = vec5.Z < vec4.Z ? vec5.Z : vec4.Z;
+            vec6.W = vec5.W < vec4.W ? vec5.W : vec4.W;
             return vec6;
         }
 
-        public static vec2 Min(vec2 vec2, double n)
+        public static Vec2 Min(Vec2 vec2, double n)
         {
-            var vec3 = new vec2(0.0);
-            vec3.x = n < vec2.x ? n : vec2.x;
-            vec3.y = n < vec2.y ? n : vec2.y;
+            var vec3 = new Vec2(0.0);
+            vec3.X = n < vec2.X ? n : vec2.X;
+            vec3.Y = n < vec2.Y ? n : vec2.Y;
             return vec3;
         }
 
-        public static vec3 Min(vec3 vec3, double n)
+        public static Vec3 Min(Vec3 vec3, double n)
         {
-            var vec4 = new vec3(0.0);
-            vec4.x = n < vec3.x ? n : vec3.x;
-            vec4.y = n < vec3.y ? n : vec3.y;
-            vec4.z = n < vec3.z ? n : vec3.z;
+            var vec4 = new Vec3(0.0);
+            vec4.X = n < vec3.X ? n : vec3.X;
+            vec4.Y = n < vec3.Y ? n : vec3.Y;
+            vec4.Z = n < vec3.Z ? n : vec3.Z;
             return vec4;
         }
 
-        public static vec4 Min(vec4 vec4, double n)
+        public static Vec4 Min(Vec4 vec4, double n)
         {
-            vec4 vec5 = new vec4(0.0);
-            vec5.x = n < vec4.x ? n : vec4.x;
-            vec5.y = n < vec4.y ? n : vec4.y;
-            vec5.z = n < vec4.z ? n : vec4.z;
-            vec5.w = n < vec4.w ? n : vec4.w;
+            var vec5 = new Vec4(0.0);
+            vec5.X = n < vec4.X ? n : vec4.X;
+            vec5.Y = n < vec4.Y ? n : vec4.Y;
+            vec5.Z = n < vec4.Z ? n : vec4.Z;
+            vec5.W = n < vec4.W ? n : vec4.W;
             return vec5;
         }
 
-        public static double max(double n, double n2)
+        public static double Max(double n, double n2)
         {
             return n < n2 ? n2 : n;
         }
 
-        public static vec2 max(vec2 vec2, vec2 vec3)
+        public static Vec2 Max(Vec2 vec2, Vec2 vec3)
         {
-            var vec4 = new vec2(0.0);
-            vec4.x = vec2.x < vec3.x ? vec3.x : vec2.x;
-            vec4.y = vec2.y < vec3.y ? vec3.y : vec2.y;
+            var vec4 = new Vec2(0.0);
+            vec4.X = vec2.X < vec3.X ? vec3.X : vec2.X;
+            vec4.Y = vec2.Y < vec3.Y ? vec3.Y : vec2.Y;
             return vec4;
         }
 
-        public static vec3 max(vec3 vec3, vec3 vec4)
+        public static Vec3 Max(Vec3 vec3, Vec3 vec4)
         {
-            var vec5 = new vec3(0.0);
-            vec5.x = vec3.x < vec4.x ? vec4.x : vec3.x;
-            vec5.y = vec3.y < vec4.y ? vec4.y : vec3.y;
-            vec5.z = vec3.z < vec4.z ? vec4.z : vec3.z;
+            var vec5 = new Vec3(0.0);
+            vec5.X = vec3.X < vec4.X ? vec4.X : vec3.X;
+            vec5.Y = vec3.Y < vec4.Y ? vec4.Y : vec3.Y;
+            vec5.Z = vec3.Z < vec4.Z ? vec4.Z : vec3.Z;
             return vec5;
         }
 
-        public static vec4 max(vec4 vec4, vec4 vec5)
+        public static Vec4 Max(Vec4 vec4, Vec4 vec5)
         {
-            vec4 vec6 = new vec4(0.0);
-            vec6.x = vec4.x < vec5.x ? vec5.x : vec4.x;
-            vec6.y = vec4.y < vec5.y ? vec5.y : vec4.y;
-            vec6.z = vec4.z < vec5.z ? vec5.z : vec4.z;
-            vec6.w = vec4.w < vec5.w ? vec5.w : vec4.w;
+            var vec6 = new Vec4(0.0);
+            vec6.X = vec4.X < vec5.X ? vec5.X : vec4.X;
+            vec6.Y = vec4.Y < vec5.Y ? vec5.Y : vec4.Y;
+            vec6.Z = vec4.Z < vec5.Z ? vec5.Z : vec4.Z;
+            vec6.W = vec4.W < vec5.W ? vec5.W : vec4.W;
             return vec6;
         }
 
-        public static vec2 max(vec2 vec2, double n)
+        public static Vec2 Max(Vec2 vec2, double n)
         {
-            var vec3 = new vec2(0.0);
-            vec3.x = vec2.x < n ? n : vec2.x;
-            vec3.y = vec2.y < n ? n : vec2.y;
+            var vec3 = new Vec2(0.0);
+            vec3.X = vec2.X < n ? n : vec2.X;
+            vec3.Y = vec2.Y < n ? n : vec2.Y;
             return vec3;
         }
 
-        public static vec3 max(vec3 vec3, double n)
+        public static Vec3 Max(Vec3 vec3, double n)
         {
-            var vec4 = new vec3(0.0);
-            vec4.x = vec3.x < n ? n : vec3.x;
-            vec4.y = vec3.y < n ? n : vec3.y;
-            vec4.z = vec3.z < n ? n : vec3.z;
+            var vec4 = new Vec3(0.0);
+            vec4.X = vec3.X < n ? n : vec3.X;
+            vec4.Y = vec3.Y < n ? n : vec3.Y;
+            vec4.Z = vec3.Z < n ? n : vec3.Z;
             return vec4;
         }
 
-        public static vec4 max(vec4 vec4, double n)
+        public static Vec4 Max(Vec4 vec4, double n)
         {
-            vec4 vec5 = new vec4(0.0);
-            vec5.x = vec4.x < n ? n : vec4.x;
-            vec5.y = vec4.y < n ? n : vec4.y;
-            vec5.z = vec4.z < n ? n : vec4.z;
-            vec5.w = vec4.w < n ? n : vec4.w;
+            var vec5 = new Vec4(0.0);
+            vec5.X = vec4.X < n ? n : vec4.X;
+            vec5.Y = vec4.Y < n ? n : vec4.Y;
+            vec5.Z = vec4.Z < n ? n : vec4.Z;
+            vec5.W = vec4.W < n ? n : vec4.W;
             return vec5;
         }
 
-        public static double sin(double a)
+        public static double Sin(double a)
         {
             return Math.Sin(a);
         }
 
-        public static vec2 sin(vec2 vec2)
+        public static Vec2 Sin(Vec2 vec2)
         {
-            var vec3 = new vec2(0.0);
-            vec3.x = Math.Sin(vec2.x);
-            vec3.y = Math.Sin(vec2.y);
+            var vec3 = new Vec2(0.0);
+            vec3.X = Math.Sin(vec2.X);
+            vec3.Y = Math.Sin(vec2.Y);
             return vec3;
         }
 
-        public static vec3 sin(vec3 vec3)
+        public static Vec3 Sin(Vec3 vec3)
         {
-            var vec4 = new vec3(0.0);
-            vec4.x = Math.Sin(vec3.x);
-            vec4.y = Math.Sin(vec3.y);
-            vec4.z = Math.Sin(vec3.z);
+            var vec4 = new Vec3(0.0);
+            vec4.X = Math.Sin(vec3.X);
+            vec4.Y = Math.Sin(vec3.Y);
+            vec4.Z = Math.Sin(vec3.Z);
             return vec4;
         }
 
-        public static vec4 sin(vec4 vec4)
+        public static Vec4 Sin(Vec4 vec4)
         {
-            vec4 vec5 = new vec4(0.0);
-            vec5.x = Math.Sin(vec4.x);
-            vec5.y = Math.Sin(vec4.y);
-            vec5.z = Math.Sin(vec4.z);
-            vec5.w = Math.Sin(vec4.w);
+            var vec5 = new Vec4(0.0);
+            vec5.X = Math.Sin(vec4.X);
+            vec5.Y = Math.Sin(vec4.Y);
+            vec5.Z = Math.Sin(vec4.Z);
+            vec5.W = Math.Sin(vec4.W);
             return vec5;
         }
 
-        public static double cos(double a)
+        public static double Cos(double a)
         {
             return Math.Cos(a);
         }
 
-        public static vec2 cos(vec2 vec2)
+        public static Vec2 Cos(Vec2 vec2)
         {
-            var vec3 = new vec2(0.0);
-            vec3.x = Math.Cos(vec2.x);
-            vec3.y = Math.Cos(vec2.y);
+            var vec3 = new Vec2(0.0);
+            vec3.X = Math.Cos(vec2.X);
+            vec3.Y = Math.Cos(vec2.Y);
             return vec3;
         }
 
-        public static vec3 cos(vec3 vec3)
+        public static Vec3 Cos(Vec3 vec3)
         {
-            var vec4 = new vec3(0.0);
-            vec4.x = Math.Cos(vec3.x);
-            vec4.y = Math.Cos(vec3.y);
-            vec4.z = Math.Cos(vec3.z);
+            var vec4 = new Vec3(0.0);
+            vec4.X = Math.Cos(vec3.X);
+            vec4.Y = Math.Cos(vec3.Y);
+            vec4.Z = Math.Cos(vec3.Z);
             return vec4;
         }
 
-        public static vec4 cos(vec4 vec4)
+        public static Vec4 Cos(Vec4 vec4)
         {
-            vec4 vec5 = new vec4(0.0);
-            vec5.x = Math.Cos(vec4.x);
-            vec5.y = Math.Cos(vec4.y);
-            vec5.z = Math.Cos(vec4.z);
-            vec5.w = Math.Cos(vec4.w);
+            var vec5 = new Vec4(0.0);
+            vec5.X = Math.Cos(vec4.X);
+            vec5.Y = Math.Cos(vec4.Y);
+            vec5.Z = Math.Cos(vec4.Z);
+            vec5.W = Math.Cos(vec4.W);
             return vec5;
         }
 
-        public static double plot(vec2 vec2, double n)
+        public static double Plot(Vec2 vec2, double n)
         {
-            return smoothstep(n - 0.02, n, vec2.y) - smoothstep(n, n + 0.02, vec2.y);
+            return Smoothstep(n - 0.02, n, vec2.Y) - Smoothstep(n, n + 0.02, vec2.Y);
         }
 
-        public static double circle(vec2 vec2, double n)
+        public static double Circle(Vec2 vec2, double n)
         {
-            var minus = vec2.minus(new vec2(0.5));
-            return 1.0 - smoothstep(n - n * 0.01, n + n * 0.01, dot(minus, minus) * 4.0);
+            var minus = vec2.Minus(new Vec2(0.5));
+            return 1.0 - Smoothstep(n - n * 0.01, n + n * 0.01, Dot(minus, minus) * 4.0);
         }
 
         // public static vec2 rotate2D(vec2 vec2, double n)
@@ -864,168 +862,168 @@ namespace FlameBase.FlameMath
         //         .plus(new vec2(0.5));
         // }
 
-        public static vec2 tile(vec2 vec2, double n)
+        public static Vec2 Tile(Vec2 vec2, double n)
         {
-            return Fract(vec2.multiply(n));
+            return Fract(vec2.Multiply(n));
         }
 
-        public static vec2 brickTile(vec2 vec2, double n)
+        public static Vec2 BrickTile(Vec2 vec2, double n)
         {
-            vec2 multiply;
-            var vec3 = multiply = vec2.multiply(n);
-            multiply.x += step(1.0, mod(vec3.y, 2.0)) * 0.5;
+            Vec2 multiply;
+            var vec3 = multiply = vec2.Multiply(n);
+            multiply.X += Step(1.0, Mod(vec3.Y, 2.0)) * 0.5;
             return Fract(vec3);
         }
 
-        public static vec2 truchetPattern(vec2 vec2, double fract)
+        public static Vec2 TruchetPattern(Vec2 vec2, double fract)
         {
             fract = Fract((fract - 0.5) * 2.0);
             if (fract > 0.75)
-                vec2 = new vec2(1.0).minus(vec2);
+                vec2 = new Vec2(1.0).Minus(vec2);
             else if (fract > 0.5)
-                vec2 = new vec2(1.0 - vec2.x, vec2.y);
-            else if (fract > 0.25) vec2 = new vec2(1.0).minus(new vec2(1.0 - vec2.x, vec2.y));
+                vec2 = new Vec2(1.0 - vec2.X, vec2.Y);
+            else if (fract > 0.25) vec2 = new Vec2(1.0).Minus(new Vec2(1.0 - vec2.X, vec2.Y));
             return vec2;
         }
 
-        public static double box(vec2 vec2, vec2 minus, double n)
+        public static double Box(Vec2 vec2, Vec2 minus, double n)
         {
-            minus = new vec2(0.5).minus(minus.multiply(0.5));
-            var vec3 = new vec2(n * 0.5);
-            var multiply = smoothstep(minus, minus.plus(vec3), vec2)
-                .multiply(smoothstep(minus, minus.plus(vec3), new vec2(1.0).minus(vec2)));
-            return multiply.x * multiply.y;
+            minus = new Vec2(0.5).Minus(minus.Multiply(0.5));
+            var vec3 = new Vec2(n * 0.5);
+            var multiply = Smoothstep(minus, minus.Plus(vec3), vec2)
+                .Multiply(Smoothstep(minus, minus.Plus(vec3), new Vec2(1.0).Minus(vec2)));
+            return multiply.X * multiply.Y;
         }
 
-        public static vec2 skew(vec2 vec2)
+        public static Vec2 Skew(Vec2 vec2)
         {
-            var vec3 = new vec2(0.0);
-            vec3.x = 1.1547 * vec2.x;
-            vec3.y = vec2.y + 0.5 * vec3.x;
+            var vec3 = new Vec2(0.0);
+            vec3.X = 1.1547 * vec2.X;
+            vec3.Y = vec2.Y + 0.5 * vec3.X;
             return vec3;
         }
 
-        public static vec3 simplexGrid(vec2 vec2)
+        public static Vec3 SimplexGrid(Vec2 vec2)
         {
-            var vec3 = new vec3(0.0);
-            var vec4 = new vec2(0.0);
-            vec2 fract = Fract(skew(vec2));
-            if (fract.x > fract.y)
+            var vec3 = new Vec3(0.0);
+            var vec4 = new Vec2(0.0);
+            var fract = Fract(Skew(vec2));
+            if (fract.X > fract.Y)
             {
-                var minus = new vec2(1.0).minus(new vec2(fract.x, fract.y - fract.x));
-                vec3.x = minus.x;
-                vec3.y = minus.y;
-                vec3.z = fract.y;
+                var minus = new Vec2(1.0).Minus(new Vec2(fract.X, fract.Y - fract.X));
+                vec3.X = minus.X;
+                vec3.Y = minus.Y;
+                vec3.Z = fract.Y;
             }
             else
             {
-                var minus2 = new vec2(1.0).minus(new vec2(fract.x - fract.y, fract.y));
-                vec3.y = minus2.x;
-                vec3.z = minus2.y;
-                vec3.x = fract.x;
+                var minus2 = new Vec2(1.0).Minus(new Vec2(fract.X - fract.Y, fract.Y));
+                vec3.Y = minus2.X;
+                vec3.Z = minus2.Y;
+                vec3.X = fract.X;
             }
 
             return Fract(vec3);
         }
 
-        public static double Random(vec2 vec2)
+        public static double Random(Vec2 vec2)
         {
-            return Fract(Math.Sin(dot(new vec2(vec2.x, vec2.y), new vec2(12.9898, 78.233))) * 43758.5453123);
+            return Fract(Math.Sin(Dot(new Vec2(vec2.X, vec2.Y), new Vec2(12.9898, 78.233))) * 43758.5453123);
         }
 
-        public static vec2 Random2(vec2 vec2)
+        public static Vec2 Random2(Vec2 vec2)
         {
-            return Fract(sin(new vec2(dot(vec2, new vec2(127.1, 311.7)), dot(vec2, new vec2(269.5, 183.3))))
-                .multiply(43758.5453));
+            return Fract(Sin(new Vec2(Dot(vec2, new Vec2(127.1, 311.7)), Dot(vec2, new Vec2(269.5, 183.3))))
+                .Multiply(43758.5453));
         }
 
-        public static vec3 fractal(vec2 vec2)
+        public static Vec3 Fractal(Vec2 vec2)
         {
             var n = 50.0;
-            var plus = new vec2(0.0);
+            var plus = new Vec2(0.0);
             for (var n2 = 0; n2 < n; ++n2)
             {
-                plus = new vec2(plus.x * plus.x - plus.y * plus.y, 2.0 * plus.x * plus.y).plus(vec2);
-                if (dot(plus, plus) > 4.0)
+                plus = new Vec2(plus.X * plus.X - plus.Y * plus.Y, 2.0 * plus.X * plus.Y).Plus(vec2);
+                if (Dot(plus, plus) > 4.0)
                 {
                     var n3 = 0.125662 * n2;
-                    return new vec3(new vec3(Math.Cos(n3 + 0.9), Math.Cos(n3 + 0.3), Math.Cos(n3 + 0.2)).multiply(0.4)
-                        .add(0.6));
+                    return new Vec3(new Vec3(Math.Cos(n3 + 0.9), Math.Cos(n3 + 0.3), Math.Cos(n3 + 0.2)).Multiply(0.4)
+                        .Add(0.6));
                 }
             }
 
-            return new vec3(0.0);
+            return new Vec3(0.0);
         }
 
-        public static vec2 B(vec2 vec2)
+        public static Vec2 B(Vec2 vec2)
         {
-            return new vec2(Math.Log(Length(vec2)), atan2(vec2.y, vec2.x) - 6.3);
+            return new Vec2(Math.Log(Length(vec2)), Atan2(vec2.Y, vec2.X) - 6.3);
         }
 
-        public static vec3 F(vec2 vec2, double n)
+        public static Vec3 F(Vec2 vec2, double n)
         {
             var plus = vec2;
             var n2 = 6.0;
             for (int n3 = 30, i = 0; i < n3; ++i)
             {
-                plus = B(new vec2(plus.x, Math.Abs(plus.y)))
-                    .plus(new vec2(0.1 * Math.Sin(n / 3.0) - 0.1, 5.0 + 0.1 * Math.Cos(n / 5.0)));
+                plus = B(new Vec2(plus.X, Math.Abs(plus.Y)))
+                    .Plus(new Vec2(0.1 * Math.Sin(n / 3.0) - 0.1, 5.0 + 0.1 * Math.Cos(n / 5.0)));
                 n2 += Length(plus);
             }
 
-            var a = log2(log2(n2 * 0.05)) * 6.0;
-            return new vec3(0.7 + Math.Tan(0.7 * Math.Cos(a)), 0.5 + 0.5 * Math.Cos(a - 0.7),
+            var a = Log2(Log2(n2 * 0.05)) * 6.0;
+            return new Vec3(0.7 + Math.Tan(0.7 * Math.Cos(a)), 0.5 + 0.5 * Math.Cos(a - 0.7),
                 0.7 + Math.Sin(0.7 * Math.Cos(a - 0.7)));
         }
 
-        public static vec3 hash3(vec2 vec2)
+        public static Vec3 Hash3(Vec2 vec2)
         {
-            return Fract(sin(new vec3(dot(vec2, new vec2(127.1, 311.7)), dot(vec2, new vec2(269.5, 183.3)),
-                dot(vec2, new vec2(419.2, 371.9)))).multiply(43758.5453));
+            return Fract(Sin(new Vec3(Dot(vec2, new Vec2(127.1, 311.7)), Dot(vec2, new Vec2(269.5, 183.3)),
+                Dot(vec2, new Vec2(419.2, 371.9)))).Multiply(43758.5453));
         }
 
-        public static double iqnoise(vec2 vec2, double n, double n2)
+        public static double Iqnoise(Vec2 vec2, double n, double n2)
         {
-            vec2 floor = Floor(vec2);
-            vec2 fract = Fract(vec2);
+            var floor = Floor(vec2);
+            var fract = Fract(vec2);
             var b = 1.0 + 63.0 * Math.Pow(1.0 - n2, 4.0);
             var n3 = 0.0;
             var n4 = 0.0;
             for (var i = -2; i <= 2; ++i)
             for (var j = -2; j <= 2; ++j)
             {
-                var vec3 = new vec2(j, i);
-                var multiply = hash3(floor.plus(vec3)).multiply(new vec3(n, n, 1.0));
-                var plus = vec3.minus(fract).plus(new vec2(multiply.x, multiply.y));
-                var pow = Math.Pow(1.0 - smoothstep(0.0, 1.414, Math.Sqrt(dot(plus, plus))), b);
-                n3 += multiply.z * pow;
+                var vec3 = new Vec2(j, i);
+                var multiply = Hash3(floor.Plus(vec3)).Multiply(new Vec3(n, n, 1.0));
+                var plus = vec3.Minus(fract).Plus(new Vec2(multiply.X, multiply.Y));
+                var pow = Math.Pow(1.0 - Smoothstep(0.0, 1.414, Math.Sqrt(Dot(plus, plus))), b);
+                n3 += multiply.Z * pow;
                 n4 += pow;
             }
 
             return n3 / n4;
         }
 
-        public static double noise(vec2 vec2)
+        public static double Noise(Vec2 vec2)
         {
-            vec2 floor = Floor(vec2);
-            vec2 fract = Fract(vec2);
-            double random = Random(floor);
-            double random2 = Random(floor.plus(new vec2(1.0, 0.0)));
-            double random3 = Random(floor.plus(new vec2(0.0, 1.0)));
-            double random4 = Random(floor.plus(new vec2(1.0, 1.0)));
-            var multiply = fract.multiply(fract).multiply(new vec2(3.0).minus(new vec2(2.0).multiply(fract)));
-            return Mix(random, random2, multiply.x) + (random3 - random) * multiply.y * (1.0 - multiply.x) +
-                   (random4 - random2) * multiply.x * multiply.y;
+            var floor = Floor(vec2);
+            var fract = Fract(vec2);
+            var random = Random(floor);
+            var random2 = Random(floor.Plus(new Vec2(1.0, 0.0)));
+            var random3 = Random(floor.Plus(new Vec2(0.0, 1.0)));
+            var random4 = Random(floor.Plus(new Vec2(1.0, 1.0)));
+            var multiply = fract.Multiply(fract).Multiply(new Vec2(3.0).Minus(new Vec2(2.0).Multiply(fract)));
+            return Mix(random, random2, multiply.X) + (random3 - random) * multiply.Y * (1.0 - multiply.X) +
+                   (random4 - random2) * multiply.X * multiply.Y;
         }
 
-        public static double fbm(vec2 multiply)
+        public static double Fbm(Vec2 multiply)
         {
             var n = 0.0;
             var n2 = 0.5;
             for (int n3 = 6, i = 0; i < n3; ++i)
             {
-                n += n2 * noise(multiply);
-                multiply = multiply.multiply(2.0);
+                n += n2 * Noise(multiply);
+                multiply = multiply.Multiply(2.0);
                 n2 *= 0.5;
             }
 
@@ -1048,117 +1046,117 @@ namespace FlameBase.FlameMath
         //     return n;
         // }
 
-        public static vec3 rgb2hsb(vec3 vec3)
+        public static Vec3 Rgb2Hsb(Vec3 vec3)
         {
-            vec4 vec4 = new vec4(0.0, -0.3333333333333333, 0.6666666666666666, -1.0);
-            vec4 mix = Mix(new vec4(vec3.b, vec3.g, vec4.w, vec4.z), new vec4(vec3.g, vec3.b, vec4.x, vec4.y),
-                step(vec3.b, vec3.g));
-            vec4 mix2 = Mix(new vec4(mix.x, mix.y, mix.w, vec3.r), new vec4(vec3.r, mix.y, mix.z, mix.x),
-                step(mix.x, vec3.r));
-            double n = mix2.x - Math.Min(mix2.w, mix2.y);
+            var vec4 = new Vec4(0.0, -0.3333333333333333, 0.6666666666666666, -1.0);
+            var mix = Mix(new Vec4(vec3.B, vec3.G, vec4.W, vec4.Z), new Vec4(vec3.G, vec3.B, vec4.X, vec4.Y),
+                Step(vec3.B, vec3.G));
+            var mix2 = Mix(new Vec4(mix.X, mix.Y, mix.W, vec3.R), new Vec4(vec3.R, mix.Y, mix.Z, mix.X),
+                Step(mix.X, vec3.R));
+            var n = mix2.X - Math.Min(mix2.W, mix2.Y);
             var n2 = 1.0E-10;
-            return new vec3(abs(mix2.z + (mix2.w - mix2.y) / (6.0 * n + n2)), n / (mix2.x + n2), mix2.x);
+            return new Vec3(Abs(mix2.Z + (mix2.W - mix2.Y) / (6.0 * n + n2)), n / (mix2.X + n2), mix2.X);
         }
 
-        public static vec3 hsb2rgb(vec3 vec3)
+        public static Vec3 Hsb2Rgb(Vec3 vec3)
         {
-            vec3 clamp = Clamp(abs(mod(new vec3(vec3.x * 6.0).add(new vec3(0.0, 4.0, 2.0)), 6.0).minus(3.0)).minus(1.0),
+            var clamp = Clamp(Abs(Mod(new Vec3(vec3.X * 6.0).Add(new Vec3(0.0, 4.0, 2.0)), 6.0).Minus(3.0)).Minus(1.0),
                 0.0, 1.0);
-            return new vec3(vec3.z).multiply(Mix(new vec3(1.0),
-                clamp.multiply(clamp).multiply(new vec3(3.0).minus(new vec3(2.0).multiply(clamp))), vec3.y));
+            return new Vec3(vec3.Z).Multiply(Mix(new Vec3(1.0),
+                clamp.Multiply(clamp).Multiply(new Vec3(3.0).Minus(new Vec3(2.0).Multiply(clamp))), vec3.Y));
         }
 
-        public static vec4 rgb2hsv(vec4 vec4)
+        public static Vec4 Rgb2Hsv(Vec4 vec4)
         {
-            vec4 vec5 = new vec4(0.0, -0.3333333333333333, 0.6666666666666666, -1.0);
-            vec4 mix = Mix(new vec4(vec4.b, vec4.g, vec5.w, vec5.z), new vec4(vec4.g, vec4.b, vec5.x, vec5.y),
-                step(vec4.b, vec4.g));
-            vec4 mix2 = Mix(new vec4(mix.x, mix.y, mix.w, vec4.r), new vec4(vec4.r, mix.y, mix.z, mix.x),
-                step(mix.x, vec4.r));
-            double n = mix2.x - Math.Min(mix2.w, mix2.y);
+            var vec5 = new Vec4(0.0, -0.3333333333333333, 0.6666666666666666, -1.0);
+            var mix = Mix(new Vec4(vec4.B, vec4.G, vec5.W, vec5.Z), new Vec4(vec4.G, vec4.B, vec5.X, vec5.Y),
+                Step(vec4.B, vec4.G));
+            var mix2 = Mix(new Vec4(mix.X, mix.Y, mix.W, vec4.R), new Vec4(vec4.R, mix.Y, mix.Z, mix.X),
+                Step(mix.X, vec4.R));
+            var n = mix2.X - Math.Min(mix2.W, mix2.Y);
             var n2 = 1.0E-10;
-            return new vec4(Math.Abs(mix2.z + (mix2.w - mix2.y) / (6.0 * n + n2)), n / (mix2.x + n2), mix2.x, vec4.a);
+            return new Vec4(Math.Abs(mix2.Z + (mix2.W - mix2.Y) / (6.0 * n + n2)), n / (mix2.X + n2), mix2.X, vec4.A);
         }
 
-        public static vec4 hsv2rgb(vec4 vec4)
+        public static Vec4 Hsv2Rgb(Vec4 vec4)
         {
-            vec4 vec5 = new vec4(1.0, 0.6666666666666666, 0.3333333333333333, 3.0);
-            return new vec4(
-                new vec3(vec4.z).multiply(Mix(new vec3(vec5.x, vec5.x, vec5.x),
+            var vec5 = new Vec4(1.0, 0.6666666666666666, 0.3333333333333333, 3.0);
+            return new Vec4(
+                new Vec3(vec4.Z).Multiply(Mix(new Vec3(vec5.X, vec5.X, vec5.X),
                     Clamp(
-                        abs(Fract(new vec3(vec4.x, vec4.x, vec4.x).add(new vec3(vec5.x, vec5.y, vec5.z))).multiply(6.0)
-                            .minus(new vec3(vec5.w, vec5.w, vec5.w))).minus(new vec3(vec5.x, vec5.x, vec5.x)), 0.0,
-                        1.0), vec4.y)), vec4.a);
+                        Abs(Fract(new Vec3(vec4.X, vec4.X, vec4.X).Add(new Vec3(vec5.X, vec5.Y, vec5.Z))).Multiply(6.0)
+                            .Minus(new Vec3(vec5.W, vec5.W, vec5.W))).Minus(new Vec3(vec5.X, vec5.X, vec5.X)), 0.0,
+                        1.0), vec4.Y)), vec4.A);
         }
 
-        public static vec2 ccon(vec2 vec2)
+        public static Vec2 Ccon(Vec2 vec2)
         {
-            return new vec2(vec2.x, -vec2.y);
+            return new Vec2(vec2.X, -vec2.Y);
         }
 
-        public static vec2 cmul(vec2 vec2, vec2 vec3)
+        public static Vec2 Cmul(Vec2 vec2, Vec2 vec3)
         {
-            return new vec2(vec2.x * vec3.x - vec2.y * vec3.y, vec2.y * vec3.x + vec2.x * vec3.y);
+            return new Vec2(vec2.X * vec3.X - vec2.Y * vec3.Y, vec2.Y * vec3.X + vec2.X * vec3.Y);
         }
 
-        private vec2 cdiv(vec2 vec2, vec2 vec3)
+        private Vec2 Cdiv(Vec2 vec2, Vec2 vec3)
         {
-            return new vec2(vec2.x * vec3.x + vec2.y * vec3.y, vec2.y * vec3.x - vec2.x * vec3.y).multiply(
-                1.0 / (vec3.x * vec3.x + vec3.y * vec3.y));
+            return new Vec2(vec2.X * vec3.X + vec2.Y * vec3.Y, vec2.Y * vec3.X - vec2.X * vec3.Y).Multiply(
+                1.0 / (vec3.X * vec3.X + vec3.Y * vec3.Y));
         }
 
-        public static double cabs(vec2 vec2)
+        public static double Cabs(Vec2 vec2)
         {
             return Length(vec2);
         }
 
-        public static double Carg(vec2 vec2)
+        public static double Carg(Vec2 vec2)
         {
-            return atan(vec2.y, vec2.x);
+            return Atan(vec2.Y, vec2.X);
         }
 
-        public static vec2 cpow(vec2 vec2, vec2 vec3)
+        public static Vec2 Cpow(Vec2 vec2, Vec2 vec3)
         {
-            double carg = Carg(vec2);
-            var n = Math.Log(vec2.x * vec2.x + vec2.y * vec2.y) / 2.0;
-            var exp = Math.Exp(n * vec3.x - carg * vec3.y);
-            var n2 = n * vec3.y + carg * vec3.x;
-            return new vec2(Math.Cos(n2) * exp, Math.Sin(n2) * exp);
+            var carg = Carg(vec2);
+            var n = Math.Log(vec2.X * vec2.X + vec2.Y * vec2.Y) / 2.0;
+            var exp = Math.Exp(n * vec3.X - carg * vec3.Y);
+            var n2 = n * vec3.Y + carg * vec3.X;
+            return new Vec2(Math.Cos(n2) * exp, Math.Sin(n2) * exp);
         }
 
-        public static vec2 cexp(vec2 vec2)
+        public static Vec2 Cexp(Vec2 vec2)
         {
-            return new vec2(Math.Cos(vec2.y), Math.Sin(vec2.y)).multiply(Math.Exp(vec2.x));
+            return new Vec2(Math.Cos(vec2.Y), Math.Sin(vec2.Y)).Multiply(Math.Exp(vec2.X));
         }
 
-        public static vec2 clog(vec2 vec2)
+        public static Vec2 Clog(Vec2 vec2)
         {
-            return new vec2(Math.Log(vec2.x * vec2.x + vec2.y * vec2.y) / 2.0, Carg(vec2));
+            return new Vec2(Math.Log(vec2.X * vec2.X + vec2.Y * vec2.Y) / 2.0, Carg(vec2));
         }
 
-        public static vec2 f(vec2 vec2, double n)
+        public static Vec2 f(Vec2 vec2, double n)
         {
-            vec2 = new vec2(2.0).multiply(cpow(vec2, new vec2(3.0, 0.0))).minus(new vec2(0.1).multiply(vec2))
-                .plus(new vec2(0.04 + 0.03 * Math.Sin(n * 0.2), 0.02 * Math.Cos(n * 0.46)));
-            vec2 = cmul(vec2, cexp(new vec2(0.0, n)));
+            vec2 = new Vec2(2.0).Multiply(Cpow(vec2, new Vec2(3.0, 0.0))).Minus(new Vec2(0.1).Multiply(vec2))
+                .Plus(new Vec2(0.04 + 0.03 * Math.Sin(n * 0.2), 0.02 * Math.Cos(n * 0.46)));
+            vec2 = Cmul(vec2, Cexp(new Vec2(0.0, n)));
             return vec2;
         }
 
-        public static vec2 Kscope(vec2 vec2, double n)
+        public static Vec2 Kscope(Vec2 vec2, double n)
         {
-            var n2 = Math.Abs(mod(atan2(vec2.y, vec2.x), 2.0 * n) - n) + 0.0;
-            return new vec2(Length(vec2)).multiply(new vec2(Math.Cos(n2), Math.Sin(n2)));
+            var n2 = Math.Abs(Mod(Atan2(vec2.Y, vec2.X), 2.0 * n) - n) + 0.0;
+            return new Vec2(Length(vec2)).Multiply(new Vec2(Math.Cos(n2), Math.Sin(n2)));
         }
 
-        public static vec3 colorize(double n, vec3 vec3, vec3 vec4, vec3 vec5, vec3 vec6)
+        public static Vec3 Colorize(double n, Vec3 vec3, Vec3 vec4, Vec3 vec5, Vec3 vec6)
         {
-            return new vec3(2.5).multiply(vec3).multiply(vec4)
-                .multiply(cos(new vec3(1.2566370614359172).multiply(vec5.multiply(n).add(vec6))));
+            return new Vec3(2.5).Multiply(vec3).Multiply(vec4)
+                .Multiply(Cos(new Vec3(1.2566370614359172).Multiply(vec5.Multiply(n).Add(vec6))));
         }
 
-        public static double v(vec2 vec2, double n, double n2, double n3)
+        public static double V(Vec2 vec2, double n, double n2, double n3)
         {
-            return 0.0 + 0.5 * Math.Cos((Math.Cos(n3) * vec2.x + Math.Sin(n3) * vec2.y) * n + n2);
+            return 0.0 + 0.5 * Math.Cos((Math.Cos(n3) * vec2.X + Math.Sin(n3) * vec2.Y) * n + n2);
         }
 
         // public static mat3 rot(vec3 vec3)
@@ -1182,239 +1180,237 @@ namespace FlameBase.FlameMath
         //     return minus;
         // }
 
-        public static double cosh(double a)
+        public static double Cosh(double a)
         {
             var exp = Math.Exp(a);
             return (exp + 1.0 / exp) / 2.0;
         }
 
-        public static double tanh(double n)
+        public static double Tanh(double n)
         {
-            double exp = Exp(n);
+            var exp = Exp(n);
             return (exp - 1.0 / exp) / (exp + 1.0 / exp);
         }
 
-        public static double sinh(double a)
+        public static double Sinh(double a)
         {
             var exp = Math.Exp(a);
             return (exp - 1.0 / exp) / 2.0;
         }
 
-        public static vec2 cosh(vec2 vec2)
+        public static Vec2 Cosh(Vec2 vec2)
         {
-            vec2 exp = Exp(vec2);
-            vec2 c_add = C_add(exp, C_div(C_one(), exp));
-            return new vec2(c_add.x / 2.0, c_add.y / 2.0);
+            var exp = Exp(vec2);
+            var cAdd = C_add(exp, C_div(C_one(), exp));
+            return new Vec2(cAdd.X / 2.0, cAdd.Y / 2.0);
         }
 
-        public static vec2 tanh(vec2 vec2)
+        public static Vec2 Tanh(Vec2 vec2)
         {
-            vec2 exp = Exp(vec2);
+            var exp = Exp(vec2);
             return C_div(C_sub(exp, C_div(C_one(), exp)), C_add(exp, C_div(C_one(), exp)));
         }
 
-        public static vec2 sinh(vec2 vec2)
+        public static Vec2 Sinh(Vec2 vec2)
         {
-            vec2 exp = Exp(vec2);
-            vec2 c_sub = C_sub(exp, C_div(C_one(), exp));
-            return new vec2(c_sub.x / 2.0, c_sub.y / 2.0);
+            var exp = Exp(vec2);
+            var cSub = C_sub(exp, C_div(C_one(), exp));
+            return new Vec2(cSub.X / 2.0, cSub.Y / 2.0);
         }
 
-        public static vec2 C_one()
+        public static Vec2 C_one()
         {
-            return new vec2(1.0, 0.0);
+            return new Vec2(1.0, 0.0);
         }
 
-        public static vec2 C_i()
+        public static Vec2 C_i()
         {
-            return new vec2(0.0, 1.0);
+            return new Vec2(0.0, 1.0);
         }
 
-        public static vec2 C_ni()
+        public static Vec2 C_ni()
         {
-            return new vec2(0.0, -1.0);
+            return new Vec2(0.0, -1.0);
         }
 
-        public static double arg(vec2 vec2)
+        public static double Arg(Vec2 vec2)
         {
-            return atan(vec2.y, vec2.x);
+            return Atan(vec2.Y, vec2.X);
         }
 
-        public static vec2 c_conj(vec2 vec2)
+        public static Vec2 c_conj(Vec2 vec2)
         {
-            return new vec2(vec2.x, -vec2.y);
+            return new Vec2(vec2.X, -vec2.Y);
         }
 
-        public static vec2 c_from_polar(double n, double n2)
+        public static Vec2 c_from_polar(double n, double n2)
         {
-            return new vec2(n * cos(n2), n * sin(n2));
+            return new Vec2(n * Cos(n2), n * Sin(n2));
         }
 
-        public static vec2 C_to_polar(vec2 vec2)
+        public static Vec2 C_to_polar(Vec2 vec2)
         {
-            return new vec2(Length(vec2), atan(vec2.y, vec2.x));
+            return new Vec2(Length(vec2), Atan(vec2.Y, vec2.X));
         }
 
-        public static vec2 c_exp(vec2 vec2)
+        public static Vec2 c_exp(Vec2 vec2)
         {
-            return c_from_polar(Math.Exp(vec2.x), vec2.y);
+            return c_from_polar(Math.Exp(vec2.X), vec2.Y);
         }
 
-        public static vec2 c_exp(double a, vec2 vec2)
+        public static Vec2 c_exp(double a, Vec2 vec2)
         {
-            return c_from_polar(pow(a, vec2.x), vec2.y * Math.Log(a));
+            return c_from_polar(Pow(a, vec2.X), vec2.Y * Math.Log(a));
         }
 
-        public static vec2 c_ln(vec2 vec2)
+        public static Vec2 c_ln(Vec2 vec2)
         {
-            vec2 c_to_polar = C_to_polar(vec2);
-            return new vec2(Math.Log(c_to_polar.x), c_to_polar.y);
+            var cToPolar = C_to_polar(vec2);
+            return new Vec2(Math.Log(cToPolar.X), cToPolar.Y);
         }
 
-        public static vec2 c_log(vec2 vec2, double n)
+        public static Vec2 c_log(Vec2 vec2, double n)
         {
-            vec2 c_to_polar = C_to_polar(vec2);
-            return new vec2(Math.Log(c_to_polar.x) / Math.Log(n), c_to_polar.y / Math.Log(n));
+            var cToPolar = C_to_polar(vec2);
+            return new Vec2(Math.Log(cToPolar.X) / Math.Log(n), cToPolar.Y / Math.Log(n));
         }
 
-        public static vec2 c_sqrt(vec2 vec2)
+        public static Vec2 c_sqrt(Vec2 vec2)
         {
-            vec2 c_to_polar = C_to_polar(vec2);
-            return c_from_polar(sqrt(c_to_polar.x), c_to_polar.y / 2.0);
+            var cToPolar = C_to_polar(vec2);
+            return c_from_polar(Sqrt(cToPolar.X), cToPolar.Y / 2.0);
         }
 
-        public static vec2 c_pow(vec2 vec2, double n)
+        public static Vec2 c_pow(Vec2 vec2, double n)
         {
-            vec2 c_to_polar = C_to_polar(vec2);
-            return c_from_polar(pow(c_to_polar.x, n), c_to_polar.y * n);
+            var cToPolar = C_to_polar(vec2);
+            return c_from_polar(Pow(cToPolar.X, n), cToPolar.Y * n);
         }
 
-        public static vec2 c_pow(vec2 vec2, vec2 vec3)
+        public static Vec2 c_pow(Vec2 vec2, Vec2 vec3)
         {
-            vec2 c_to_polar = C_to_polar(vec2);
-            return c_from_polar(pow(c_to_polar.x, vec3.x) * Exp(-vec3.y * c_to_polar.y),
-                vec3.x * c_to_polar.y + vec3.y * Math.Log(c_to_polar.x));
+            var cToPolar = C_to_polar(vec2);
+            return c_from_polar(Pow(cToPolar.X, vec3.X) * Exp(-vec3.Y * cToPolar.Y),
+                vec3.X * cToPolar.Y + vec3.Y * Math.Log(cToPolar.X));
         }
 
-        public static vec2 C_add(vec2 vec2, vec2 vec3)
+        public static Vec2 C_add(Vec2 vec2, Vec2 vec3)
         {
-            return new vec2(vec2.x + vec3.x, vec2.y + vec3.y);
+            return new Vec2(vec2.X + vec3.X, vec2.Y + vec3.Y);
         }
 
-        public static vec2 C_sub(vec2 vec2, vec2 vec3)
+        public static Vec2 C_sub(Vec2 vec2, Vec2 vec3)
         {
-            return new vec2(vec2.x - vec3.x, vec2.y - vec3.y);
+            return new Vec2(vec2.X - vec3.X, vec2.Y - vec3.Y);
         }
 
-        public static vec2 c_mul(vec2 vec2, vec2 vec3)
+        public static Vec2 c_mul(Vec2 vec2, Vec2 vec3)
         {
-            return new vec2(vec2.x * vec3.x - vec2.y * vec3.y, vec2.x * vec3.y + vec2.y * vec3.x);
+            return new Vec2(vec2.X * vec3.X - vec2.Y * vec3.Y, vec2.X * vec3.Y + vec2.Y * vec3.X);
         }
 
-        public static vec2 C_div(vec2 vec2, vec2 vec3)
+        public static Vec2 C_div(Vec2 vec2, Vec2 vec3)
         {
-            double length = Length(vec3);
-            return new vec2((vec2.x * vec3.x + vec2.y * vec3.y) / (length * length),
-                (vec2.y * vec3.x - vec2.x * vec3.y) / (length * length));
+            var length = Length(vec3);
+            return new Vec2((vec2.X * vec3.X + vec2.Y * vec3.Y) / (length * length),
+                (vec2.Y * vec3.X - vec2.X * vec3.Y) / (length * length));
         }
 
-        public static vec2 c_sin(vec2 vec2)
+        public static Vec2 c_sin(Vec2 vec2)
         {
-            return new vec2(sin(vec2.x) * cosh(vec2.y), cos(vec2.x) * sinh(vec2.y));
+            return new Vec2(Sin(vec2.X) * Cosh(vec2.Y), Cos(vec2.X) * Sinh(vec2.Y));
         }
 
-        public static vec2 c_cos(vec2 vec2)
+        public static Vec2 c_cos(Vec2 vec2)
         {
-            return new vec2(cos(vec2.x) * cosh(vec2.y), -sin(vec2.x) * sinh(vec2.y));
+            return new Vec2(Cos(vec2.X) * Cosh(vec2.Y), -Sin(vec2.X) * Sinh(vec2.Y));
         }
 
-        public static vec2 c_tan(vec2 vec2)
+        public static Vec2 c_tan(Vec2 vec2)
         {
-            var multiply = vec2.multiply(2.0);
-            return new vec2(sin(multiply.x), sinh(multiply.y)).division(cos(multiply.x) + cosh(multiply.y));
+            var multiply = vec2.Multiply(2.0);
+            return new Vec2(Sin(multiply.X), Sinh(multiply.Y)).Division(Cos(multiply.X) + Cosh(multiply.Y));
         }
 
-        public static bool c_eq(vec2 vec2, vec2 vec3)
+        public static bool c_eq(Vec2 vec2, Vec2 vec3)
         {
-            return vec2.x == vec3.x && vec2.y == vec3.y;
+            return vec2.X == vec3.X && vec2.Y == vec3.Y;
         }
 
-        public static vec2 c_atan(vec2 vec2)
+        public static Vec2 c_atan(Vec2 vec2)
         {
-            vec2 c_i = C_i();
-            vec2 c_ni = C_ni();
-            vec2 c_one = C_one();
-            var plus = c_one.plus(c_one);
-            if (c_eq(vec2, c_i)) return new vec2(0.0, double.PositiveInfinity);
-            if (c_eq(vec2, c_ni)) return new vec2(0.0, double.NegativeInfinity);
-            return C_div(C_sub(c_ln(C_add(c_one, c_mul(c_i, vec2))), c_ln(C_sub(c_one, c_mul(c_i, vec2)))),
-                c_mul(plus, c_i));
+            var cI = C_i();
+            var cNi = C_ni();
+            var cOne = C_one();
+            var plus = cOne.Plus(cOne);
+            if (c_eq(vec2, cI)) return new Vec2(0.0, double.PositiveInfinity);
+            if (c_eq(vec2, cNi)) return new Vec2(0.0, double.NegativeInfinity);
+            return C_div(C_sub(c_ln(C_add(cOne, c_mul(cI, vec2))), c_ln(C_sub(cOne, c_mul(cI, vec2)))),
+                c_mul(plus, cI));
         }
 
-        public static vec2 c_asin(vec2 vec2)
+        public static Vec2 c_asin(Vec2 vec2)
         {
-            vec2 c_i = C_i();
-            vec2 c_ni = C_ni();
+            var cI = C_i();
+            var cNi = C_ni();
             C_one();
-            return c_mul(c_ni, c_ln(C_add(c_sqrt(C_sub(C_one(), c_mul(vec2, vec2))), c_mul(c_i, vec2))));
+            return c_mul(cNi, c_ln(C_add(c_sqrt(C_sub(C_one(), c_mul(vec2, vec2))), c_mul(cI, vec2))));
         }
 
-        public static vec2 c_acos(vec2 vec2)
+        public static Vec2 c_acos(Vec2 vec2)
         {
             return c_mul(C_ni(), c_ln(C_add(c_mul(C_i(), c_sqrt(C_sub(C_one(), c_mul(vec2, vec2)))), vec2)));
         }
 
-        public static vec2 c_sinh(vec2 vec2)
+        public static Vec2 c_sinh(Vec2 vec2)
         {
-            return new vec2(sinh(vec2.x) * cos(vec2.y), cosh(vec2.x) * sin(vec2.y));
+            return new Vec2(Sinh(vec2.X) * Cos(vec2.Y), Cosh(vec2.X) * Sin(vec2.Y));
         }
 
-        public static vec2 c_cosh(vec2 vec2)
+        public static Vec2 c_cosh(Vec2 vec2)
         {
-            return new vec2(cosh(vec2.x) * cos(vec2.y), sinh(vec2.x) * sin(vec2.y));
+            return new Vec2(Cosh(vec2.X) * Cos(vec2.Y), Sinh(vec2.X) * Sin(vec2.Y));
         }
 
-        public static vec2 c_tanh(vec2 vec2)
+        public static Vec2 c_tanh(Vec2 vec2)
         {
-            var vec3 = new vec2(2.0 * vec2.x, 2.0 * vec2.y);
-            return new vec2(sinh(vec3.x) / (cosh(vec3.x) + cos(vec3.y)), sin(vec3.y) / (cosh(vec3.x) + cos(vec3.y)));
+            var vec3 = new Vec2(2.0 * vec2.X, 2.0 * vec2.Y);
+            return new Vec2(Sinh(vec3.X) / (Cosh(vec3.X) + Cos(vec3.Y)), Sin(vec3.Y) / (Cosh(vec3.X) + Cos(vec3.Y)));
         }
 
-        public static vec2 c_asinh(vec2 vec2)
+        public static Vec2 c_asinh(Vec2 vec2)
         {
             return c_ln(C_add(vec2, c_sqrt(C_add(C_one(), c_mul(vec2, vec2)))));
         }
 
-        public static vec2 c_acosh(vec2 vec2)
+        public static Vec2 c_acosh(Vec2 vec2)
         {
-            vec2 c_one = C_one();
-            vec2 c_add = C_add(c_one, c_one);
-            return c_mul(c_add,
-                c_ln(C_add(c_sqrt(C_div(C_add(vec2, c_one), c_add)), c_sqrt(C_div(C_sub(vec2, c_one), c_add)))));
+            var cOne = C_one();
+            var cAdd = C_add(cOne, cOne);
+            return c_mul(cAdd,
+                c_ln(C_add(c_sqrt(C_div(C_add(vec2, cOne), cAdd)), c_sqrt(C_div(C_sub(vec2, cOne), cAdd)))));
         }
 
-        public static vec2 c_atanh(vec2 vec2)
+        public static Vec2 c_atanh(Vec2 vec2)
         {
-            vec2 c_one = C_one();
-            var vec3 = new vec2(-c_one.x, -c_one.y);
-            var plus = c_one.plus(c_one);
-            if (c_eq(vec2, c_one)) return new vec2(double.PositiveInfinity, 0.0);
-            if (c_eq(vec2, vec3)) return new vec2(double.NegativeInfinity, 0.0);
-            return C_div(C_sub(c_ln(C_add(c_one, vec2)), c_ln(C_sub(c_one, vec2))), plus);
+            var cOne = C_one();
+            var vec3 = new Vec2(-cOne.X, -cOne.Y);
+            var plus = cOne.Plus(cOne);
+            if (c_eq(vec2, cOne)) return new Vec2(double.PositiveInfinity, 0.0);
+            if (c_eq(vec2, vec3)) return new Vec2(double.NegativeInfinity, 0.0);
+            return C_div(C_sub(c_ln(C_add(cOne, vec2)), c_ln(C_sub(cOne, vec2))), plus);
         }
 
-        public static vec2 c_rem(vec2 vec2, vec2 vec3)
+        public static Vec2 c_rem(Vec2 vec2, Vec2 vec3)
         {
-            vec2 c_div = C_div(vec2, vec3);
-            return vec2.minus(c_mul(vec3, new vec2(c_div.x - mod(c_div.x, 1.0), c_div.y - mod(c_div.y, 1.0))));
+            var cDiv = C_div(vec2, vec3);
+            return vec2.Minus(c_mul(vec3, new Vec2(cDiv.X - Mod(cDiv.X, 1.0), cDiv.Y - Mod(cDiv.Y, 1.0))));
         }
 
-        public static vec2 c_inv(vec2 vec2)
+        public static Vec2 c_inv(Vec2 vec2)
         {
-            double length = Length(vec2);
-            return new vec2(vec2.x / (length * length), -vec2.y / (length * length));
+            var length = Length(vec2);
+            return new Vec2(vec2.X / (length * length), -vec2.Y / (length * length));
         }
     }
 }
-
-    

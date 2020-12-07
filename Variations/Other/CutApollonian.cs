@@ -32,7 +32,7 @@ namespace Variations.Other
             }
 
             // var vec2 = new vec2(x, y);
-            var n2 = 0.0 + Apollonian(new vec2(x * P3, y * P3));
+            var n2 = 0.0 + Apollonian(new Vec2(x * P3, y * P3));
 
             if (Math.Abs(P4) <= VariationHelper.SmallDouble)
             {
@@ -61,22 +61,22 @@ namespace Variations.Other
         {
         }
 
-        private double Apollonian(vec2 vec2)
+        private double Apollonian(Vec2 vec2)
         {
             var n = 1.0;
             var min = 1.0E20;
             var min2 = 1.0E20;
             for (var i = 0; i < P2; ++i)
             {
-                vec2 = G.Fract(vec2.multiply(0.5).plus(0.5)).multiply(2.0).minus(1.0);
-                var n2 = 1.34 / G.dot(vec2, vec2);
-                vec2 = vec2.multiply(n2);
-                min = G.Min(min, G.dot(vec2, vec2));
-                min2 = G.Min(min2, G.max(G.abs(vec2.x), G.abs(vec2.y)));
+                vec2 = G.Fract(vec2.Multiply(0.5).Plus(0.5)).Multiply(2.0).Minus(1.0);
+                var n2 = 1.34 / G.Dot(vec2, vec2);
+                vec2 = vec2.Multiply(n2);
+                min = G.Min(min, G.Dot(vec2, vec2));
+                min2 = G.Min(min2, G.Max(G.Abs(vec2.X), G.Abs(vec2.Y)));
                 n *= n2;
             }
 
-            return G.smoothstep(0.001, 0.002, 0.25 * G.abs(vec2.y) / n);
+            return G.Smoothstep(0.001, 0.002, 0.25 * G.Abs(vec2.Y) / n);
         }
     }
 }

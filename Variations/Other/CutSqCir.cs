@@ -36,8 +36,8 @@ namespace Variations.Other
                 y = VariationHelper.Psi - 0.5;
             }
 
-            var vec2 = new vec2(x * _zoom, y * _zoom);
-            var b = Math.Pow(Math.Abs(vec2.x - vec2.y), _power) + Math.Pow(Math.Abs(vec2.y + vec2.x), _power) <= 1.0;
+            var vec2 = new Vec2(x * _zoom, y * _zoom);
+            var b = Math.Pow(Math.Abs(vec2.X - vec2.Y), _power) + Math.Pow(Math.Abs(vec2.Y + vec2.X), _power) <= 1.0;
             if (Math.Abs(_invert) <= VariationHelper.SmallDouble)
             {
                 if (!b)
