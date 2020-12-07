@@ -9,14 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlameBase", "FlameBase\Flam
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Variations", "Variations\Variations.csproj", "{CA096052-3EC6-4026-92BE-A9BA6B882F22}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Readme Images", "Readme Images", "{521B6B30-D2A3-48C1-B184-0CE5F9E9BF1D}"
-	ProjectSection(SolutionItems) = preProject
-		D:\WIN\Desktop\CV\fflames\imgs\color_selection.jpg = D:\WIN\Desktop\CV\fflames\imgs\color_selection.jpg
-		D:\WIN\Desktop\CV\fflames\imgs\main_view.jpg = D:\WIN\Desktop\CV\fflames\imgs\main_view.jpg
-		D:\WIN\Desktop\CV\fflames\imgs\open_file.jpg = D:\WIN\Desktop\CV\fflames\imgs\open_file.jpg
-		D:\WIN\Desktop\CV\fflames\imgs\render_settings.jpg = D:\WIN\Desktop\CV\fflames\imgs\render_settings.jpg
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
