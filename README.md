@@ -8,7 +8,7 @@ You can create, edit, render and save fractal flames with this application.
 
 App uses .NET Framework 4.7.2
 
-You can view gallery of rendered images and download latest release ![here](https://drive.google.com/drive/folders/1Y0wFxWtkSyBZg-t_Zqu1sXsZEiHiiV3T?usp=sharing) 
+You can view the rendered images gallery and download the latest release ![here](https://drive.google.com/drive/folders/1Y0wFxWtkSyBZg-t_Zqu1sXsZEiHiiV3T?usp=sharing) 
 
 ![](readme_images/main_view.jpg)
 ![](readme_images/open_file.jpg)
