@@ -1,0 +1,58 @@
+{
+  "Coefficients": [
+    [
+      0.5,
+      0.0,
+      0.0,
+      0.5,
+      0.0,
+      0.0,
+      0.5
+    ],
+    [
+      0.5,
+      0.0,
+      0.0,
+      0.5,
+      0.5,
+      0.0,
+      0.5
+    ],
+    [
+      0.5,
+      0.0,
+      0.0,
+      0.5,
+      0.25,
+      0.5,
+      0.5
+    ]
+  ],
+  "Parameters": [
+    [
+      2.358,
+      2.0,
+      -1.075,
+      1.0
+    ],
+    null,
+    null
+  ],
+  "VariationIds": [
+    61,
+    0,
+    0
+  ],
+  "FunctionColors": [
+    "#FFAFAFAF",
+    "#FF167FFF",
+    "#FF9A29FF"
+  ],
+  "ViewShiftX": 0.88,
+  "ViewShiftY": -0.17,
+  "ViewZoom": 0.6,
+  "Rotation": 0.0,
+  "Symmetry": 1,
+  "ImageWidth": 3840,
+  "ImageHeight": 2160
+}

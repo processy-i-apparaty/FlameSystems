@@ -1,0 +1,37 @@
+{
+  "Coefficients": [
+    [
+      -0.5,
+      -0.5,
+      0.5,
+      -0.5,
+      0.1,
+      0.1,
+      0.5
+    ],
+    [
+      0.5,
+      -0.5,
+      0.5,
+      0.5,
+      1.0,
+      1.0,
+      1.5
+    ]
+  ],
+  "VariationIds": [
+    2,
+    0
+  ],
+  "FunctionColors": [
+    "#FFC3C3C3",
+    "#FFFB9004"
+  ],
+  "ViewShiftX": -0.55,
+  "ViewShiftY": -0.1,
+  "ViewZoom": 0.17,
+  "Rotation": 5.223,
+  "Symmetry": 1,
+  "ImageWidth": 3840,
+  "ImageHeight": 2160
+}
